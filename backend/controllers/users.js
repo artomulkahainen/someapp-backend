@@ -3,6 +3,7 @@ const config = require("../utils/config");
 const userModel = require("../database/models/user");
 const { Sequelize } = require("sequelize");
 const User = userModel(config.sequelize, Sequelize);
+const bcrypt = require("bcrypt");
 
 // GET METHODS
 usersRouter.get("/", async (req, res) => {
@@ -22,9 +23,12 @@ usersRouter.post("/", async (req, res) => {
       .json({ error: "username or password was not provided" });
   }
 
+  const passwordHash = await bcrypt.hash(req.body.password, 10);
+
   const newUser = User.build({
     username: req.body.username,
-    passwordHash: req.body.password,
+    passwordHash,
+    admin: false,
   });
 
   try {
