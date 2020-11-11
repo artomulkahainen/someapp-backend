@@ -1,5 +1,26 @@
-My own social media app. I'm building this just for training purposes.
+<h1 align="center">GimmeVibe</h1>
 
-This app is going to be finished somewhere in the future.
 
-Backend: NodeJS (Express)
+
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Link to Heroku](#heroku-link)
+
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+I'm building this social media app for mobile devices. The purpose of this project is learning to code. "GimmeVibe" is the project name for the whole app.
+
+### Built With
+I used these frameworks:
+  * React Native
+  * Express (NodeJS)
+ 
+## Link to Heroku
+I'm going to upload the backend to heroku somewhere in the future.
