@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
 import Profile from './containers/Profile/Profile';
-import Feed from './components/Feed/Feed';
+import Feed from './containers/Feed/Feed';
 import NewPost from './components/NewPost/NewPost';
 import Settings from './containers/SettingsScreen/Settings';
 
