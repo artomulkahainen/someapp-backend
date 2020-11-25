@@ -8,19 +8,21 @@ import Profile from './containers/Profile/Profile';
 import Feed from './containers/Feed/Feed';
 import NewPost from './components/NewPost/NewPost';
 import Settings from './containers/SettingsScreen/Settings';
-
-const LogoutScreen = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Logged out!</Text>
-    </View>
-  );
-};
+import Login from './components/Login/Login';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [logged, setLogged] = useState(true);
+
+  const logout = () => {
+    setLogged(false);
+    return (
+      <View>
+        <Text>logged out</Text>
+      </View>
+    );
+  };
 
   const view = logged ? (
     <NavigationContainer>
@@ -57,18 +59,17 @@ export default function App() {
           activeTintColor: 'white',
           inactiveTintColor: 'black',
           tabStyle: { backgroundColor: '#3D6DCC' },
+          showLabel: false,
         }}>
         <Tab.Screen name='Feed' component={Feed} />
         <Tab.Screen name='New Post' component={NewPost} />
         <Tab.Screen name='Profile' component={Profile} />
         <Tab.Screen name='Settings' component={Settings} />
-        <Tab.Screen name='Logout' component={LogoutScreen} />
+        <Tab.Screen name='Logout' component={logout} />
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
-    <View>
-      <Text>Login!</Text>
-    </View>
+    <Login setLogged={() => setLogged(true)}></Login>
   );
 
   return view;

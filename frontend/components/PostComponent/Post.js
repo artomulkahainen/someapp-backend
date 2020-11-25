@@ -7,7 +7,7 @@ const Post = (props) => {
     <Card>
       <Card.Title>{props.author}</Card.Title>
       <Card.Divider />
-      <Text style={{ textAlign: 'center' }}>{props.children}</Text>
+      <Text style={{ textAlign: 'center' }}>{props.post}</Text>
     </Card>
   );
 };
