@@ -37,19 +37,19 @@ export default function App() {
       <Header
         centerComponent={{
           text: 'GimmeVibe',
-          style: { color: '#fff' },
+          style: { color: '#FF4500' },
         }}
         containerStyle={{
-          backgroundColor: '#3D6DCC',
+          backgroundColor: 'white',
         }}
       />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => <Icon name={iconNames[route.name]} color={color} /> })}
         tabBarOptions={{
-          activeTintColor: 'white',
+          activeTintColor: '#FF4500',
           inactiveTintColor: 'black',
-          tabStyle: { backgroundColor: '#3D6DCC' },
+          tabStyle: { backgroundColor: 'white' },
           showLabel: false,
         }}>
         <Tab.Screen name='Feed' component={Feed} />
