@@ -12,7 +12,7 @@ import Login from './views/Login/Login';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+const App = () => {
   const [logged, setLogged] = useState(true);
 
   const iconNames = {
@@ -62,4 +62,6 @@ export default function App() {
   ) : (
     <Login setLogged={() => setLogged(true)}></Login>
   );
-}
+};
+
+export default App;
