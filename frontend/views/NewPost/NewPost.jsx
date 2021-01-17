@@ -9,7 +9,7 @@ const NewPost = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <TextArea value={comment} setValue={setComment} />
-      <ButtonComponent title='Press me'/>
+      <ButtonComponent title='Post'/>
     </View>
   );
 };
