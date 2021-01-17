@@ -60,7 +60,7 @@ const App = () => {
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
-    <Login setLogged={() => setLogged(true)}></Login>
+    <Login setLogged={() => setLogged(true)} />
   );
 };
 
