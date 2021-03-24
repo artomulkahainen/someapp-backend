@@ -4,3 +4,6 @@ node_modules
 .prettierignore
 .prettierrc.json
 SQL-tables
+.idea
+app.properties
+
