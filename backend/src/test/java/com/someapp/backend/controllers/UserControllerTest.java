@@ -4,9 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.util.Format;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +47,7 @@ public class UserControllerTest {
     @Test
     public void creatingUserIsSuccessful() throws Exception {
         mockMvc.perform(post("/users")
-                .content(asJsonString(new User("kusti", "kustipojke")))
+                .content(Format.asJsonString(new User("kusti", "kustipojke")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -57,7 +57,7 @@ public class UserControllerTest {
     @Test
     public void creatingVeryShortUsernameIsNotPossible() throws Exception {
         mockMvc.perform(post("/users")
-                .content(asJsonString(new User("k", "aaaa")))
+                .content(Format.asJsonString(new User("k", "aaaa")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -66,7 +66,7 @@ public class UserControllerTest {
     @Test
     public void creatingVeryShortPasswordIsNotPossible() throws Exception {
         mockMvc.perform(post("/users")
-                .content(asJsonString(new User("kaija", "ko")))
+                .content(Format.asJsonString(new User("kaija", "ko")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -75,18 +75,10 @@ public class UserControllerTest {
     @Test
     public void notPossibleToCreateUserWithExistingUsername() throws Exception {
         mockMvc.perform(post("/users")
-                .content(asJsonString(new User("urpo", "urpoOnTurpo")))
+                .content(Format.asJsonString(new User("urpo", "urpoOnTurpo")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

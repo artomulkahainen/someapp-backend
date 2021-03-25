@@ -8,12 +8,14 @@ import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.util.Format;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -55,6 +57,13 @@ public class PostControllerTest {
                 .andExpect(status().isOk());
     }
 
-
+    /*@Test
+    public void sendNewPostSuccessfully() throws Exception {
+        mockMvc.perform(post("/posts")
+                .content(Format.asJsonString(new SendPostRequest("Let's have a tea.", user.getId())))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.post").value("Let's have a tea."));
+    }*/
 
 }

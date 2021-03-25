@@ -20,7 +20,6 @@ public class Post extends AbstractPersistable<UUID> {
     private String post;
 
     @ManyToOne
-    @NotNull
     private User user;
 
     @OneToMany(mappedBy = "post")
@@ -37,5 +36,19 @@ public class Post extends AbstractPersistable<UUID> {
         this.user = user;
     }
 
-    public Post() {};
+    public String getPost() {
+        return post;
+    }
+
+    public List<PostComment> getPostComments() {
+        return postComments;
+    }
+
+    public List<PostLike> getPostLikes() {
+        return postLikes;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
 }
