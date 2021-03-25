@@ -13,7 +13,7 @@ import java.util.UUID;
 @Entity
 public class User extends AbstractPersistable<UUID> {
 
-    @Size(min = 3, message = "Username must be bigger or equal to 3")
+    @Size(min = 3, message = "Username must be longer or equal to 3")
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -30,6 +30,13 @@ public class User extends AbstractPersistable<UUID> {
     @OneToMany(mappedBy = "user")
     private List<PostComment> postComments;
 
+    @OneToMany(mappedBy = "user")
+    private List<PostLike> postLikes;
+
+    /*
+    @ManyToMany(mappedBy = "userList")
+    private List<Relationship> relationships;*/
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -45,6 +52,8 @@ public class User extends AbstractPersistable<UUID> {
         this.username = username;
     }
 
+    public String getPassword() { return this.password; };
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -55,5 +64,13 @@ public class User extends AbstractPersistable<UUID> {
 
     public List<PostComment> getPostComments() {
         return postComments;
+    }
+
+    public List<PostLike> getPostLikes() {
+        return postLikes;
+    }
+
+    public void setPostLikes(List<PostLike> postLikes) {
+        this.postLikes = postLikes;
     }
 }
