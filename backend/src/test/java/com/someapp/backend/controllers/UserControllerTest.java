@@ -31,7 +31,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         if (userRepository.findAll().isEmpty()) {
             userRepository.save(new User("urpo", "urpoOnTurpo"));
         }
@@ -71,14 +71,13 @@ public class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
-
     @Test
     public void notPossibleToCreateUserWithExistingUsername() throws Exception {
         mockMvc.perform(post("/users")
                 .content(Format.asJsonString(new User("urpo", "urpoOnTurpo")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 
 }
