@@ -32,7 +32,7 @@ public class PostController {
         return postRepository.findAll();
     }
 
-    /*@PostMapping("/posts")
+    @PostMapping("/posts")
     public Post sendPost(@Valid @RequestBody ObjectNode jsonNode) throws Exception {
         String post = jsonNode.get("post").asText();
         Optional<User> user = userRepository.findById(UUID.fromString(jsonNode.get("userId").asText()));
@@ -50,14 +50,6 @@ public class PostController {
                 }
             }
         }
-    }*/
-    /*@PostMapping("/posts")
-    public Post sendPost(@Valid @RequestBody Post post) throws Exception {
-        if (userRepository.findById(post.getUserId()).isPresent()) {
-            return postRepository.save(post);
-        } else {
-            throw new ResourceNotFoundException("No user found with given uuid");
-        }
-    }*/
+    }
 
 }

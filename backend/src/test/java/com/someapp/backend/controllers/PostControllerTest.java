@@ -67,7 +67,7 @@ public class PostControllerTest {
                 .andExpect(status().isOk());
     }
 
-    /*@Test
+    @Test
     public void sendNewPostSuccessfully() throws Exception {
         mockMvc.perform(post("/posts")
                 .content(Format.asJsonString(new SendPostTestRequest("Let's have a tea.", userId.toString())))
@@ -85,18 +85,9 @@ public class PostControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message")
                         .value("No user found with given uuid"));
-    }*/
-
-    @Test
-    public void sendNewPostSuccessfully() throws Exception {
-        mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new Post("Let's have a tea.", userRepository.getById(userId))))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.post").value("Let's have a tea."));
     }
 
-    /*@Test
+    @Test
     public void tooShortPostsCantBeSent() throws Exception {
         mockMvc.perform(post("/posts")
                 .content(Format.asJsonString(new SendPostTestRequest("", userId.toString())))
@@ -122,5 +113,5 @@ public class PostControllerTest {
                         "ryLongMessageee", userId.toString())))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-    }*/
+    }
 }
