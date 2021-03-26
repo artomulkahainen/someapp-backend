@@ -9,7 +9,7 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.util.Format;
-import com.someapp.backend.util.requests.SendPostTestRequest;
+import com.someapp.backend.util.requests.SendPostRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,18 +40,28 @@ public class PostControllerTest {
     private MockMvc mockMvc;
 
     private UUID userId;
+    private UUID postId;
 
     @Before
     public void createUserAndPost() throws Exception {
         User user;
+        Post post;
         if (userRepository.findAll().isEmpty()
                 && postRepository.findAll().isEmpty()) {
             user = new User("kalleKustaa", "korkki");
+            post = new Post("Oh yeah", user);
             userRepository.save(user);
-            postRepository.save(new Post("Oh yeah", user));
+            postRepository.save(post);
             this.userId = user.getId();
+            this.postId = post.getId();
         } else {
             this.userId = userRepository
+                    .findAll()
+                    .stream()
+                    .collect(Collectors.toList())
+                    .get(0)
+                    .getId();
+            this.postId = postRepository
                     .findAll()
                     .stream()
                     .collect(Collectors.toList())
@@ -68,9 +78,16 @@ public class PostControllerTest {
     }
 
     @Test
+    public void findOneSpecificPostIsSuccessful() throws Exception {
+        mockMvc.perform(get("/posts").param("uuid", postId.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].post").value("Oh yeah"));
+    }
+
+    @Test
     public void sendNewPostSuccessfully() throws Exception {
         mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new SendPostTestRequest("Let's have a tea.", userId.toString())))
+                .content(Format.asJsonString(new SendPostRequest("Let's have a tea.", userId.toString())))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.post").value("Let's have a tea."));
@@ -80,26 +97,26 @@ public class PostControllerTest {
     public void postCantBeSentWithoutExistingUserId() throws Exception {
         mockMvc.perform(post("/posts")
                 .content(Format.asJsonString(
-                        new SendPostTestRequest("Let's have a t", "87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
+                        new SendPostRequest("Let's have a t", "87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message")
+                .andExpect(jsonPath("$.errors[0]")
                         .value("No user found with given uuid"));
     }
 
     @Test
     public void tooShortPostsCantBeSent() throws Exception {
         mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new SendPostTestRequest("", userId.toString())))
+                .content(Format.asJsonString(new SendPostRequest("", userId.toString())))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Post must contain 1-250 letters."));
+                .andExpect(jsonPath("$.errors[0]").isNotEmpty());
     }
 
     @Test
     public void tooLongPostsCantBeSent() throws Exception {
         mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new SendPostTestRequest("writingVeryLong\n" +
+                .content(Format.asJsonString(new SendPostRequest("writingVeryLong\n" +
                         "MessagewritingVery\n" +
                         "LongMessagewritingVe\n" +
                         "ryLongMessagewritingVery\n" +
@@ -112,6 +129,8 @@ public class PostControllerTest {
                         "LongMessagewritingVe\n" +
                         "ryLongMessageee", userId.toString())))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Post length must be between 1-250 letters."));
     }
 }

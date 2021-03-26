@@ -2,7 +2,7 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
-import com.someapp.backend.util.CustomExceptions;
+import com.someapp.backend.util.customExceptions.BadArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +27,9 @@ public class UserController {
             return user;
         } catch (Exception e) {
             if (user.getUsername().length() < 3 || user.getPassword().length() < 3) {
-                throw new CustomExceptions.BadArgumentsException("Username or password is too short");
+                throw new BadArgumentException("Username or password is too short");
             } else {
-                throw new CustomExceptions.InternalException("Same username already exists.");
+                throw new BadArgumentException("Same username already exists.");
             }
         }
     }
