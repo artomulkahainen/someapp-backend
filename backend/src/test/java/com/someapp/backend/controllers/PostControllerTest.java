@@ -79,9 +79,15 @@ public class PostControllerTest {
 
     @Test
     public void findOneSpecificPostIsSuccessful() throws Exception {
-        mockMvc.perform(get("/posts").param("uuid", postId.toString()))
+        mockMvc.perform(get("/posts/{uuid}", postId.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].post").value("Oh yeah"));
+                .andExpect(jsonPath("$.post").value("Oh yeah"));
+    }
+
+    @Test
+    public void findingPostWithWrongIdGivesError() throws Exception {
+        mockMvc.perform(get("/posts/{uuid}").param("uuid", "87156b1f-fb34-43ec-8e45-82e82e67fa3b"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

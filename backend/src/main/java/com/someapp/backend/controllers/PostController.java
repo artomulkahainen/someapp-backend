@@ -30,9 +30,9 @@ public class PostController {
     }
 
     @GetMapping("/posts/{uuid}")
-    public Post getOnePost(@RequestParam String uuid) throws ResourceNotFoundException {
+    public Post getOnePost(@PathVariable("uuid") UUID uuid) throws ResourceNotFoundException {
         try {
-            return postRepository.getById(UUID.fromString(uuid));
+            return postRepository.getById(uuid);
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
