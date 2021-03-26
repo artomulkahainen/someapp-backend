@@ -1,4 +1,4 @@
-package com.someapp.backend.util.embeddedkeys;
+package com.someapp.backend.util.keys;
 
 import java.io.Serializable;
 import java.util.UUID;

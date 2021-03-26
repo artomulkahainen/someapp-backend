@@ -1,6 +1,6 @@
 package com.someapp.backend.entities;
 
-import com.someapp.backend.util.embeddedkeys.PostLikeKey;
+import com.someapp.backend.util.keys.PostLikeKey;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

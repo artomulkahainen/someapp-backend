@@ -15,7 +15,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@RequestMapping("posts")
+@RestController("posts")
 public class PostController {
 
     @Autowired
@@ -24,21 +25,21 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/posts")
+    @GetMapping("/")
     public List<Post> getPosts() {
         return postRepository.findAll();
     }
 
     @GetMapping("/posts/{uuid}")
-    public Post getOnePost(@PathVariable("uuid") UUID uuid) throws ResourceNotFoundException {
+    public Post getOnePost(@PathVariable("uuid") String uuid) throws ResourceNotFoundException {
         try {
-            return postRepository.getById(uuid);
+            return postRepository.getById(UUID.fromString(uuid));
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
     }
 
-    @PostMapping("/posts")
+    @PostMapping("/")
     public Post sendPost(@Valid @RequestBody SendPostRequest sendPostRequest, BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getErrorCount());
