@@ -19,8 +19,8 @@ I'm building this social media app for mobile devices. The purpose of this proje
 
 ### Built With
 I used these frameworks:
-  * React Native
-  * Express (NodeJS)
+  * React Native (JavaScript)
+  * Spring Boot (Java)
  
 ## Link to Heroku
 I'm going to upload the backend to heroku somewhere in the future.
