@@ -9,6 +9,7 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.util.Format;
+import com.someapp.backend.util.requests.SendPostTestRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
@@ -35,18 +39,24 @@ public class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private User user;
-    private Post post;
+    private UUID userId;
 
     @Before
-    public void createUserAndPost() {
-        if (user == null) {
-            this.user = userRepository.save(new User("kalleKustaa", "korkki"));
-        }
-
-        if (post == null) {
-            this.post = postRepository
-                    .save(new Post("Oh yeah", user));
+    public void createUserAndPost() throws Exception {
+        User user;
+        if (userRepository.findAll().isEmpty()
+                && postRepository.findAll().isEmpty()) {
+            user = new User("kalleKustaa", "korkki");
+            userRepository.save(user);
+            postRepository.save(new Post("Oh yeah", user));
+            this.userId = user.getId();
+        } else {
+            this.userId = userRepository
+                    .findAll()
+                    .stream()
+                    .collect(Collectors.toList())
+                    .get(0)
+                    .getId();
         }
     }
 
@@ -60,10 +70,57 @@ public class PostControllerTest {
     /*@Test
     public void sendNewPostSuccessfully() throws Exception {
         mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new SendPostRequest("Let's have a tea.", user.getId())))
+                .content(Format.asJsonString(new SendPostTestRequest("Let's have a tea.", userId.toString())))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.post").value("Let's have a tea."));
+    }
+
+    @Test
+    public void postCantBeSentWithoutExistingUserId() throws Exception {
+        mockMvc.perform(post("/posts")
+                .content(Format.asJsonString(
+                        new SendPostTestRequest("Let's have a t", "87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message")
+                        .value("No user found with given uuid"));
     }*/
 
+    @Test
+    public void sendNewPostSuccessfully() throws Exception {
+        mockMvc.perform(post("/posts")
+                .content(Format.asJsonString(new Post("Let's have a tea.", userRepository.getById(userId))))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.post").value("Let's have a tea."));
+    }
+
+    /*@Test
+    public void tooShortPostsCantBeSent() throws Exception {
+        mockMvc.perform(post("/posts")
+                .content(Format.asJsonString(new SendPostTestRequest("", userId.toString())))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Post must contain 1-250 letters."));
+    }
+
+    @Test
+    public void tooLongPostsCantBeSent() throws Exception {
+        mockMvc.perform(post("/posts")
+                .content(Format.asJsonString(new SendPostTestRequest("writingVeryLong\n" +
+                        "MessagewritingVery\n" +
+                        "LongMessagewritingVe\n" +
+                        "ryLongMessagewritingVery\n" +
+                        "LongMessawritingVeryLong\n" +
+                        "MessagewritingVery\n" +
+                        "LongMessagewritingVe\n" +
+                        "ryLongMessagewritingVery\n" +
+                        "LongMessawritingVeryLong\n" +
+                        "MessagewritingVery\n" +
+                        "LongMessagewritingVe\n" +
+                        "ryLongMessageee", userId.toString())))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }*/
 }
