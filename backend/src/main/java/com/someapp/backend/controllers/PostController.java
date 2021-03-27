@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@RequestMapping("posts")
-@RestController("posts")
+@RestController
 public class PostController {
 
     @Autowired
@@ -30,16 +30,37 @@ public class PostController {
         return postRepository.findAll();
     }
 
-    @GetMapping("/posts/{uuid}")
-    public Post getOnePost(@PathVariable("uuid") String uuid) throws ResourceNotFoundException {
+    /*@GetMapping(path = "/{uuid}/")
+    public Post getOnePost(@PathVariable("uuid") UUID uuid) throws ResourceNotFoundException {
         try {
-            return postRepository.getById(UUID.fromString(uuid));
+            return postRepository.getById(uuid);
         } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Post was not found with given uuid");
+        }
+    }*/
+
+    // All users posts
+    @GetMapping("/posts/user/{userId}")
+    public List<Post> getAllUsersPosts(@PathVariable String userId) throws ResourceNotFoundException {
+        try {
+            System.out.println("userId class:");
+            System.out.println(userId.getClass());
+            UUID uuid = UUID.fromString(userId);
+            System.out.println("uuid class:");
+            System.out.println(uuid.getClass());
+
+            return postRepository
+                    .findAll()
+                    .stream()
+                    .filter(post -> post.getUserId() == uuid)
+                    .collect(Collectors.toList());
+        } catch (ResourceNotFoundException e) {
+            System.out.println("post was not found");
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/posts")
     public Post sendPost(@Valid @RequestBody SendPostRequest sendPostRequest, BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getErrorCount());
