@@ -25,34 +25,37 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/")
+    @GetMapping("/posts")
     public List<Post> getPosts() {
         return postRepository.findAll();
     }
 
-    /*@GetMapping(path = "/{uuid}/")
+    @GetMapping("/posts/{uuid}")
     public Post getOnePost(@PathVariable("uuid") UUID uuid) throws ResourceNotFoundException {
         try {
-            return postRepository.getById(uuid);
+            return postRepository.findById(uuid).get();
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
-    }*/
+    }
 
     // All users posts
     @GetMapping("/posts/user/{userId}")
-    public List<Post> getAllUsersPosts(@PathVariable String userId) throws ResourceNotFoundException {
+    public List<Post> getAllUsersPosts(@PathVariable UUID userId) throws ResourceNotFoundException {
         try {
-            System.out.println("userId class:");
-            System.out.println(userId.getClass());
-            UUID uuid = UUID.fromString(userId);
-            System.out.println("uuid class:");
-            System.out.println(uuid.getClass());
+            List<Post> posts = postRepository
+                    .findAll();
+
+            for (int i = 0; i < posts.size(); i++) {
+                if (posts.get(i).getUserId() == userId) {
+                    System.out.println("userId is found from posts!");
+                }
+            }
 
             return postRepository
                     .findAll()
                     .stream()
-                    .filter(post -> post.getUserId() == uuid)
+                    .filter(post -> post.getUserId() == userId)
                     .collect(Collectors.toList());
         } catch (ResourceNotFoundException e) {
             System.out.println("post was not found");
