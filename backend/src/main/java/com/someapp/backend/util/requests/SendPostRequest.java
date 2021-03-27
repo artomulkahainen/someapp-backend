@@ -2,7 +2,6 @@ package com.someapp.backend.util.requests;
 
 import com.sun.istack.NotNull;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.UUID;

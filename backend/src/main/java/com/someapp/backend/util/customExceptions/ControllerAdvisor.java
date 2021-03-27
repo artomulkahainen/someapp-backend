@@ -38,11 +38,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadArgumentException.class)
     public ResponseEntity<Object> handleBadArgumentException(
-            BadArgumentException exception, HttpStatus status, WebRequest request) {
+            BadArgumentException exception, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", status.value());
 
         List<String> errors = new ArrayList<>();
         errors.add(exception.getMessage());

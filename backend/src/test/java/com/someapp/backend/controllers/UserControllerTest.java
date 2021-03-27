@@ -77,7 +77,7 @@ public class UserControllerTest {
                 .content(Format.asJsonString(new User("urpo", "urpoOnTurpo")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
 }

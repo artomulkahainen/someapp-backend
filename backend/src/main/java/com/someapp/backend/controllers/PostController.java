@@ -6,6 +6,7 @@ import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.util.requests.SendPostRequest;
+import com.someapp.backend.util.requests.UUIDRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -56,9 +57,9 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public Post sendPost(@Valid @RequestBody SendPostRequest sendPostRequest, BindingResult bindingResult) throws BindException {
+    public Post sendPost(@Valid @RequestBody SendPostRequest sendPostRequest,
+                         BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getErrorCount());
             throw new BindException(bindingResult);
         }
 
@@ -67,6 +68,16 @@ public class PostController {
             return postRepository.save(new Post(sendPostRequest.getPost(), user));
         } catch (Exception e) {
             throw new ResourceNotFoundException("No user found with given uuid");
+        }
+    }
+
+    @DeleteMapping("/posts/{uuid}")
+    public UUIDRequest deletePost(@PathVariable UUID uuid) throws ResourceNotFoundException {
+        try {
+            postRepository.deleteById(uuid);
+            return new UUIDRequest(uuid);
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Post was not found with given uuid.");
         }
     }
 

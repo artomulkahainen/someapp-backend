@@ -86,8 +86,11 @@ public class PostControllerTest {
 
     @Test
     public void findOneUsersPostsWithWrongUUIDGivesError() throws Exception {
-        mockMvc.perform(get("/posts/user/{userId}", UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/posts/user/{userId}",
+                UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("No posts found with given uuid"));
     }
 
     @Test
@@ -100,8 +103,11 @@ public class PostControllerTest {
 
     @Test
     public void findingPostWithWrongIdGivesError() throws Exception {
-        mockMvc.perform(get("/posts/{uuid}",UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/posts/{uuid}",
+                UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Post was not found with given uuid"));
     }
 
     @Test
@@ -111,22 +117,23 @@ public class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
     }
-/*
+
     @Test
     public void postCantBeSentWithoutExistingUserId() throws Exception {
         mockMvc.perform(post("/posts")
                 .content(Format.asJsonString(
-                        new SendPostRequest("Let's have a t", "87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
+                        new SendPostRequest("Let's have a t", UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b"))))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors[0]")
                         .value("No user found with given uuid"));
     }
 
+
     @Test
     public void tooShortPostsCantBeSent() throws Exception {
         mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new SendPostRequest("", userId.toString())))
+                .content(Format.asJsonString(new SendPostRequest("", userId)))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors[0]").isNotEmpty());
@@ -146,10 +153,21 @@ public class PostControllerTest {
                         "LongMessawritingVeryLong\n" +
                         "MessagewritingVery\n" +
                         "LongMessagewritingVe\n" +
-                        "ryLongMessageee", userId.toString())))
+                        "ryLongMessageee", userId)))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors[0]")
                         .value("Post length must be between 1-250 letters."));
-    }*/
+    }
+
+    @Test
+    public void deletePostIsSuccessful() throws Exception {
+        Post newPost = postRepository.save(new Post("Heipodei", userRepository.getById(userId)));
+
+        mockMvc.perform(delete("/posts/{uuid}", newPost.getId()))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.uuid").isNotEmpty());
+    }
+
+
 }
