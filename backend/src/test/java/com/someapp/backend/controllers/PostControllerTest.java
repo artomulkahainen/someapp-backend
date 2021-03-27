@@ -85,6 +85,12 @@ public class PostControllerTest {
     }
 
     @Test
+    public void findOneUsersPostsWithWrongUUIDGivesError() throws Exception {
+        mockMvc.perform(get("/posts/user/{userId}", UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void findOneSpecificPostIsSuccessful() throws Exception {
         mockMvc.perform(get("/posts/{uuid}", postId))
                 .andExpect(status().isOk())
@@ -92,16 +98,16 @@ public class PostControllerTest {
                 .andExpect(jsonPath("$.userId").value(userId.toString()));
     }
 
-    /*@Test
+    @Test
     public void findingPostWithWrongIdGivesError() throws Exception {
-        mockMvc.perform(get("/posts/{uuid}","87156b1f-fb34-43ec-8e45-82e82e67fa3b"))
+        mockMvc.perform(get("/posts/{uuid}",UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
                 .andExpect(status().isNotFound());
-    }*/
+    }
 
     @Test
     public void sendNewPostSuccessfully() throws Exception {
         mockMvc.perform(post("/posts")
-                .content(Format.asJsonString(new SendPostRequest("Let's have a tea.", userId.toString())))
+                .content(Format.asJsonString(new SendPostRequest("Let's have a tea.", userId)))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
     }

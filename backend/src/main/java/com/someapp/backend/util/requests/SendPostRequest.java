@@ -15,9 +15,9 @@ public class SendPostRequest {
     private String post;
     private UUID userId;
 
-    public SendPostRequest(String post, String userId) {
+    public SendPostRequest(String post, UUID userId) {
         this.post = post;
-        this.userId = UUID.fromString(userId);
+        this.userId = userId;
     }
 
     public String getPost() {

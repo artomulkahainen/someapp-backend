@@ -1,15 +1,12 @@
 package com.someapp.backend.entities;
 
-import com.someapp.backend.repositories.UserRepository;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
