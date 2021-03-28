@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Entity
 public class User extends AbstractPersistable<UUID> {
 
-    @Size(min = 3, message = "Username must be longer or equal to 3")
+    @Size(min = 3, max = 15, message = "Username length must be between 3-15 letters")
     @Column(unique = true, nullable = false)
     private String username;
 

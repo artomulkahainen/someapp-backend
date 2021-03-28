@@ -60,7 +60,20 @@ public class UserControllerTest {
                 .content(Format.asJsonString(new User("k", "aaaa")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Username length must be between 3-15 letters"));
+    }
+
+    @Test
+    public void creatingVeryLongUsernameIsNotPossible() throws Exception {
+        mockMvc.perform(post("/users")
+                .content(Format.asJsonString(new User("kaarlekaarlekaar", "aaaa")))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Username length must be between 3-15 letters"));
     }
 
     @Test
@@ -69,7 +82,9 @@ public class UserControllerTest {
                 .content(Format.asJsonString(new User("kaija", "ko")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Password must be longer or equal to 3"));
     }
     @Test
     public void notPossibleToCreateUserWithExistingUsername() throws Exception {

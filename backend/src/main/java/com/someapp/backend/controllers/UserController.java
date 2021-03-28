@@ -3,7 +3,6 @@ package com.someapp.backend.controllers;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
-import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -33,7 +32,6 @@ public class UserController {
             userRepository.save(user);
             return user;
         } catch (Exception e) {
-            System.out.println("catch is called");
             throw new BadArgumentException("Given values were not suitable for account.");
         }
     }
