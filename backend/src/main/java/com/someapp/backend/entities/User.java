@@ -1,11 +1,12 @@
 package com.someapp.backend.entities;
 
 import com.sun.istack.NotNull;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
+
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;

@@ -43,17 +43,11 @@ public class PostController {
     // All users posts
     @GetMapping("/posts/user/{userId}")
     public List<Post> getAllUsersPosts(@PathVariable UUID userId) throws ResourceNotFoundException {
-        List<Post> posts = postRepository
+        return postRepository
                 .findAll()
                 .stream()
                 .filter(post -> post.getUserId().equals(userId))
                 .collect(Collectors.toList());
-
-        if (posts.isEmpty()) {
-            throw new ResourceNotFoundException("No posts found with given uuid");
-        } else {
-            return posts;
-        }
     }
 
     @PostMapping("/posts")
