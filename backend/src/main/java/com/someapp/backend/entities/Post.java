@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
@@ -26,7 +27,8 @@ public class Post extends AbstractPersistable<UUID> {
     @OneToMany(mappedBy = "post")
     private List<PostComment> postComments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany
+    @JoinColumn(name = "POST_ID")
     private List<PostLike> postLikes;
 
     @CreationTimestamp
@@ -38,6 +40,8 @@ public class Post extends AbstractPersistable<UUID> {
     }
 
     public Post() {};
+
+    public List<PostLike> getPostLikes() { return postLikes; }
 
     public String getPost() {
         return post;
@@ -51,9 +55,9 @@ public class Post extends AbstractPersistable<UUID> {
         return postComments;
     }
 
-    public List<PostLike> getPostLikes() {
+    /*public List<PostLike> getPostLikes() {
         return postLikes;
-    }
+    }*/
 
     public Timestamp getTimestamp() {
         return timestamp;

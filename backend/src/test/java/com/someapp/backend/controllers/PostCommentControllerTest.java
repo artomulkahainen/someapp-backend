@@ -129,7 +129,7 @@ public class PostCommentControllerTest {
                 userRepository.getById(testData.getUserId()));
         postCommentRepository.save(newPostComment);
 
-        mockMvc.perform(delete("/posts/comments/{postCommentId}", testData.getPostComment2Id()))
+        mockMvc.perform(delete("/posts/comments/{postCommentId}", newPostComment.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.uuid").isNotEmpty());
     }*/

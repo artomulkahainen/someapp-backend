@@ -49,4 +49,5 @@ public class PostComment extends AbstractPersistable<UUID> {
     public Timestamp getTimestamp() {
         return timestamp;
     }
+
 }

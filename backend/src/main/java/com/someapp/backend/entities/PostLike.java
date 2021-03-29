@@ -1,39 +1,36 @@
 package com.someapp.backend.entities;
 
-import com.someapp.backend.util.keys.PostLikeKey;
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@IdClass(PostLikeKey.class)
-public class PostLike {
-
-    @Id
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private UUID userId;
-
-    @Id
-    @Column(name = "post_id", insertable = false, updatable = false)
-    private UUID postId;
+public class PostLike extends AbstractPersistable<UUID> {
 
     @ManyToOne
     @NotNull
-    private Post post;
+    @JoinColumn(name="POST_ID")
+    Post post;
 
     @ManyToOne
     @NotNull
-    private User user;
+    @JoinColumn(name="USER_ID")
+    User user;
 
-    @CreationTimestamp
-    private Timestamp timestamp;
+    public PostLike(Post post, User user) {
+        this.post = post;
+        this.user = user;
+    }
+
+    public PostLike() {};
+
+    public UUID getPostId() {
+        return this.post.getId();
+    }
+
+    public UUID getUserId() {
+        return this.user.getId();
+    }
 }

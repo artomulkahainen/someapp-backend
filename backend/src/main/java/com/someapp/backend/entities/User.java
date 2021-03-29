@@ -23,6 +23,8 @@ public class User extends AbstractPersistable<UUID> {
     @Size(min = 3, message = "Password must be longer or equal to 3")
     private String password;
 
+    private boolean admin;
+
     @CreationTimestamp
     private Timestamp timestamp;
 
@@ -32,7 +34,8 @@ public class User extends AbstractPersistable<UUID> {
     @OneToMany(mappedBy = "user")
     private List<PostComment> postComments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany
+    @JoinColumn(name = "USER_ID")
     private List<PostLike> postLikes;
 
     /*
@@ -42,6 +45,7 @@ public class User extends AbstractPersistable<UUID> {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.admin = false;
     }
 
     public User() {};
@@ -68,11 +72,19 @@ public class User extends AbstractPersistable<UUID> {
         return postComments;
     }
 
-    public List<PostLike> getPostLikes() {
+    /*public List<PostLike> getPostLikes() {
         return postLikes;
     }
 
     public void setPostLikes(List<PostLike> postLikes) {
         this.postLikes = postLikes;
+    }*/
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean status) {
+        this.admin = status;
     }
 }
