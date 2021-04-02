@@ -10,7 +10,6 @@ import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class TestData {
 
@@ -22,47 +21,63 @@ public class TestData {
 
     public TestData() {};
 
+    public void createUsers(UserRepository userRepository) {
+        User user = new User("kalleKustaa", "korkki");
+        User user2 = new User("yyberi", "korkki");
+        userRepository.save(user);
+        userRepository.save(user2);
+        this.userId = user.getId();
+        this.userId2 = user.getId();
+    }
+
+    public void createPost(PostRepository postRepository, UserRepository userRepository) {
+        Post post = new Post("Oh yeah", userRepository.getById(userId));
+        postRepository.save(post);
+        this.postId = post.getId();
+    }
+
+    public void createPostLike(PostRepository postRepository,
+                               UserRepository userRepository,
+                               PostLikeRepository postLikeRepository) {
+        PostLike postLike = new PostLike(postRepository.getById(postId), userRepository.getById(userId2));
+        postLikeRepository.save(postLike);
+        this.postLikeId = postLike.getId();
+    }
+
+    public void createPostComment(PostRepository postRepository,
+                                  PostCommentRepository postCommentRepository,
+                                  UserRepository userRepository) {
+        PostComment postComment = new PostComment("Nice post!",
+                postRepository.getById(postId),
+                userRepository.getById(userId2));
+        postCommentRepository.save(postComment);
+        this.postCommentId = postComment.getId();
+    }
+
     public void createPostLikeTestData(PostLikeRepository postLikeRepository,
                                        PostRepository postRepository,
                                        UserRepository userRepository) throws Exception {
         if (userRepository.findAll().isEmpty()
                 && postRepository.findAll().isEmpty()
                 && postLikeRepository.findAll().isEmpty()) {
-            User user = new User("kalleKustaa", "korkki");
-            User user2 = new User("yyberi", "korkki");
-            Post post = new Post("Oh yeah", user);
-            PostLike postLike = new PostLike(post, user2);
-            userRepository.save(user);
-            userRepository.save(user2);
-            postRepository.save(post);
-            postLikeRepository.save(postLike);
-            this.userId = user.getId();
-            this.userId2 = user.getId();
-            this.postId = post.getId();
-            this.postLikeId = postLike.getId();
+            createUsers(userRepository);
+            createPost(postRepository, userRepository);
+            createPostLike(postRepository, userRepository, postLikeRepository);
         } else {
             this.userId = userRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
             this.userId2 = userRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(1)
                     .getId();
             this.postId = postRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
             this.postLikeId = postLikeRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
         }
@@ -74,33 +89,24 @@ public class TestData {
         if (userRepository.findAll().isEmpty()
                 && postRepository.findAll().isEmpty()
                 && postCommentRepository.findAll().isEmpty()) {
-            User user = new User("kalleKustaa", "korkki");
-            User user2 = new User("yyberi", "korkki");
-            Post post = new Post("Oh yeah", user);
-            PostComment postComment = new PostComment("Nice post!", post, user2);
-            userRepository.save(user);
-            postRepository.save(post);
-            postCommentRepository.save(postComment);
-            this.userId = user.getId();
-            this.postId = post.getId();
-            this.postCommentId = postComment.getId();
+            createUsers(userRepository);
+            createPost(postRepository, userRepository);
+            createPostComment(postRepository, postCommentRepository, userRepository);
         } else {
             this.userId = userRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
+                    .getId();
+            this.userId2 = userRepository
+                    .findAll()
+                    .get(1)
                     .getId();
             this.postId = postRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
             this.postCommentId = postCommentRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
         }
@@ -109,23 +115,15 @@ public class TestData {
     public void createPostTestData(PostRepository postRepository, UserRepository userRepository) {
         if (userRepository.findAll().isEmpty()
                 && postRepository.findAll().isEmpty()) {
-            User user = new User("kalleKustaa", "korkki");
-            Post post = new Post("Oh yeah", user);
-            userRepository.save(user);
-            postRepository.save(post);
-            this.userId = user.getId();
-            this.postId = post.getId();
+            createUsers(userRepository);
+            createPost(postRepository, userRepository);
         } else {
             this.userId = userRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
             this.postId = postRepository
                     .findAll()
-                    .stream()
-                    .collect(Collectors.toList())
                     .get(0)
                     .getId();
         }
