@@ -122,17 +122,20 @@ public class PostCommentControllerTest {
                         .value("Post or user was not found with given uuid"));
     }
 
-    /*@Test
+    @Test
     public void postCommentCanBeDeleted() throws Exception {
         PostComment newPostComment = new PostComment("gj!",
                 postRepository.getById(testData.getPostId()),
                 userRepository.getById(testData.getUserId()));
+        System.out.println("new post comment:");
+        System.out.println(newPostComment.getUserId());
+        System.out.println(newPostComment.getPostComment());
         postCommentRepository.save(newPostComment);
 
         mockMvc.perform(delete("/posts/comments/{postCommentId}", newPostComment.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uuid").isNotEmpty());
-    }*/
+                .andExpect(status().isOk());
+                //.andExpect(jsonPath("$.uuid").isNotEmpty());
+    }
 
 }
 

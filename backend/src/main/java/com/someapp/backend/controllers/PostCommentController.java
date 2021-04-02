@@ -31,7 +31,7 @@ public class PostCommentController {
     @GetMapping("/posts/comments/{postId}")
     public List<PostComment> getPostCommentsByPostId(@PathVariable UUID postId) {
         if (postRepository.findById(postId).isPresent()) {
-            return postRepository.findById(postId).get().getPostComments();
+            return postRepository.getById(postId).getPostComments();
         } else {
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
@@ -40,14 +40,19 @@ public class PostCommentController {
     @PostMapping("/posts/comments")
     public PostComment sendNewPostComment(@Valid @RequestBody SendPostCommentRequest sendPostCommentRequest,
                                    BindingResult bindingResult) throws BindException {
+        // IF VALIDATION ERRORS
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
+
+        // IF POSTID AND USERID ARE CORRECT, SAVE NEW POST COMMENT
         } else if (postRepository.findById(sendPostCommentRequest.getPostId()).isPresent()
                 && userRepository.findById(sendPostCommentRequest.getUserId()).isPresent()) {
 
             return postCommentRepository.save(new PostComment(sendPostCommentRequest.getPostComment(),
                         postRepository.getById(sendPostCommentRequest.getPostId()),
                         userRepository.getById(sendPostCommentRequest.getUserId())));
+
+        // IF POST OR USER WEREN'T FOUND WITH GIVEN UUID
         } else {
             throw new ResourceNotFoundException("Post or user was not found with given uuid");
         }

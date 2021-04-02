@@ -17,6 +17,7 @@ public class TestData {
     private UUID userId2;
     private UUID postId;
     private UUID postCommentId;
+    private UUID postComment2Id;
     private UUID postLikeId;
 
     public TestData() {};
@@ -27,7 +28,7 @@ public class TestData {
         userRepository.save(user);
         userRepository.save(user2);
         this.userId = user.getId();
-        this.userId2 = user.getId();
+        this.userId2 = user2.getId();
     }
 
     public void createPost(PostRepository postRepository, UserRepository userRepository) {
@@ -44,14 +45,19 @@ public class TestData {
         this.postLikeId = postLike.getId();
     }
 
-    public void createPostComment(PostRepository postRepository,
+    public void createPostComments(PostRepository postRepository,
                                   PostCommentRepository postCommentRepository,
                                   UserRepository userRepository) {
         PostComment postComment = new PostComment("Nice post!",
                 postRepository.getById(postId),
                 userRepository.getById(userId2));
         postCommentRepository.save(postComment);
+        PostComment postComment2 = new PostComment("Yea very nice",
+                postRepository.getById(postId),
+                userRepository.getById(userId));
+        postCommentRepository.save(postComment2);
         this.postCommentId = postComment.getId();
+        this.postComment2Id = postComment2.getId();
     }
 
     public void createPostLikeTestData(PostLikeRepository postLikeRepository,
@@ -91,7 +97,7 @@ public class TestData {
                 && postCommentRepository.findAll().isEmpty()) {
             createUsers(userRepository);
             createPost(postRepository, userRepository);
-            createPostComment(postRepository, postCommentRepository, userRepository);
+            createPostComments(postRepository, postCommentRepository, userRepository);
         } else {
             this.userId = userRepository
                     .findAll()
@@ -108,6 +114,10 @@ public class TestData {
             this.postCommentId = postCommentRepository
                     .findAll()
                     .get(0)
+                    .getId();
+            this.postComment2Id = postCommentRepository
+                    .findAll()
+                    .get(1)
                     .getId();
         }
     }
@@ -133,11 +143,13 @@ public class TestData {
         return userId;
     }
 
+    public UUID getUserId2() { return userId2; }
+
     public UUID getPostId() {
         return postId;
     }
 
-    public UUID getPostCommentId() {
-        return postCommentId;
+    public UUID getPostComment2Id() {
+        return postComment2Id;
     }
 }

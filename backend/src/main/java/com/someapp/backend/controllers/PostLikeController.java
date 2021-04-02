@@ -41,24 +41,32 @@ public class PostLikeController {
    @PostMapping("/posts/likes")
    public PostLike likePost(@Valid @RequestBody LikePostRequest likePostRequest,
                             BindingResult bindingResult) throws BindException {
+
+       // IF VALIDATING ERRORS
        if (bindingResult.hasErrors()) {
            throw new BindException(bindingResult);
+
+       // IF POSTLIKE REPOSITORY ALREADY CONTAINS THE LIKE
        } else if (!postLikeRepository.findAll().stream()
                .filter(postLike -> postLike.getPostId().equals(likePostRequest.getPostId())
                        && postLike.getUserId().equals(likePostRequest.getUserId()))
                .collect(Collectors.toList()).isEmpty()) {
            throw new BadArgumentException("Post like is already found with given uuids");
+
+       // IF BOTH POSTID AND USERID ARE CORRECT, SAVE NEW POST LIKE
        } else if (postRepository.findById(likePostRequest.getPostId()).isPresent()
                && userRepository.findById(likePostRequest.getUserId()).isPresent()) {
            return postLikeRepository.save(
                    new PostLike(postRepository.getById(likePostRequest.getPostId()),
                            userRepository.getById(likePostRequest.getUserId())));
+
+       // IF POST WAS NOT FOUND
        } else {
            throw new ResourceNotFoundException("Post or user was not found with given uuid");
        }
    }
 
-   /*@DeleteMapping("/posts/likes")
+   @DeleteMapping("/posts/likes")
    public LikePostRequest deleteLike(@Valid @RequestBody LikePostRequest likePostRequest,
                                      BindingResult bindingResult) throws BindException {
        if (bindingResult.hasErrors()) {
@@ -76,5 +84,5 @@ public class PostLikeController {
        } else {
            throw new ResourceNotFoundException("Post or user was not found with given uuid");
        }
-   }*/
+   }
 }
