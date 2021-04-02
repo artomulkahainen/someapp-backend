@@ -55,10 +55,6 @@ public class Post extends AbstractPersistable<UUID> {
         return postComments;
     }
 
-    /*public List<PostLike> getPostLikes() {
-        return postLikes;
-    }*/
-
     public Timestamp getTimestamp() {
         return timestamp;
     }
