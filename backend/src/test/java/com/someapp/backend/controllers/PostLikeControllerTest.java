@@ -2,9 +2,7 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.PostLikeRepository;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.repositories.*;
 import com.someapp.backend.util.Format;
 import com.someapp.backend.util.TestData;
 import com.someapp.backend.util.requests.LikePostRequest;
@@ -44,6 +42,12 @@ public class PostLikeControllerTest {
     PostLikeRepository postLikeRepository;
 
     @Autowired
+    PostCommentRepository postCommentRepository;
+
+    @Autowired
+    RelationshipRepository relationshipRepository;
+
+    @Autowired
     MockMvc mockMvc;
 
     private TestData testData;
@@ -51,7 +55,9 @@ public class PostLikeControllerTest {
     @Before
     public void initializeTestData() throws Exception {
         testData = new TestData();
-        testData.createPostLikeTestData(postLikeRepository, postRepository, userRepository);
+        testData.createTestData(userRepository,
+                postRepository, postCommentRepository,
+                postLikeRepository, relationshipRepository);
     }
 
     @Test

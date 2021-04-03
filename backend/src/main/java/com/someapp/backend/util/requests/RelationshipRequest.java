@@ -20,12 +20,6 @@ public class RelationshipRequest {
         this.status = status;
     }
 
-    public RelationshipRequest(UUID user1, UUID user2, int status) {
-        this.user1Id = user1;
-        this.user2Id = user2;
-        this.status = status;
-    }
-
     public UUID getUser1Id() {
         return user1Id;
     }

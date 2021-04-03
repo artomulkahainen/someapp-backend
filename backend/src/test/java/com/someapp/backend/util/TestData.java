@@ -81,14 +81,14 @@ public class TestData {
                                PostLikeRepository postLikeRepository,
                                RelationshipRepository relationshipRepository) throws Exception {
 
-        createUsers(userRepository);
+        /*createUsers(userRepository);
         createRelationships(userRepository, relationshipRepository);
         createPost(postRepository, userRepository);
         createPostLike(postRepository, userRepository, postLikeRepository);
-        createPostComments(postRepository, postCommentRepository, userRepository);
+        createPostComments(postRepository, postCommentRepository, userRepository);*/
 
         // If repositories are empty, create totally new data for every repo
-        /*if (userRepository.findAll().isEmpty()
+        if (userRepository.findAll().isEmpty()
                 && postRepository.findAll().isEmpty()
                 && postLikeRepository.findAll().isEmpty()
                 && postCommentRepository.findAll().isEmpty()
@@ -99,7 +99,7 @@ public class TestData {
             createPostLike(postRepository, userRepository, postLikeRepository);
             createPostComments(postRepository, postCommentRepository, userRepository);
 
-            // If repositories are already filled,
+            // If repositories are already filled, init ids
         } else {
             this.userId = userRepository
                     .findAll()
@@ -122,42 +122,6 @@ public class TestData {
             this.postComment2Id = postCommentRepository
                     .findAll()
                     .get(1)
-                    .getId();
-            this.postLikeId = postLikeRepository
-                    .findAll()
-                    .get(0)
-                    .getId();
-            if (postLikeRepository.findAll().stream().count() >= 2) {
-                this.postLikeId2 = postLikeRepository
-                        .findAll()
-                        .get(1)
-                        .getId();
-            }*/
-
-
-    }
-
-    public void createPostLikeTestData(PostLikeRepository postLikeRepository,
-                                       PostRepository postRepository,
-                                       UserRepository userRepository) throws Exception {
-        if (userRepository.findAll().isEmpty()
-                && postRepository.findAll().isEmpty()
-                && postLikeRepository.findAll().isEmpty()) {
-            createUsers(userRepository);
-            createPost(postRepository, userRepository);
-            createPostLike(postRepository, userRepository, postLikeRepository);
-        } else {
-            this.userId = userRepository
-                    .findAll()
-                    .get(0)
-                    .getId();
-            this.userId2 = userRepository
-                    .findAll()
-                    .get(1)
-                    .getId();
-            this.postId = postRepository
-                    .findAll()
-                    .get(0)
                     .getId();
             this.postLikeId = postLikeRepository
                     .findAll()
@@ -227,6 +191,8 @@ public class TestData {
     }
 
     public UUID getUserId2() { return userId2; }
+
+    public UUID getUserId3() { return userId3; }
 
     public UUID getPostId() {
         return postId;

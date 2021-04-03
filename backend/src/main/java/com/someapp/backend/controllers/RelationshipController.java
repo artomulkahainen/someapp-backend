@@ -25,7 +25,7 @@ public class RelationshipController {
     @Autowired
     private RelationshipRepository relationshipRepository;
 
-    @GetMapping("/relationship/{userId}")
+    @GetMapping("/relationships/{userId}")
     public List<Relationship> getUserRelationships(@PathVariable UUID userId) {
         return relationshipRepository
                 .findAll()
@@ -36,7 +36,7 @@ public class RelationshipController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/relationship")
+    @PostMapping("/relationships")
     public Relationship postNewRelationship(
             @Valid @RequestBody RelationshipRequest relationshipRequest,
             BindingResult bindingResult) throws BindException {
