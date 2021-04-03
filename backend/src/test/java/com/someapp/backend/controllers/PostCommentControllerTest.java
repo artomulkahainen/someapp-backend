@@ -1,5 +1,6 @@
 package com.someapp.backend.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
@@ -127,14 +128,13 @@ public class PostCommentControllerTest {
         PostComment newPostComment = new PostComment("gj!",
                 postRepository.getById(testData.getPostId()),
                 userRepository.getById(testData.getUserId()));
-        System.out.println("new post comment:");
-        System.out.println(newPostComment.getUserId());
-        System.out.println(newPostComment.getPostComment());
         postCommentRepository.save(newPostComment);
 
         mockMvc.perform(delete("/posts/comments/{postCommentId}", newPostComment.getId()))
                 .andExpect(status().isOk());
-                //.andExpect(jsonPath("$.uuid").isNotEmpty());
+
+        assertEquals(true, postRepository.findById(testData.getPostId()).isPresent());
+        assertEquals(true, userRepository.findById(testData.getUserId()).isPresent());
     }
 
 }

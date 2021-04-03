@@ -1,5 +1,6 @@
 package com.someapp.backend.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
@@ -142,6 +143,8 @@ public class PostControllerTest {
         mockMvc.perform(delete("/posts/{uuid}", newPost.getId()))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.uuid").isNotEmpty());
+
+        assertEquals(true, userRepository.findById(testData.getUserId()).isPresent());
     }
 
 

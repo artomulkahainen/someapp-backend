@@ -103,18 +103,12 @@ public class PostLikeControllerTest {
 
     @Test
     public void unLikingisPossible() throws Exception {
-        User newUser = new User("Aino", "ainoomaaa");
-        userRepository.save(newUser);
+        MvcResult res = mockMvc.perform(delete("/posts/likes/{postLikeId}", testData.getPostLikeId2()))
+                .andExpect(status().isOk()).andReturn();
 
-        PostLike postLike = postLikeRepository
-                .save(new PostLike(postRepository.getById(testData.getPostId()), newUser));
-
-        mockMvc.perform(delete("/posts/likes")
-                .content(Format.asJsonString(new LikePostRequest
-                        (newUser.getId(),
-                                testData.getPostId())))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful());
+        assertEquals(true, res.getResponse().getContentAsString().contains(testData.getPostLikeId2().toString()));
+        assertEquals(true, userRepository.findById(testData.getUserId()).isPresent());
+        assertEquals(true, postRepository.findById(testData.getPostId()).isPresent());
     }
 
 }

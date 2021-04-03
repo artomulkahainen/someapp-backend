@@ -3,20 +3,15 @@ package com.someapp.backend.entities;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
 public class PostLike extends AbstractPersistable<UUID> {
 
-    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
-    @NotNull
-    @JoinColumn(name="POST_ID")
+    @ManyToOne
     Post post;
 
-    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
-    @NotNull
-    @JoinColumn(name="USER_ID")
+    @ManyToOne
     User user;
 
     public PostLike(Post post, User user) {

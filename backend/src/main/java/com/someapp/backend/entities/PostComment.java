@@ -22,7 +22,7 @@ public class PostComment extends AbstractPersistable<UUID> {
     @ManyToOne
     private Post post;
 
-    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
+    @ManyToOne
     private User user;
 
     @CreationTimestamp
