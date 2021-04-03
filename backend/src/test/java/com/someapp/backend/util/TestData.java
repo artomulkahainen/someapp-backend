@@ -1,13 +1,7 @@
 package com.someapp.backend.util;
 
-import com.someapp.backend.entities.Post;
-import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.PostCommentRepository;
-import com.someapp.backend.repositories.PostLikeRepository;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.entities.*;
+import com.someapp.backend.repositories.*;
 
 import java.util.UUID;
 
@@ -21,6 +15,8 @@ public class TestData {
     private UUID postComment2Id;
     private UUID postLikeId;
     private UUID postLikeId2;
+    private UUID relationshipId;
+    private UUID relationshipId2;
 
     public TestData() {};
 
@@ -69,6 +65,78 @@ public class TestData {
         this.postComment2Id = postComment2.getId();
     }
 
+    public void createRelationships(UserRepository userRepository,
+                                    RelationshipRepository relationshipRepository) {
+        Relationship relationship = relationshipRepository.save(new Relationship(userRepository.getById(userId),
+                userRepository.getById(userId2), userId, 0));
+        Relationship relationship2 = relationshipRepository.save(new Relationship(userRepository.getById(userId),
+                userRepository.getById(userId3), userId, 0));
+        this.relationshipId = relationship.getId();
+        this.relationshipId2 = relationship2.getId();
+    }
+
+    public void createTestData(UserRepository userRepository,
+                               PostRepository postRepository,
+                               PostCommentRepository postCommentRepository,
+                               PostLikeRepository postLikeRepository,
+                               RelationshipRepository relationshipRepository) throws Exception {
+
+        createUsers(userRepository);
+        createRelationships(userRepository, relationshipRepository);
+        createPost(postRepository, userRepository);
+        createPostLike(postRepository, userRepository, postLikeRepository);
+        createPostComments(postRepository, postCommentRepository, userRepository);
+
+        // If repositories are empty, create totally new data for every repo
+        /*if (userRepository.findAll().isEmpty()
+                && postRepository.findAll().isEmpty()
+                && postLikeRepository.findAll().isEmpty()
+                && postCommentRepository.findAll().isEmpty()
+                && relationshipRepository.findAll().isEmpty()) {
+            createUsers(userRepository);
+            createRelationships(userRepository, relationshipRepository);
+            createPost(postRepository, userRepository);
+            createPostLike(postRepository, userRepository, postLikeRepository);
+            createPostComments(postRepository, postCommentRepository, userRepository);
+
+            // If repositories are already filled,
+        } else {
+            this.userId = userRepository
+                    .findAll()
+                    .get(0)
+                    .getId();
+            this.userId2 = userRepository
+                    .findAll()
+                    .get(1)
+                    .getId();
+            this.relationshipId = relationshipRepository.findAll().get(0).getId();
+            this.relationshipId2 = relationshipRepository.findAll().get(1).getId();
+            this.postId = postRepository
+                    .findAll()
+                    .get(0)
+                    .getId();
+            this.postCommentId = postCommentRepository
+                    .findAll()
+                    .get(0)
+                    .getId();
+            this.postComment2Id = postCommentRepository
+                    .findAll()
+                    .get(1)
+                    .getId();
+            this.postLikeId = postLikeRepository
+                    .findAll()
+                    .get(0)
+                    .getId();
+            if (postLikeRepository.findAll().stream().count() >= 2) {
+                this.postLikeId2 = postLikeRepository
+                        .findAll()
+                        .get(1)
+                        .getId();
+            }*/
+
+
+    }
+
     public void createPostLikeTestData(PostLikeRepository postLikeRepository,
                                        PostRepository postRepository,
                                        UserRepository userRepository) throws Exception {
@@ -79,14 +147,6 @@ public class TestData {
             createPost(postRepository, userRepository);
             createPostLike(postRepository, userRepository, postLikeRepository);
         } else {
-            System.out.println("isPostLikes empty");
-            System.out.println(postLikeRepository.findAll().isEmpty());
-            System.out.println("can post likes get index 0:");
-            System.out.println(postLikeRepository.findAll().get(0).getId());
-            System.out.println("current postlike id:");
-            System.out.println(postLikeId);
-            System.out.println("is posts empty:");
-            System.out.println(postRepository.findAll().isEmpty());
             this.userId = userRepository
                     .findAll()
                     .get(0)
@@ -103,8 +163,6 @@ public class TestData {
                     .findAll()
                     .get(0)
                     .getId();
-            System.out.println("postlike id after setting:");
-            System.out.println(postLikeId);
             if (postLikeRepository.findAll().stream().count() >= 2) {
                 this.postLikeId2 = postLikeRepository
                         .findAll()
