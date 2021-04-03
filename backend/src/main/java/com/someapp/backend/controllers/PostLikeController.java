@@ -33,12 +33,21 @@ public class PostLikeController {
     PostLikeRepository postLikeRepository;
 
     @GetMapping("/posts/likes/{postId}")
-    public List<PostLike> getPostsLikes(@PathVariable UUID postId) {
-        return postLikeRepository
-                .findAll()
-                .stream()
-                .filter(postLike -> postLike.getPostId().equals(postId))
-                .collect(Collectors.toList());
+    public List<PostLike> getPostsLikes(@PathVariable UUID postId) throws ResourceNotFoundException {
+        try {
+            return postLikeRepository
+                    .findAll()
+                    .stream()
+                    .filter(postLike -> {
+                        if (postLike.getPostId() != null) {
+                            return postLike.getPostId().equals(postId);
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("No post like with given post id");
+        }
     }
 
     @PostMapping("/posts/likes")

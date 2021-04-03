@@ -4,10 +4,7 @@ import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
@@ -24,10 +21,10 @@ public class Post extends AbstractPersistable<UUID> {
     @NotNull
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = { CascadeType.REMOVE })
     private List<PostComment> postComments;
 
-    @OneToMany
+    @OneToMany(cascade = { CascadeType.REMOVE })
     @JoinColumn(name = "POST_ID")
     private List<PostLike> postLikes;
 

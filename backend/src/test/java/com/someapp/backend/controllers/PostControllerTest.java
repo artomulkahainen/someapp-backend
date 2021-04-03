@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.*;
 
 import com.someapp.backend.entities.Post;
+import com.someapp.backend.repositories.PostCommentRepository;
+import com.someapp.backend.repositories.PostLikeRepository;
 import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.util.Format;
@@ -23,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
@@ -35,6 +38,12 @@ public class PostControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostLikeRepository postLikeRepository;
+
+    @Autowired
+    private PostCommentRepository postCommentRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -145,6 +154,18 @@ public class PostControllerTest {
                 .andExpect(jsonPath("$.uuid").isNotEmpty());
 
         assertEquals(true, userRepository.findById(testData.getUserId()).isPresent());
+        assertEquals(true, postLikeRepository
+                .findAll()
+                .stream()
+                .filter(postLike -> postLike.getPostId().equals(newPost.getId()))
+                .collect(Collectors.toList())
+                .isEmpty());
+        assertEquals(true, postCommentRepository
+                .findAll()
+                .stream()
+                .filter(postComment -> postComment.getPostId().equals(newPost.getId()))
+                .collect(Collectors.toList())
+                .isEmpty());
     }
 
 
