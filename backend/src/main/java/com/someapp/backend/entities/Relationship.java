@@ -4,6 +4,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.ArrayList;

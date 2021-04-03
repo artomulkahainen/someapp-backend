@@ -4,7 +4,8 @@ import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.repositories.*;
 import com.someapp.backend.util.Format;
 import com.someapp.backend.util.TestData;
-import com.someapp.backend.util.requests.RelationshipRequest;
+import com.someapp.backend.util.requests.ModifyRelationshipRequest;
+import com.someapp.backend.util.requests.NewRelationshipRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -74,15 +76,39 @@ public class RelationshipControllerTest {
     public void createNewRelationship() throws Exception {
         mockMvc.perform(post("/relationships")
                 .content(Format.asJsonString(
-                        new RelationshipRequest(
+                        new NewRelationshipRequest(
                                 testData.getUserId2(),
                                 testData.getUserId3(),
-                                testData.getUserId2(),
-                                0)))
+                                testData.getUserId2())))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.user1").isNotEmpty())
                 .andExpect(jsonPath("$.user2").isNotEmpty());
+    }
+
+    @Test
+    public void notPossibleToCreateSameRelationshipAgain() throws Exception {
+        mockMvc.perform(post("/relationships")
+                .content(Format.asJsonString(new NewRelationshipRequest(
+                        testData.getUserId(),
+                        testData.getUserId2(),
+                        testData.getUserId())))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Relationship is already created."));
+    }
+
+    @Test
+    public void acceptRelationshipInvite() throws Exception {
+        mockMvc.perform(put("/relationships")
+                .content(Format.asJsonString(new ModifyRelationshipRequest(
+                        testData.getRelationshipId(),
+                        testData.getUserId2(),
+                        1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.status").value(1));
     }
 
 }

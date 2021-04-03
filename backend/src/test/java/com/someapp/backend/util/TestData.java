@@ -205,4 +205,8 @@ public class TestData {
     public UUID getPostLikeId() { return postLikeId; }
 
     public UUID getPostLikeId2() { return postLikeId2; }
+
+    public UUID getRelationshipId() { return relationshipId; }
+
+    public UUID getRelationshipId2() { return relationshipId2; }
 }
