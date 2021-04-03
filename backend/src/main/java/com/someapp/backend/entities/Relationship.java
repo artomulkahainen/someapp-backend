@@ -1,43 +1,40 @@
-/*package com.someapp.backend.entities;
+package com.someapp.backend.entities;
 
-import com.someapp.backend.util.embeddedkeys.RelationshipKey;
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class Relationship {
+public class Relationship extends AbstractPersistable<UUID> {
 
-    @EmbeddedId
-    @NotNull
-    private RelationshipKey relationshipKey;
+    @ManyToOne
+    private User user1;
 
-    @ManyToMany
-    @NotNull
-    private List<User> userList;
+    @ManyToOne
+    private User user2;
 
-    @NotNull
     private UUID actionUserId;
 
     // STATUS CODES: 0 Pending, 1 Accepted, 2 Declined, 3 Blocked
-    @NotNull
     private int status;
 
     @CreationTimestamp
     private Timestamp timestamp;
 
-    public Relationship(List<User> userList, UUID actionUserId, int status) {
-        this.relationshipKey = new RelationshipKey(userList.get(0).getId(), userList.get(1).getId());
-        this.userList = userList;
+    public Relationship(User user1, User user2, UUID actionUserId, int status) {
+        this.user1 = user1;
+        this.user2 = user2;
         this.actionUserId = actionUserId;
         this.status = status;
     }
+
+    public Relationship() {};
 
     public UUID getActionUserId() {
         return actionUserId;
@@ -55,20 +52,15 @@ public class Relationship {
         return timestamp;
     }
 
-    public RelationshipKey getRelationshipKey() {
-        return relationshipKey;
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        return users;
     }
 
-    public void setRelationshipKey(RelationshipKey relationshipKey) {
-        this.relationshipKey = relationshipKey;
-    }
+    public User getUser1() { return user1; }
 
-    public List<User> getUserList() {
-        return userList;
-    }
+    public User getUser2() { return user2; }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
 }
-*/

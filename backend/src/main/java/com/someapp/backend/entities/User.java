@@ -38,9 +38,10 @@ public class User extends AbstractPersistable<UUID> {
     @JoinColumn(name = "USER_ID")
     private List<PostLike> postLikes;
 
-    /*
-    @ManyToMany(mappedBy = "userList")
-    private List<Relationship> relationships;*/
+    @OneToMany
+    @JoinColumn(name = "USER1_ID", referencedColumnName = "id")
+    @JoinColumn(name = "USER2_ID", referencedColumnName = "id")
+    private List<Relationship> relationships;
 
     public User(String username, String password) {
         this.username = username;
