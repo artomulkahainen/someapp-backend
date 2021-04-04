@@ -111,4 +111,53 @@ public class RelationshipControllerTest {
                 .andExpect(jsonPath("$.status").value(1));
     }
 
+    @Test
+    public void declineRelationshipInvite() throws Exception {
+        mockMvc.perform(put("/relationships")
+                .content(Format.asJsonString(new ModifyRelationshipRequest(
+                        testData.getRelationshipId(),
+                        testData.getUserId2(),
+                        2)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.status").value(2));
+    }
+
+    @Test
+    public void relationshipActionUserCantModifyRelationship() throws Exception {
+        mockMvc.perform(put("/relationships")
+                .content(Format.asJsonString(new ModifyRelationshipRequest(
+                        testData.getRelationshipId(),
+                        testData.getUserId(),
+                        1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Modifying user has no permits to modify the relationship."));
+    }
+
+    @Test
+    public void relationshipCantBeModifiedToPendingState() throws Exception {
+        mockMvc.perform(put("/relationships")
+                .content(Format.asJsonString(new ModifyRelationshipRequest(
+                        testData.getRelationshipId(),
+                        testData.getUserId2(),
+                        0)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").isNotEmpty());
+    }
+
+    @Test
+    public void relationshipCantBeModifiedToStatusAbove3() throws Exception {
+        mockMvc.perform(put("/relationships")
+                .content(Format.asJsonString(new ModifyRelationshipRequest(
+                        testData.getRelationshipId(),
+                        testData.getUserId2(),
+                        4)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").isNotEmpty());
+    }
+
 }
