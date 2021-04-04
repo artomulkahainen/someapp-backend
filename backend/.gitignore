@@ -35,3 +35,5 @@ build/
 
 ### App properties ###
 src/main/resources/application-production.properties
+src/main/resources/application-development.properties
+

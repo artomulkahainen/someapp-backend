@@ -71,14 +71,6 @@ public class User extends AbstractPersistable<UUID> {
         return postComments;
     }
 
-    /*public List<PostLike> getPostLikes() {
-        return postLikes;
-    }
-
-    public void setPostLikes(List<PostLike> postLikes) {
-        this.postLikes = postLikes;
-    }*/
-
     public boolean isAdmin() {
         return admin;
     }
