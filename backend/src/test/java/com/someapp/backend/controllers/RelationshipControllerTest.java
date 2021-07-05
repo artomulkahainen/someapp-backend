@@ -58,7 +58,7 @@ public class RelationshipControllerTest {
                 postLikeRepository, relationshipRepository);
     }
 
-    @Test
+    /*@Test
     public void getUserRelationships() throws Exception {
         mockMvc.perform(get("/relationships/{userId}", testData.getUserId()))
                 .andExpect(status().isOk())
@@ -70,7 +70,7 @@ public class RelationshipControllerTest {
         mockMvc.perform(get("/relationships/{userId}", testData.getPostId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
-    }
+    }*/
 
     @Test
     public void createNewRelationship() throws Exception {
@@ -124,7 +124,7 @@ public class RelationshipControllerTest {
     }
 
     @Test
-    public void relationshipActionUserCantModifyRelationship() throws Exception {
+    public void relationshipActionUserCantModifyRelationshipStatus() throws Exception {
         mockMvc.perform(put("/relationships")
                 .content(Format.asJsonString(new ModifyRelationshipRequest(
                         testData.getRelationshipId(),

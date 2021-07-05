@@ -4,8 +4,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class Relationship extends AbstractPersistable<UUID> {
     private int status;
 
     @CreationTimestamp
-    private Timestamp timestamp;
+    private Timestamp createdDate;
 
     public Relationship(User user1, User user2, UUID actionUserId, int status) {
         this.user1 = user1;
@@ -50,8 +48,8 @@ public class Relationship extends AbstractPersistable<UUID> {
         this.status = status;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 
     public List<User> getUsers() {

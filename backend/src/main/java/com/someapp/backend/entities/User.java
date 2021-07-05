@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "users")
 public class User extends AbstractPersistable<UUID> {
 
     @Size(min = 3, max = 15, message = "Username length must be between 3-15 letters")
@@ -26,20 +27,16 @@ public class User extends AbstractPersistable<UUID> {
     private boolean admin;
 
     @CreationTimestamp
-    private Timestamp timestamp;
+    private Timestamp createdDate;
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user")
-    private List<PostComment> postComments;
-
-    @OneToMany
-    @JoinColumn(name = "USER_ID")
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<PostLike> postLikes;
 
-    /*@OneToMany
-    private List<Relationship> relationships;*/
+    @OneToMany
+    private List<Relationship> relationships;
 
     public User(String username, String password) {
         this.username = username;
@@ -63,12 +60,12 @@ public class User extends AbstractPersistable<UUID> {
         this.password = password;
     }
 
-    public List<Post> getPosts() {
-        return posts;
+    public List<PostLike> getPostLikes() {
+        return postLikes;
     }
 
-    public List<PostComment> getPostComments() {
-        return postComments;
+    public List<Relationship> getRelationships() {
+        return relationships;
     }
 
     public boolean isAdmin() {
@@ -77,5 +74,9 @@ public class User extends AbstractPersistable<UUID> {
 
     public void setAdmin(boolean status) {
         this.admin = status;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 }

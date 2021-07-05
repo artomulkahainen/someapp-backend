@@ -17,6 +17,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    /* NEED TO CHANGE THIS TO USE POSTMAPPING AND FETCHING USERS BY NAME. RESPONSE AS USER NAME AND ID ONLY. */
     @GetMapping("/users")
     public List<User> users() {
         return userRepository.findAll();

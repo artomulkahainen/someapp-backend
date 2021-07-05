@@ -3,9 +3,7 @@ package com.someapp.backend.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
 
-import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.PostCommentRepository;
@@ -51,32 +49,6 @@ public class PostCommentControllerTest {
     public void initializeTestData() throws Exception {
         testData = new TestData();
         testData.createPostCommentTestData(postCommentRepository, postRepository, userRepository);
-    }
-
-    @Test
-    public void findCommentsFromOnePostSuccessfully() throws Exception {
-        mockMvc.perform(get("/posts/comments/{postId}", testData.getPostId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", not(emptyCollectionOf(PostComment.class))));
-    }
-
-    @Test
-    public void postWithNoCommentsReturnsEmptyArray() throws Exception {
-        Post newPost = postRepository.save(
-                new Post("no comments here pls", userRepository.getById(testData.getUserId())));
-
-        mockMvc.perform(get("/posts/comments/{postId}", newPost.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isEmpty());
-    }
-
-    @Test
-    public void queryWithUnexistingPostReturnsError() throws Exception {
-        mockMvc.perform(get("/posts/comments/{postId}",
-                UUID.fromString("329dd70c-a441-4977-a242-6554a1d1f5ba")))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("Post was not found with given uuid"));
     }
 
     @Test

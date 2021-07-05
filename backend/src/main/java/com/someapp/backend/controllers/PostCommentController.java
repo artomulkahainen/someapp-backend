@@ -28,6 +28,7 @@ public class PostCommentController {
     @Autowired
     UserRepository userRepository;
 
+    /* PROBABLY NOT NEEDED
     @GetMapping("/posts/comments/{postId}")
     public List<PostComment> getPostCommentsByPostId(@PathVariable UUID postId) {
         if (postRepository.findById(postId).isPresent()) {
@@ -35,7 +36,7 @@ public class PostCommentController {
         } else {
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
-    }
+    } PROBABLY NOT NEEDED*/
 
     @PostMapping("/posts/comments")
     public PostComment sendNewPostComment(@Valid @RequestBody SendPostCommentRequest sendPostCommentRequest,
@@ -58,6 +59,7 @@ public class PostCommentController {
         }
     }
 
+    // CONVERT THIS TO USE POSTMAPPING
     @DeleteMapping("/posts/comments/{postCommentId}")
     public UUIDRequest deletePostCommentById(@PathVariable UUID postCommentId) throws ResourceNotFoundException {
         try {

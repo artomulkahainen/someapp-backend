@@ -56,44 +56,12 @@ public class PostControllerTest {
         testData.createPostTestData(postRepository, userRepository);
     }
 
-    @Test
+    /*@Test
     public void findPostsIsSuccessful() throws Exception {
         mockMvc.perform(get("/posts"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", not(emptyCollectionOf(Post.class))));
-    }
-
-    @Test
-    public void findOneUsersPostsIsSuccessful() throws Exception {
-        mockMvc.perform(get("/posts/user/{userId}", testData.getUserId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", not(emptyCollectionOf(Post.class))));
-    }
-
-    @Test
-    public void findOneUsersPostsWithWrongUUIDReturnsEmptyArray() throws Exception {
-        mockMvc.perform(get("/posts/user/{userId}",
-                UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isEmpty());
-    }
-
-    @Test
-    public void findOneSpecificPostIsSuccessful() throws Exception {
-        mockMvc.perform(get("/posts/{uuid}", testData.getPostId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.post").value("Oh yeah"))
-                .andExpect(jsonPath("$.userId").value(testData.getUserId().toString()));
-    }
-
-    @Test
-    public void findingPostWithWrongIdGivesError() throws Exception {
-        mockMvc.perform(get("/posts/{uuid}",
-                UUID.fromString("87156b1f-fb34-43ec-8e45-82e82e67fa3b")))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("Post was not found with given uuid"));
-    }
+    }*/
 
     @Test
     public void sendNewPostSuccessfully() throws Exception {

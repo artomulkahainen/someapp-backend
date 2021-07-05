@@ -32,6 +32,7 @@ public class PostLikeController {
     @Autowired
     PostLikeRepository postLikeRepository;
 
+    /* PROBABLY NOT NEEDED
     @GetMapping("/posts/likes/{postId}")
     public List<PostLike> getPostsLikes(@PathVariable UUID postId) {
         return postLikeRepository
@@ -39,7 +40,7 @@ public class PostLikeController {
                     .stream()
                     .filter(postLike -> postLike.getPostId().equals(postId))
                     .collect(Collectors.toList());
-    }
+    } PROBABLY NOT NEEDED */
 
     @PostMapping("/posts/likes")
     public PostLike likePost(@Valid @RequestBody LikePostRequest likePostRequest,

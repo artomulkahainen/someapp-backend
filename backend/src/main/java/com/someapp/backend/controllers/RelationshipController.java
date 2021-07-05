@@ -26,6 +26,7 @@ public class RelationshipController {
     @Autowired
     private RelationshipRepository relationshipRepository;
 
+    /* PROBABLY NOT NEEDED
     @GetMapping("/relationships/{userId}")
     public List<Relationship> getUserRelationships(@PathVariable UUID userId) {
         return relationshipRepository
@@ -35,7 +36,7 @@ public class RelationshipController {
                         relationship.getUser1().getId().equals(userId) ||
                                 relationship.getUser2().getId().equals(userId))
                 .collect(Collectors.toList());
-    }
+    } PROBABLY NOT NEEDED */
 
     @PostMapping("/relationships")
     public Relationship postNewRelationship(

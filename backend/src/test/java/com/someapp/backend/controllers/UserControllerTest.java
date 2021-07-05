@@ -37,12 +37,12 @@ public class UserControllerTest {
         }
     }
 
-    @Test
+    /*@Test
     public void findUsersIsSuccessful() throws Exception {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", not(emptyCollectionOf(User.class))));
-    }
+    }*/
 
     @Test
     public void creatingUserIsSuccessful() throws Exception {

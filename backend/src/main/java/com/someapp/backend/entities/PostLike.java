@@ -22,10 +22,10 @@ public class PostLike extends AbstractPersistable<UUID> {
     public PostLike() {};
 
     public UUID getPostId() {
-        return this.post.getId();
+        return post.getId();
     }
 
     public UUID getUserId() {
-        return this.user.getId();
+        return user.getId();
     }
 }

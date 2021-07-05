@@ -26,7 +26,7 @@ public class PostComment extends AbstractPersistable<UUID> {
     private User user;
 
     @CreationTimestamp
-    private Timestamp timestamp;
+    private Timestamp createdDate;
 
     public PostComment(String postComment, Post post, User user) {
         this.postComment = postComment;
@@ -46,8 +46,8 @@ public class PostComment extends AbstractPersistable<UUID> {
         return this.user.getId();
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 
 }

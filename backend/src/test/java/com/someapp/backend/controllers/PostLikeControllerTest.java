@@ -60,7 +60,7 @@ public class PostLikeControllerTest {
                 postLikeRepository, relationshipRepository);
     }
 
-    @Test
+    /*@Test
     public void findLikesFromOnePost() throws Exception {
         MvcResult res = mockMvc.perform(get("/posts/likes/{postId}", testData.getPostId()))
                 .andExpect(status().isOk())
@@ -74,7 +74,7 @@ public class PostLikeControllerTest {
         mockMvc.perform(get("/posts/likes/{postId}", testData.getUserId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(emptyCollectionOf(PostLike.class))));
-    }
+    }*/
 
     @Test
     public void likingExistingPostIsPossible() throws Exception {

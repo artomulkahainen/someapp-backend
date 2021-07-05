@@ -29,7 +29,7 @@ public class Post extends AbstractPersistable<UUID> {
     private List<PostLike> postLikes;
 
     @CreationTimestamp
-    private Timestamp timestamp;
+    private Timestamp createdDate;
 
     public Post(String post, User user) {
         this.post = post;
@@ -52,7 +52,7 @@ public class Post extends AbstractPersistable<UUID> {
         return postComments;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 }

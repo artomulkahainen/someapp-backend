@@ -26,11 +26,13 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
+    /* THIS IS NOT PROBABLY NEEDED*/
     @GetMapping("/posts")
     public List<Post> getPosts() {
         return postRepository.findAll();
     }
 
+    /* THIS IS NOT PROBABLY NEEDED
     @GetMapping("/posts/{uuid}")
     public Post getOnePost(@PathVariable UUID uuid) throws ResourceNotFoundException {
         if (postRepository.findById(uuid).isPresent()) {
@@ -38,17 +40,15 @@ public class PostController {
         } else {
             throw new ResourceNotFoundException("Post was not found with given uuid");
         }
-    }
+    } THIS IS NOT PROBABLY NEEDED*/
 
-    // All users posts
-    @GetMapping("/posts/user/{userId}")
-    public List<Post> getAllUsersPosts(@PathVariable UUID userId) throws ResourceNotFoundException {
-        return postRepository
-                .findAll()
-                .stream()
-                .filter(post -> post.getUserId().equals(userId))
-                .collect(Collectors.toList());
-    }
+
+
+    /* NEED TO IMPLEMENT THIS
+    @PostMapping("/posts/getPostsByRelationships")
+    public List<Post> getPostsByRelationships() {
+
+    } NEED TO IMPLEMENT THIS */
 
     @PostMapping("/posts")
     public Post sendPost(@Valid @RequestBody SendPostRequest sendPostRequest,
@@ -65,6 +65,7 @@ public class PostController {
         }
     }
 
+    // NEED TO CONVERT THIS TO USE POSTMAPPING
     @DeleteMapping("/posts/{uuid}")
     public UUIDRequest deletePost(@PathVariable UUID uuid) throws ResourceNotFoundException {
         try {
