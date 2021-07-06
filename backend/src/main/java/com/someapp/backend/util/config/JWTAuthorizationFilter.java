@@ -1,4 +1,4 @@
-package com.someapp.backend.util.config;
+/*package com.someapp.backend.util.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -67,3 +67,4 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
     }
 }
+*/

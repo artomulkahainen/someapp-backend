@@ -1,4 +1,4 @@
-package com.someapp.backend.util.config;
+/*package com.someapp.backend.util.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -31,7 +31,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
 
-        setFilterProcessesUrl("/api/v1/login");
+        setFilterProcessesUrl("/login");
     }
 
     @Override
@@ -73,3 +73,4 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 
 }
+*/
