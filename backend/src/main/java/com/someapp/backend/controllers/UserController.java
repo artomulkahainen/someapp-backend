@@ -4,6 +4,7 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /* NEED TO CHANGE THIS TO USE POSTMAPPING AND FETCHING USERS BY NAME. RESPONSE AS USER NAME AND ID ONLY. */
     @GetMapping("/users")
@@ -30,6 +34,7 @@ public class UserController {
         }
 
         try {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             return user;
         } catch (Exception e) {

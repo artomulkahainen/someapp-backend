@@ -4,7 +4,6 @@ package com.someapp.backend.entities;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
