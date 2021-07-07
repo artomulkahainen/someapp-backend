@@ -1,4 +1,4 @@
-package com.someapp.backend.util.config;
+package com.someapp.backend.util.Jwt;
 
 import java.io.IOException;
 import java.io.Serializable;

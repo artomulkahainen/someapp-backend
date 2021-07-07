@@ -46,7 +46,7 @@ public class UserControllerTest {
 
     @Test
     public void creatingUserIsSuccessful() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/saveNewUser")
                 .content(Format.asJsonString(new User("kusti", "kustipojke")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -56,7 +56,7 @@ public class UserControllerTest {
 
     @Test
     public void creatingVeryShortUsernameIsNotPossible() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/saveNewUser")
                 .content(Format.asJsonString(new User("k", "aaaa")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -67,7 +67,7 @@ public class UserControllerTest {
 
     @Test
     public void creatingVeryLongUsernameIsNotPossible() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/saveNewUser")
                 .content(Format.asJsonString(new User("kaarlekaarlekaar", "aaaa")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ public class UserControllerTest {
 
     @Test
     public void creatingVeryShortPasswordIsNotPossible() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/saveNewUser")
                 .content(Format.asJsonString(new User("kaija", "ko")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -88,7 +88,7 @@ public class UserControllerTest {
     }
     @Test
     public void notPossibleToCreateUserWithExistingUsername() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/saveNewUser")
                 .content(Format.asJsonString(new User("urpo", "urpoOnTurpo")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

@@ -2,15 +2,20 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.util.Jwt.JWTTokenUtil;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
+import com.someapp.backend.util.requests.FindUserByNameRequest;
+import com.someapp.backend.util.responses.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -21,14 +26,25 @@ public class UserController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    /* NEED TO CHANGE THIS TO USE POSTMAPPING AND FETCHING USERS BY NAME. RESPONSE AS USER NAME AND ID ONLY. */
-    @GetMapping("/users")
-    public List<User> users() {
-        return userRepository.findAll();
+    @Autowired
+    JWTTokenUtil jwtTokenUtil;
+
+    @GetMapping("/findOwnUserDetails")
+    public User findOwnUserDetails(HttpServletRequest req) {
+        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req.getHeader("Authorization").substring(7));
+        return userRepository.findByUsername(usernameFromToken);
     }
 
-    @PostMapping("/users")
-    public User create(@Valid @RequestBody User user, BindingResult bindingResult) throws BindException {
+    @PostMapping("/findUsersByName")
+    public List<UserNameIdResponse> findUsersByName(@RequestBody FindUserByNameRequest findUserByNameRequest) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getUsername().contains(findUserByNameRequest.getUsername()))
+                .map(user -> new UserNameIdResponse(user.getUsername(), user.getId()))
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/saveNewUser")
+    public User saveNewUser(@Valid @RequestBody User user, BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }

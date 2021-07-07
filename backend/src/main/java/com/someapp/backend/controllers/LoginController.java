@@ -2,7 +2,7 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.services.UserDetailsServiceImpl;
-import com.someapp.backend.util.JWTTokenUtil;
+import com.someapp.backend.util.Jwt.JWTTokenUtil;
 import com.someapp.backend.util.responses.JWTResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
