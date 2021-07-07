@@ -55,4 +55,8 @@ public class Post extends AbstractPersistable<UUID> {
     public Timestamp getCreatedDate() {
         return createdDate;
     }
+
+    public UUID getUUID() {
+        return this.getId();
+    }
 }

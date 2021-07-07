@@ -63,4 +63,8 @@ public class Relationship extends AbstractPersistable<UUID> {
 
     public User getUser2() { return user2; }
 
+    public UUID getUUID() {
+        return this.getId();
+    }
+
 }

@@ -2,9 +2,10 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.util.extendedclasses.ExtendedUser;
+import com.someapp.backend.util.extendedinterfaces.ExtendedUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public ExtendedUserDetails loadUserByUsername(String username) {
 
         User user = userRepository.findByUsername(username);
 
@@ -26,7 +27,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("No such user: " + username);
         }
 
-        return new org.springframework.security.core.userdetails.User(
+        return new ExtendedUser(
+                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 true,

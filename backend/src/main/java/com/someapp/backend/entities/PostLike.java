@@ -28,4 +28,8 @@ public class PostLike extends AbstractPersistable<UUID> {
     public UUID getUserId() {
         return user.getId();
     }
+
+    public UUID getUUID() {
+        return this.getId();
+    }
 }

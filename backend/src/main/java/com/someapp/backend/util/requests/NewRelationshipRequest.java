@@ -6,29 +6,19 @@ import java.util.UUID;
 public class NewRelationshipRequest {
 
     @NotNull
-    private UUID user1Id;
-    @NotNull
-    private UUID user2Id;
-    private UUID actionUserId;
+    private UUID addedUserId;
+
     private int status;
 
-    public NewRelationshipRequest(UUID user1Id, UUID user2Id, UUID actionUserId) {
-        this.user1Id = user1Id;
-        this.user2Id = user2Id;
-        this.actionUserId = actionUserId;
+    public NewRelationshipRequest(UUID addedUserId) {
+        this.addedUserId = addedUserId;
         this.status = 0;
     }
 
-    public UUID getUser1Id() {
-        return user1Id;
-    }
+    public NewRelationshipRequest() {}
 
-    public UUID getUser2Id() {
-        return user2Id;
-    }
-
-    public UUID getActionUserId() {
-        return actionUserId;
+    public UUID getAddedUserId() {
+        return addedUserId;
     }
 
     public int getStatus() {

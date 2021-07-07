@@ -72,7 +72,7 @@ public class RelationshipControllerTest {
                 .andExpect(jsonPath("$").isEmpty());
     }*/
 
-    @Test
+    /*@Test
     public void createNewRelationship() throws Exception {
         mockMvc.perform(post("/relationships")
                 .content(Format.asJsonString(
@@ -97,9 +97,9 @@ public class RelationshipControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors[0]")
                         .value("Relationship is already created."));
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void acceptRelationshipInvite() throws Exception {
         mockMvc.perform(put("/relationships")
                 .content(Format.asJsonString(new ModifyRelationshipRequest(
@@ -158,6 +158,6 @@ public class RelationshipControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isNotEmpty());
-    }
+    }*/
 
 }
