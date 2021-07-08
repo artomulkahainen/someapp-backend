@@ -6,21 +6,21 @@ import java.util.UUID;
 public class LikePostRequest {
 
     @NotNull
-    private UUID userId;
+    private UUID postUserId;
     @NotNull
     private UUID postId;
 
-    public LikePostRequest(UUID userId, UUID postId) {
-        this.userId = userId;
+    public LikePostRequest(UUID postUserId, UUID postId) {
+        this.postUserId = postUserId;
         this.postId = postId;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public UUID getPostUserId() {
+        return postUserId;
     }
 
     public void setUserId(UUID userId) {
-        this.userId = userId;
+        this.postUserId = userId;
     }
 
     public UUID getPostId() {
