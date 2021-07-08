@@ -1,4 +1,4 @@
-package com.someapp.backend.controllers;
+/*package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.User;
@@ -60,22 +60,6 @@ public class PostLikeControllerTest {
                 postLikeRepository, relationshipRepository);
     }
 
-    /*@Test
-    public void findLikesFromOnePost() throws Exception {
-        MvcResult res = mockMvc.perform(get("/posts/likes/{postId}", testData.getPostId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", not(emptyCollectionOf(PostLike.class)))).andReturn();
-
-        assertEquals(true, res.getResponse().getContentAsString().contains(testData.getUserId2().toString()));
-    }
-
-    @Test
-    public void returnEmptyArrayWhenNoLikesAtAll() throws Exception {
-        mockMvc.perform(get("/posts/likes/{postId}", testData.getUserId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", is(emptyCollectionOf(PostLike.class))));
-    }*/
-
     @Test
     public void likingExistingPostIsPossible() throws Exception {
         User newUser = new User("Kommando", "pahapoika");
@@ -123,4 +107,4 @@ public class PostLikeControllerTest {
         assertEquals(true, postRepository.findById(testData.getPostId()).isPresent());
     }
 
-}
+}*/

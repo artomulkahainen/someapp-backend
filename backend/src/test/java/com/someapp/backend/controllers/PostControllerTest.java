@@ -1,4 +1,4 @@
-package com.someapp.backend.controllers;
+/*package com.someapp.backend.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -56,12 +56,6 @@ public class PostControllerTest {
         testData.createPostTestData(postRepository, userRepository);
     }
 
-    /*@Test
-    public void findPostsIsSuccessful() throws Exception {
-        mockMvc.perform(get("/posts"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", not(emptyCollectionOf(Post.class))));
-    }*/
 
     @Test
     public void sendNewPostSuccessfully() throws Exception {
@@ -137,4 +131,4 @@ public class PostControllerTest {
     }
 
 
-}
+}*/
