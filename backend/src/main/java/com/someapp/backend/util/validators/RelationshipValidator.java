@@ -23,8 +23,8 @@ public class RelationshipValidator {
                 .findAll()
                 .stream()
                 .filter(relationship ->
-                        (relationship.getUser1().equals(userId1) && relationship.getUser2().equals(userId2)) ||
-                                (relationship.getUser2().equals(userId1) && relationship.getUser1().equals(userId2)))
+                        (relationship.getUser1().getUUID().equals(userId1) && relationship.getUser2().getUUID().equals(userId2)) ||
+                                (relationship.getUser2().getUUID().equals(userId1) && relationship.getUser1().getUUID().equals(userId2)))
                 .collect(Collectors.toList());
 
         if (matches.size() > 0 && matches.get(0).getStatus() == 1) {

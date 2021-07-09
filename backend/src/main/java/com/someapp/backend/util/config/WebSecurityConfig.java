@@ -54,6 +54,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, signUpUrl).permitAll()
                 .antMatchers(HttpMethod.POST, loginUrl).permitAll()
+                .antMatchers(HttpMethod.GET, "/posts").denyAll()
+                .antMatchers(HttpMethod.GET, "/users").denyAll()
+                .antMatchers(HttpMethod.GET, "/relationships").denyAll()
+                .antMatchers(HttpMethod.POST, "/posts").denyAll()
+                .antMatchers(HttpMethod.POST, "/users").denyAll()
+                .antMatchers(HttpMethod.POST, "/relationships").denyAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
