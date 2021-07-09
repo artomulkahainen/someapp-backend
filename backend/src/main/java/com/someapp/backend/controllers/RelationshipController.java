@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,10 +42,6 @@ public class RelationshipController {
         // If validation errors, throw an error
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
-
-        // if token doesn't return id, throw an error
-        } else if (actionUserId == null) {
-            throw new ResourceNotFoundException("Action user id not found");
 
             // If relationship is already created, throw an error
         } else if (!relationshipRepository
@@ -85,29 +82,25 @@ public class RelationshipController {
                                            BindingResult bindingResult) throws BindException {
 
         UUID modifyingUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        Optional<Relationship> relationship = relationshipRepository
+                .findById(modifyRelationshipRequest.getRelationshipId());
 
         // If validation errors, throw an error
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
 
         // If relationship is found, try to modify it
-        } else if (relationshipRepository
-                .findById(modifyRelationshipRequest.getRelationshipId())
-                .isPresent()) {
-
-            // Get relationship from repository
-            Relationship relationship = relationshipRepository
-                    .getById(modifyRelationshipRequest.getRelationshipId());
+        } else if (relationship.isPresent()) {
 
             // Confirm that relationship actionUserId != modifying userId
             // Check also that modifying user belongs to relationship
-            if (!relationship.getActionUserId().equals(modifyingUserId) &&
-                    (modifyingUserId.equals(relationship.getUser1().getId())
-                            || modifyingUserId.equals(relationship.getUser2().getId()))) {
+            if (!relationship.get().getActionUserId().equals(modifyingUserId) &&
+                    (modifyingUserId.equals(relationship.get().getUser1().getId())
+                            || modifyingUserId.equals(relationship.get().getUser2().getId()))) {
 
                 // Finally modify the new status for the relationship and save it
-                relationship.setStatus(modifyRelationshipRequest.getStatus());
-                return relationshipRepository.save(relationship);
+                relationship.get().setStatus(modifyRelationshipRequest.getStatus());
+                return relationshipRepository.save(relationship.get());
 
                 // Or throw an error
             } else {

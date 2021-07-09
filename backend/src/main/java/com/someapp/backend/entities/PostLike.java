@@ -11,12 +11,18 @@ public class PostLike extends AbstractPersistable<UUID> {
     @ManyToOne
     Post post;
 
+    UUID postUUID;
+
     @ManyToOne
     User user;
+
+    UUID userUUID;
 
     public PostLike(Post post, User user) {
         this.post = post;
         this.user = user;
+        this.postUUID = post.getUUID();
+        this.userUUID = user.getUUID();
     }
 
     public PostLike() {};
@@ -31,5 +37,21 @@ public class PostLike extends AbstractPersistable<UUID> {
 
     public UUID getUUID() {
         return this.getId();
+    }
+
+    public UUID getPostUUID() {
+        return postUUID;
+    }
+
+    public void setPostUUID(UUID postUUID) {
+        this.postUUID = postUUID;
+    }
+
+    public UUID getUserUUID() {
+        return userUUID;
+    }
+
+    public void setUserUUID(UUID userUUID) {
+        this.userUUID = userUUID;
     }
 }

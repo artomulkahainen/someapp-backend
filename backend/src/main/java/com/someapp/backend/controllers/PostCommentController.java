@@ -4,9 +4,11 @@ import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.services.PostCommentServiceImpl;
 import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.util.requests.SendPostCommentRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
+import com.someapp.backend.util.validators.UserPostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -23,10 +25,10 @@ public class PostCommentController {
     PostCommentRepository postCommentRepository;
 
     @Autowired
-    PostRepository postRepository;
+    UserPostValidator userPostValidator;
 
     @Autowired
-    UserRepository userRepository;
+    PostCommentServiceImpl postCommentService;
 
     /* PROBABLY NOT NEEDED
     @GetMapping("/posts/comments/{postId}")
@@ -46,12 +48,8 @@ public class PostCommentController {
             throw new BindException(bindingResult);
 
         // IF POSTID AND USERID ARE CORRECT, SAVE NEW POST COMMENT
-        } else if (postRepository.findById(sendPostCommentRequest.getPostId()).isPresent()
-                && userRepository.findById(sendPostCommentRequest.getUserId()).isPresent()) {
-
-            return postCommentRepository.save(new PostComment(sendPostCommentRequest.getPostComment(),
-                        postRepository.getById(sendPostCommentRequest.getPostId()),
-                        userRepository.getById(sendPostCommentRequest.getUserId())));
+        } else if (userPostValidator.isValid(sendPostCommentRequest.getPostId(), sendPostCommentRequest.getUserId())) {
+            return postCommentService.save(sendPostCommentRequest);
 
         // IF POST OR USER WEREN'T FOUND WITH GIVEN UUID
         } else {
