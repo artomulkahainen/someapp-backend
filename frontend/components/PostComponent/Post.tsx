@@ -2,7 +2,12 @@ import React from 'react';
 import { Card } from 'react-native-elements';
 import { Text } from 'react-native';
 
-const Post = (props) => {
+export interface PostComponentProps {
+  author: string;
+  post: string;
+}
+
+const Post = (props: PostComponentProps) => {
   return (
     <Card>
       <Card.Title>{props.author}</Card.Title>

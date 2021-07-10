@@ -2,7 +2,14 @@ import React from 'react';
 import { Text } from 'react-native';
 import { Card } from 'react-native-elements';
 
-const ProfileCard = ({ username, info, age, favoriteMovie }) => (
+export interface ProfileCardProps {
+  username: string;
+  info: string;
+  age: number;
+  favoriteMovie: string;
+}
+
+const ProfileCard = ({ username, info, age, favoriteMovie }: ProfileCardProps) => (
   <Card>
     <Card.Title>{username}</Card.Title>
     <Card.Divider />

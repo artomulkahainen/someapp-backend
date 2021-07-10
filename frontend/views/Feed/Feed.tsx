@@ -2,7 +2,15 @@ import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import Post from '../../components/PostComponent/Post';
 
-const Feed = ({ author }) => {
+interface FeedProps {
+  author: string;
+}
+
+interface PostProps {
+  item: any;
+}
+
+const Feed = ({ author }: FeedProps) => {
   const styles = StyleSheet.create({
     separator: {
       height: 10
@@ -43,7 +51,7 @@ const Feed = ({ author }) => {
     }
   ];
 
-  const renderPost = ({ item }) => (
+  const renderPost = ({ item }: PostProps) => (
     <Post author={item.author} post={item.post} />
   );
 
