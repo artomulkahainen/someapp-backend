@@ -1,12 +1,10 @@
 package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.services.PostCommentServiceImpl;
 import com.someapp.backend.util.requests.SendPostCommentRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
-import com.someapp.backend.util.validators.UserPostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;

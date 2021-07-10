@@ -6,8 +6,6 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,7 +32,7 @@ public class Relationship extends AbstractPersistable<UUID> {
         this.status = status;
     }
 
-    public Relationship() {};
+    public Relationship() {}
 
     public UUID getActionUserId() {
         return actionUserId;
@@ -50,13 +48,6 @@ public class Relationship extends AbstractPersistable<UUID> {
 
     public Timestamp getCreatedDate() {
         return createdDate;
-    }
-
-    public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
-        users.add(user1);
-        users.add(user2);
-        return users;
     }
 
     public User getUser1() { return user1; }

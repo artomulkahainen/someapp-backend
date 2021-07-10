@@ -64,7 +64,6 @@ public class PostServiceImpl {
         }
     }
 
-    // Currently fetches all posts matching the criteria
     public List<Post> findPostsByRelationships(HttpServletRequest req) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
         Set<UUID> friendIds = relationshipRepository
@@ -75,7 +74,7 @@ public class PostServiceImpl {
                         relationship.getUser1().getUUID() : relationship.getUser2().getUUID())
                 .collect(Collectors.toSet());
 
-        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate);
+        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
 
         return postRepository
                 .findAll()
@@ -83,7 +82,7 @@ public class PostServiceImpl {
                 .filter(post -> friendIds
                         .stream()
                         .anyMatch(friendId -> friendId.equals(post.getUserId())))
-                .sorted(byCreatedDate)
+                .sorted(byCreatedDate).limit(10)
                 .collect(Collectors.toList());
     }
 }

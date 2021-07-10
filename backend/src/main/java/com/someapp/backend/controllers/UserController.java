@@ -36,10 +36,6 @@ public class UserController {
             throw new BindException(bindingResult);
         }
 
-        try {
-            return userDetailsService.save(user);
-        } catch (Exception e) {
-            throw new BadArgumentException("Given values were not suitable for account.");
-        }
+        return userDetailsService.save(user);
     }
 }

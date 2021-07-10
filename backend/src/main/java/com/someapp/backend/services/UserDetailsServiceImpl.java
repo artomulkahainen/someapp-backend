@@ -2,6 +2,7 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.util.customExceptions.BadArgumentException;
 import com.someapp.backend.util.extendedclasses.ExtendedUser;
 import com.someapp.backend.util.extendedinterfaces.ExtendedUserDetails;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
@@ -70,8 +71,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public User save(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        try {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new BadArgumentException("Given values are not suitable for user account");
+        }
     }
 
 }

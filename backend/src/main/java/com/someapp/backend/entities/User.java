@@ -9,8 +9,10 @@ import javax.persistence.*;
 
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -34,9 +36,6 @@ public class User extends AbstractPersistable<UUID> {
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<PostLike> postLikes;
-
-    @OneToMany
-    private List<Relationship> relationships;
 
     public User(String username, String password) {
         this.username = username;
@@ -68,10 +67,6 @@ public class User extends AbstractPersistable<UUID> {
         return postLikes;
     }
 
-    public List<Relationship> getRelationships() {
-        return relationships;
-    }
-
     public boolean isAdmin() {
         return admin;
     }
@@ -82,5 +77,10 @@ public class User extends AbstractPersistable<UUID> {
 
     public Timestamp getCreatedDate() {
         return createdDate;
+    }
+
+    public List<Post> getPosts() {
+        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
+        return posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList());
     }
 }
