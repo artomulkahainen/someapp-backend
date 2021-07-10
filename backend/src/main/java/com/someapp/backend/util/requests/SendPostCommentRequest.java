@@ -14,12 +14,12 @@ public class SendPostCommentRequest {
     @NotNull
     private UUID postId;
     @NotNull
-    private UUID userId;
+    private UUID postCreatorId;
 
-    public SendPostCommentRequest(String postComment, UUID postId, UUID userId) {
+    public SendPostCommentRequest(String postComment, UUID postId, UUID postCreatorId) {
         this.postComment = postComment;
         this.postId = postId;
-        this.userId = userId;
+        this.postCreatorId = postCreatorId;
     }
 
     public String getPostComment() {
@@ -30,9 +30,8 @@ public class SendPostCommentRequest {
         return postId;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public UUID getPostCreatorId() {
+        return postCreatorId;
     }
-
 
 }
