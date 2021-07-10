@@ -30,16 +30,6 @@ public class PostCommentController {
     @Autowired
     PostCommentServiceImpl postCommentService;
 
-    /* PROBABLY NOT NEEDED
-    @GetMapping("/posts/comments/{postId}")
-    public List<PostComment> getPostCommentsByPostId(@PathVariable UUID postId) {
-        if (postRepository.findById(postId).isPresent()) {
-            return postRepository.getById(postId).getPostComments();
-        } else {
-            throw new ResourceNotFoundException("Post was not found with given uuid");
-        }
-    } PROBABLY NOT NEEDED*/
-
     @PostMapping("/posts/comments")
     public PostComment sendNewPostComment(@Valid @RequestBody SendPostCommentRequest sendPostCommentRequest,
                                    BindingResult bindingResult) throws BindException {

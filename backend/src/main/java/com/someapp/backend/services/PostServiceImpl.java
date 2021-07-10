@@ -10,15 +10,14 @@ import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.DeletePostRequest;
 import com.someapp.backend.util.requests.SendPostRequest;
-import com.someapp.backend.util.requests.UUIDRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
 import com.someapp.backend.util.validators.RelationshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl {
@@ -28,6 +27,12 @@ public class PostServiceImpl {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RelationshipRepository relationshipRepository;
+
+    @Autowired
+    private RelationshipValidator relationshipValidator;
 
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
@@ -57,5 +62,28 @@ public class PostServiceImpl {
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("Post was not found");
         }
+    }
+
+    // Currently fetches all posts matching the criteria
+    public List<Post> findPostsByRelationships(HttpServletRequest req) {
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        Set<UUID> friendIds = relationshipRepository
+                .findAll()
+                .stream()
+                .filter(relationship -> relationshipValidator.isUserInActiveRelationship(actionUserId, relationship))
+                .map(relationship -> relationship.getUser1().getUUID().equals(actionUserId) ?
+                        relationship.getUser1().getUUID() : relationship.getUser2().getUUID())
+                .collect(Collectors.toSet());
+
+        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate);
+
+        return postRepository
+                .findAll()
+                .stream()
+                .filter(post -> friendIds
+                        .stream()
+                        .anyMatch(friendId -> friendId.equals(post.getUserId())))
+                .sorted(byCreatedDate)
+                .collect(Collectors.toList());
     }
 }

@@ -33,4 +33,9 @@ public class RelationshipValidator {
 
         return false;
     }
+
+    public boolean isUserInActiveRelationship(UUID actionUserId, Relationship relationship) {
+        return (relationship.getUser1().getUUID().equals(actionUserId) || relationship.getUser2().getUUID().equals(actionUserId))
+                && relationship.getStatus() == 1;
+    }
 }

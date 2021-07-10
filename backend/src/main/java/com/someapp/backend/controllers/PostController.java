@@ -11,6 +11,9 @@ import com.someapp.backend.util.requests.SendPostRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +30,10 @@ public class PostController {
     @Autowired
     private PostServiceImpl postService;
 
-    /* NEED TO IMPLEMENT THIS
-    @PostMapping("/getPostsByRelationshipsByUsingPOST")
-    public List<Post> getPostsByRelationships() {
-
-    } NEED TO IMPLEMENT THIS */
+    @GetMapping("/getPostsByRelationshipsByUsingGET")
+    public List<Post> getPostsByRelationships(HttpServletRequest req) {
+        return postService.findPostsByRelationships(req);
+    }
 
     @PostMapping("/sendNewPostByUsingPOST")
     public Post sendPost(HttpServletRequest req, @Valid @RequestBody SendPostRequest sendPostRequest,
