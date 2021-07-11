@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
-import Feed from '../Feed/Feed';
+import FeedView from '../FeedView/FeedView';
 
 const profileExample = {
   username: 'Pertti',
@@ -10,7 +10,7 @@ const profileExample = {
   info: 'Mä oon Pertti eli ekspertti.'
 };
 
-const Profile = () => {
+const ProfileView = () => {
   return (
     <View style={{ flex: 1 }}>
       <ProfileCard
@@ -22,9 +22,9 @@ const Profile = () => {
       <Text style={{ margin: 30, textAlign: 'center', fontSize: 20 }}>
         POSTS
       </Text>
-      <Feed author={profileExample.username} />
+      <FeedView author={profileExample.username} />
     </View>
   );
 };
 
-export default Profile;
+export default ProfileView;

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import TextArea from '../../components/TextArea/TextArea';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 
-const NewPost = () => {
+const NewPostView = () => {
   const [comment, setComment] = useState('');
 
   return (
@@ -14,4 +14,4 @@ const NewPost = () => {
   );
 };
 
-export default NewPost;
+export default NewPostView;

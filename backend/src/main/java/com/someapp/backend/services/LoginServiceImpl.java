@@ -44,6 +44,8 @@ public class LoginServiceImpl {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
+        System.out.println("Successful login with username: "
+                + userDetails.getUsername());
         return ResponseEntity.ok(new JWTResponse(token));
     }
 }

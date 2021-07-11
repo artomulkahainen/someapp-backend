@@ -10,7 +10,7 @@ interface PostProps {
   item: any;
 }
 
-const Feed = ({ author }: FeedProps) => {
+const FeedView = ({ author }: FeedProps) => {
   const styles = StyleSheet.create({
     separator: {
       height: 10
@@ -69,4 +69,4 @@ const Feed = ({ author }: FeedProps) => {
   );
 };
 
-export default Feed;
+export default FeedView;

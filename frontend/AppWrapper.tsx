@@ -1,34 +1,42 @@
+import React, { useState } from 'react';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import AsyncStorageFunctions from './util/storage/AsyncStorageFunctions';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
-import Feed from './views/Feed/Feed';
-import Login from './views/Login/Login';
-import NewPost from './views/NewPost/NewPost';
-import Profile from './views/Profile/Profile';
-import Settings from './views/SettingsScreen/Settings';
+import FeedView from './views/FeedView/FeedView';
+import LoginView from './views/LoginView/LoginView';
+import NewPostView from './views/NewPostView/NewPostView';
+import ProfileView from './views/ProfileView/ProfileView';
+import SettingsView from './views/SettingsView/SettingsView';
 
 const Tab = createBottomTabNavigator();
 
 const AppWrapper = () => {
+  const { getItem, setItem, removeItem } = useAsyncStorage('token');
+  const { getToken, saveToken, removeToken } = AsyncStorageFunctions({
+    getItem,
+    setItem,
+    removeItem
+  });
+
   const [logged, setLogged] = useState(false);
 
   const navIconNames = {
     Feed: 'comment',
     Profile: 'person',
     NewPost: 'edit',
-    Settings: 'settings',
-    Logout: 'close'
+    Settings: 'settings'
   };
 
-  const logout = () => {
+  const logout = async () => {
     setLogged(false);
-    return (
-      <View>
-        <Text>logged out</Text>
-      </View>
-    );
+    await removeToken();
+  };
+
+  const Settings = (): JSX.Element => {
+    return <SettingsView logout={logout} />;
   };
 
   return logged ? (
@@ -56,11 +64,10 @@ const AppWrapper = () => {
           showLabel: false
         }}
       >
-        <Tab.Screen name="Feed" component={Feed} />
-        <Tab.Screen name="NewPost" component={NewPost} />
-        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="Feed" component={FeedView} />
+        <Tab.Screen name="NewPost" component={NewPostView} />
+        <Tab.Screen name="Profile" component={ProfileView} />
         <Tab.Screen name="Settings" component={Settings} />
-        <Tab.Screen name="Logout" component={logout} />
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
@@ -71,7 +78,7 @@ const AppWrapper = () => {
         alignContent: 'center'
       }}
     >
-      <Login setLogged={() => setLogged(true)} />
+      <LoginView saveToken={saveToken} setLogged={() => setLogged(true)} />
     </View>
   );
 };
