@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, GestureResponderEvent, Dimensions } from 'react-native';
 import InputWithButton from '../../components/InputWithButton/InputWithButton';
+import { login } from '../../services/loginService';
 
 interface LoginProps {
   setLogged: (event: GestureResponderEvent) => void;
 }
 
 const Login = (props: LoginProps) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const tryLogin = async () => {
     setLoading(true);
+    const res = await login({ username, password });
+
+    if (!res.error) {
+      console.log(res.data);
+    }
+
     setTimeout(() => {
       setLoading(false);
     }, 3000);
