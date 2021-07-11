@@ -20,8 +20,7 @@ const Feed = ({ author }: FeedProps) => {
   let posts = [
     {
       author: 'Pertti',
-      post:
-        'Lorem ipsum hallulahLorem ipsum hallulahLorem ipsum hallulahLoremipsum hallulahLorem ipsum hallulahLorem ipsum hallulahLorem ipsumhallulahLorem ipsum hallulahLorem ipsum hallulahLorem ipsum hallulah'
+      post: 'Lorem ipsum hallulahLorem ipsum hallulahLorem ipsum hallulahLoremipsum hallulahLorem ipsum hallulahLorem ipsum hallulahLorem ipsumhallulahLorem ipsum hallulahLorem ipsum hallulahLorem ipsum hallulah'
     },
     {
       author: 'Kalle',
@@ -33,13 +32,11 @@ const Feed = ({ author }: FeedProps) => {
     },
     {
       author: 'Kusti',
-      post:
-        'Sieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateella'
+      post: 'Sieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateellaSieniä kasvaa sateella'
     },
     {
       author: 'Kerttu',
-      post:
-        'Joskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vain'
+      post: 'Joskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vainJoskus vain'
     },
     {
       author: 'Pertti',
@@ -55,11 +52,18 @@ const Feed = ({ author }: FeedProps) => {
     <Post author={item.author} post={item.post} />
   );
 
+  const keyExtractor = (item: any, index: number) => index.toString();
+
   return !author ? (
-    <FlatList data={posts} renderItem={renderPost} />
+    <FlatList
+      data={posts}
+      renderItem={renderPost}
+      keyExtractor={keyExtractor}
+    />
   ) : (
     <FlatList
       data={posts.filter((post) => post.author === author)}
+      keyExtractor={keyExtractor}
       renderItem={renderPost}
     />
   );

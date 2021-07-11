@@ -1,20 +1,18 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import { Header } from 'react-native-elements';
-import { NavigationContainer, RouteProp } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon } from 'react-native-elements';
-import Profile from './views/Profile/Profile';
+import { Header, Icon } from 'react-native-elements';
 import Feed from './views/Feed/Feed';
-import NewPost from './views/NewPost/NewPost';
-import Settings from './views/SettingsScreen/Settings';
 import Login from './views/Login/Login';
-import Posts from './util/posts';
+import NewPost from './views/NewPost/NewPost';
+import Profile from './views/Profile/Profile';
+import Settings from './views/SettingsScreen/Settings';
 
 const Tab = createBottomTabNavigator();
 
-const App = () => {
-  const [logged, setLogged] = useState(true);
+const AppWrapper = () => {
+  const [logged, setLogged] = useState(false);
 
   const navIconNames = {
     Feed: 'comment',
@@ -66,8 +64,16 @@ const App = () => {
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
-    <Login setLogged={() => setLogged(true)} />
+    <View
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center'
+      }}
+    >
+      <Login setLogged={() => setLogged(true)} />
+    </View>
   );
 };
 
-export default App;
+export default AppWrapper;

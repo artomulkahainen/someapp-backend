@@ -9,7 +9,12 @@ export interface ProfileCardProps {
   favoriteMovie: string;
 }
 
-const ProfileCard = ({ username, info, age, favoriteMovie }: ProfileCardProps) => (
+const ProfileCard = ({
+  username,
+  info,
+  age,
+  favoriteMovie
+}: ProfileCardProps) => (
   <Card>
     <Card.Title>{username}</Card.Title>
     <Card.Divider />
