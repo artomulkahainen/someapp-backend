@@ -21,6 +21,7 @@ public class LoginController {
 
     @GetMapping("/ping")
     public PingResponse pingServerStatus() {
+        System.out.println("Server pinged");
         return new PingResponse(HttpStatus.OK, new Date());
     }
 
