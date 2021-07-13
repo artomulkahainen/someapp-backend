@@ -13,14 +13,14 @@ import SettingsView from './views/SettingsView/SettingsView';
 
 const Tab = createBottomTabNavigator();
 
-const AppWrapper = () => {
-  const { getItem, setItem, removeItem } = useAsyncStorage('token');
-  const { getToken, saveToken, removeToken } = AsyncStorageFunctions({
-    getItem,
-    setItem,
-    removeItem
-  });
+const { getItem, setItem, removeItem } = useAsyncStorage('token');
+export const { getToken, saveToken, removeToken } = AsyncStorageFunctions({
+  getItem,
+  setItem,
+  removeItem
+});
 
+const AppWrapper = () => {
   const [logged, setLogged] = useState(false);
 
   const navIconNames = {
