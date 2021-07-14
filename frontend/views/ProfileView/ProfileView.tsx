@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import PostListComponent from '../../components/PostListComponent/PostListComponent';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
-import FeedView from '../FeedView/FeedView';
 
 const profileExample = {
   username: 'Pertti',
@@ -22,7 +22,7 @@ const ProfileView = () => {
       <Text style={{ margin: 30, textAlign: 'center', fontSize: 20 }}>
         POSTS
       </Text>
-      <FeedView author={profileExample.username} />
+      <PostListComponent author={profileExample.username} />
     </View>
   );
 };

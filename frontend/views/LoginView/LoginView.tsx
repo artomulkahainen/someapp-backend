@@ -1,4 +1,3 @@
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import React, { SetStateAction, useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import InputWithButton from '../../components/InputWithButton/InputWithButton';

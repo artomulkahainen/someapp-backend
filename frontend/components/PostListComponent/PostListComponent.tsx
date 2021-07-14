@@ -10,7 +10,7 @@ interface PostProps {
   item: any;
 }
 
-const PostFeedComponent = ({ author }: FeedProps) => {
+const PostListComponent = ({ author }: FeedProps) => {
   let posts = [
     {
       author: 'Pertti',
@@ -63,4 +63,4 @@ const PostFeedComponent = ({ author }: FeedProps) => {
   );
 };
 
-export default PostFeedComponent;
+export default PostListComponent;
