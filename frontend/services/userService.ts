@@ -5,6 +5,8 @@ import { getToken } from '../AppWrapper';
 import { UserProps } from './loginService';
 const baseUrl = `${API_URL}/api/v1`;
 
+export interface MyUserDetails {}
+
 export const findMyUserDetails =
   async (): Promise<AxiosResponse<any> | null> => {
     const token = await getToken();

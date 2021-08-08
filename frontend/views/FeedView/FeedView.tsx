@@ -5,15 +5,7 @@ import { findMyUserDetails } from '../../services/userService';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { getFriendsPosts } from '../../services/postService';
 
-interface FeedProps {
-  author?: string;
-}
-
-interface PostProps {
-  item: any;
-}
-
-const FeedView = ({ author }: FeedProps) => {
+const FeedView = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useFocusEffect(
