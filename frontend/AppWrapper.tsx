@@ -10,6 +10,7 @@ import LoginView from './views/LoginView/LoginView';
 import NewPostView from './views/NewPostView/NewPostView';
 import ProfileView from './views/ProfileView/ProfileView';
 import SettingsView from './views/SettingsView/SettingsView';
+import { black, red, white } from './util/Colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,10 +45,10 @@ const AppWrapper = () => {
       <Header
         centerComponent={{
           text: 'GimmeVibe',
-          style: { color: '#FF4500' }
+          style: { color: red }
         }}
         containerStyle={{
-          backgroundColor: 'white'
+          backgroundColor: white
         }}
       />
       <Tab.Navigator
@@ -58,9 +59,9 @@ const AppWrapper = () => {
           )
         })}
         tabBarOptions={{
-          activeTintColor: '#FF4500',
-          inactiveTintColor: 'black',
-          tabStyle: { backgroundColor: 'white' },
+          activeTintColor: red,
+          inactiveTintColor: black,
+          tabStyle: { backgroundColor: white },
           showLabel: false
         }}
       >
