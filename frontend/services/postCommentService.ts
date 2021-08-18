@@ -4,24 +4,25 @@ import axios, { AxiosResponse } from 'axios';
 import { getToken } from '../AppWrapper';
 const baseUrl = `${API_URL}/api/v1`;
 
-export interface NewRelationshipRequest {
-  addedUserId: string;
+export interface PostCommentRequest {
+  postComment: string;
+  postCreatorId: string;
+  postId: string;
 }
 
-export interface UpdateRelationshipRequest {
-  relationshipId: string;
-  status: number;
+export interface UUIDRequest {
+  uuid: string;
 }
 
-export const saveNewRelationship = async (
-  req: NewRelationshipRequest
+export const sendNewPostComment = async (
+  req: PostCommentRequest
 ): Promise<AxiosResponse<any> | null> => {
   const token = await getToken();
 
   if (!!token) {
     try {
       const res = await axios.post(
-        `${baseUrl}/saveNewRelationshipByUsingPOST`,
+        `${baseUrl}/sendPostCommentByUsingPOST`,
         req,
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -37,15 +38,15 @@ export const saveNewRelationship = async (
   return null;
 };
 
-export const updateRelationship = async (
-  req: UpdateRelationshipRequest
+export const deletePostComment = async (
+  req: UUIDRequest
 ): Promise<AxiosResponse<any> | null> => {
   const token = await getToken();
 
   if (!!token) {
     try {
-      const res = await axios.put(
-        `${baseUrl}/updateRelationshipByUsingPUT`,
+      const res = await axios.post(
+        `${baseUrl}/deletePostCommentByUsingPOST`,
         req,
         {
           headers: { Authorization: `Bearer ${token}` }
