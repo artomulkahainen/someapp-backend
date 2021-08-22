@@ -19,7 +19,7 @@ I'm building this social media app for mobile devices. The purpose of this proje
 
 ### Built With
 I used these frameworks:
-  * React Native (JavaScript)
+  * React Native (TypeScript)
   * Spring Boot (Java)
  
 ## Link to Heroku
