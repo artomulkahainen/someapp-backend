@@ -3,6 +3,7 @@ import { View, Text, Dimensions } from 'react-native';
 import InputWithButton from '../../components/InputWithButton/InputWithButton';
 import { login } from '../../services/loginService';
 import { red, white } from '../../util/Colors';
+import Snackbar from 'react-native-snackbar';
 
 interface LoginProps {
   setLogged: (value: SetStateAction<boolean>) => void;
@@ -29,7 +30,11 @@ const LoginView = ({ setLogged, saveToken }: LoginProps) => {
     } catch (e: any) {
       // send snackbar message here instead of console log
       console.log(`${e.response.data.message}, ${e.response.data.status}`);
-
+      Snackbar.show({
+        text: `${e.response.data.message}, ${e.response.data.status}`,
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: red
+      });
       setLoading(false);
     }
   };
