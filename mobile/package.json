@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "react-native start",
+    "devLinux": "gnome-terminal -e 'sh -c \"npm start\"' && npm run android",
     "ts-node": "ts-node",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
