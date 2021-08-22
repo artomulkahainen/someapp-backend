@@ -8,15 +8,17 @@ import LoginView from './views/LoginView/LoginView';
 import NewPostView from './views/NewPostView/NewPostView';
 import ProfileView from './views/ProfileView/ProfileView';
 import SettingsView from './views/SettingsView/SettingsView';
-import { black, red, white } from './util/Colors';
+import { black, darkRed, red, white } from './util/Colors';
 import { saveToken, removeToken } from './util/storage/AsyncStorage';
 import { ping, ServerStatus } from './services/pingService';
 import useInterval from './util/hooks/useInterval';
+import RegisterForm from './views/RegisterView/RegisterForm';
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   const [logged, setLogged] = useState(false);
+  const [registerFormOpen, setRegisterFormOpen] = useState<boolean>(false);
   const [serverOnline, setServerOnline] = useState<boolean>(true);
 
   useEffect(() => {
@@ -72,7 +74,7 @@ const App = () => {
         })}
         tabBarOptions={{
           activeTintColor: red,
-          inactiveTintColor: black,
+          inactiveTintColor: darkRed,
           tabStyle: { backgroundColor: white },
           showLabel: false
         }}
@@ -91,7 +93,15 @@ const App = () => {
         alignContent: 'center'
       }}
     >
-      <LoginView saveToken={saveToken} setLogged={() => setLogged(true)} />
+      <LoginView
+        saveToken={saveToken}
+        setLogged={() => setLogged(true)}
+        toggleRegisterForm={setRegisterFormOpen}
+      />
+      <RegisterForm
+        toggleForm={setRegisterFormOpen}
+        formOpen={registerFormOpen}
+      />
     </View>
   );
 };
