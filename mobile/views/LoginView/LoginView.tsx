@@ -1,17 +1,13 @@
 import React, { SetStateAction, useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import InputWithButton from '../../components/InputWithButton/InputWithButton';
-import { login } from '../../services/loginService';
+import { login, SuccessfulLoginResponse } from '../../services/loginService';
 import { red, white } from '../../util/Colors';
 import Snackbar from 'react-native-snackbar';
 
 interface LoginProps {
   setLogged: (value: SetStateAction<boolean>) => void;
   saveToken: (token: string) => Promise<void>;
-}
-
-interface SuccessfulLoginResponse {
-  token: string;
 }
 
 const LoginView = ({ setLogged, saveToken }: LoginProps) => {
