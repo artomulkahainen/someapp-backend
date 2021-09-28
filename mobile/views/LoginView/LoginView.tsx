@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import InputWithButton from '../../components/InputWithButton/InputWithButton';
 import { login, SuccessfulLoginResponse } from '../../services/loginService';
 import { red, white } from '../../util/Colors';
 import Snackbar from 'react-native-snackbar';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
+import RegisterForm from '../RegisterView/RegisterForm';
 
 interface LoginProps {
   setLogged: (value: SetStateAction<boolean>) => void;
@@ -51,6 +52,7 @@ const LoginView = ({
         marginTop: Dimensions.get('window').height / 5
       }}
     >
+      <View />
       <Text style={{ textAlign: 'center', fontSize: 30, color: 'red' }}>
         GimmeVibe
       </Text>
@@ -61,7 +63,15 @@ const LoginView = ({
         buttonAction={tryLogin}
         loading={loading}
       />
-      <ButtonComponent onPress={handleFormOpen} title="Register new user" />
+      <ButtonComponent
+        onPress={handleFormOpen}
+        title="Register new user"
+        style={{ marginTop: 50 }}
+      />
+      {/* <RegisterForm
+        toggleForm={setRegisterFormOpen}
+        formOpen={registerFormOpen}
+      />*/}
     </View>
   );
 };

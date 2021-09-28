@@ -38,12 +38,12 @@ const App = () => {
     });
   };
 
-  const navIconNames = {
-    Feed: 'comment',
-    Profile: 'person',
-    NewPost: 'edit',
-    Settings: 'settings'
-  };
+  const navIconNames = new Map<string, string>([
+    ['Feed', 'comment'],
+    ['Profile', 'person'],
+    ['NewPost', 'edit'],
+    ['Settings', 'settings']
+  ]);
 
   const logout = async () => {
     setLogged(false);
@@ -68,8 +68,7 @@ const App = () => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => (
-            // @ts-ignore: Got to fix at some point
-            <Icon name={navIconNames[route.name]} color={color} />
+            <Icon name={navIconNames.get(route.name)!} color={color} />
           )
         })}
         tabBarOptions={{
@@ -86,23 +85,11 @@ const App = () => {
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
-    <View
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignContent: 'center'
-      }}
-    >
-      <LoginView
-        saveToken={saveToken}
-        setLogged={() => setLogged(true)}
-        toggleRegisterForm={setRegisterFormOpen}
-      />
-      <RegisterForm
-        toggleForm={setRegisterFormOpen}
-        formOpen={registerFormOpen}
-      />
-    </View>
+    <LoginView
+      saveToken={saveToken}
+      setLogged={() => setLogged(true)}
+      toggleRegisterForm={setRegisterFormOpen}
+    />
   );
 };
 
