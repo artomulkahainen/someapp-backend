@@ -10,13 +10,7 @@ export interface ButtonProps {
   onPress: () => void;
 }
 
-const ButtonComponent = ({
-  icon,
-  title,
-  loading,
-  style,
-  onPress
-}: ButtonProps) => (
+const ButtonComponent = ({ icon, title, loading, style, onPress }: ButtonProps) => (
   <Button
     buttonStyle={style}
     icon={icon}
@@ -24,6 +18,7 @@ const ButtonComponent = ({
     loading={loading}
     onPress={onPress}
     disabled={loading}
+    style={{ marginLeft: 10 }}
     //titleStyle={{ textAlign: 'center' }}
   />
 );

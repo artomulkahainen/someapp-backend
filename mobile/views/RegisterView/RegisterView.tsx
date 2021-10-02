@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { Formik, FormikValues, FormikHandlers } from 'formik';
+import { FormikValues } from 'formik';
 import { saveNewUser } from '../../services/userService';
-import { AxiosResponse } from 'axios';
-import InputWithButton from '../../components/InputWithButton/InputWithButton';
 import FormComponent from '../../components/FormComponent/FormComponent';
 
 export interface RegisterFormProps {
@@ -14,6 +11,7 @@ const RegisterView = ({ toggleForm }: RegisterFormProps) => {
   const [saving, setSaving] = useState<boolean>(false);
 
   const trySave = (values: FormikValues) => {
+    console.log(values);
     setSaving(true);
     saveNewUser({
       username: values.username,

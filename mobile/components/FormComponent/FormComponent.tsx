@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { Formik, FormikValues } from 'formik';
+import { lightGrey } from '../../util/Colors';
 
 interface FormComponentProps {
   inputPlaceholders: Array<string>;
@@ -28,19 +29,16 @@ const FormComponent = ({
 }: FormComponentProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const renderInputs = (
-    handleChange: (e: string | React.ChangeEvent<any>) => void,
-    handleBlur: (e: any) => void,
-    values: FormikValues
-  ) =>
+  const renderInputs = (handleChange: any, handleBlur: any, values: FormikValues) =>
     inputPlaceholders.map((placeholder: string, index: number) => (
-      <Input
+      <TextInput
         placeholder={placeholder}
-        onChangeText={(_: string) => handleChange(placeholder.toLowerCase().trim())}
-        onBlur={handleBlur(placeholder.toLowerCase().trim())}
+        onChangeText={handleChange(placeholder.toLowerCase().replace(' ', ''))}
+        onBlur={handleBlur(placeholder.toLowerCase().replace(' ', ''))}
         key={index}
         secureTextEntry={showPassword ? false : placeholder.toLowerCase().includes('password')}
-        value={values[placeholder.toLowerCase().trim()]}
+        value={values[placeholder.toLowerCase().replace(' ', '')]}
+        style={{ margin: 10, borderBottomWidth: 1, borderBottomColor: lightGrey }}
       />
     ));
 
@@ -53,7 +51,7 @@ const FormComponent = ({
       initialValues={inputPlaceholders.reduce(
         (inputsArray, input) => ({
           ...inputsArray,
-          [input.toLowerCase().trim()]: ''
+          [input.toLowerCase().replace(' ', '')]: ''
         }),
         {}
       )}
@@ -61,18 +59,27 @@ const FormComponent = ({
     >
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View>
-          {/*<TextInput
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />*/}
-
           {renderInputs(handleChange, handleBlur, values)}
           {renderShowPasswordCheckbox && (
             <CheckBox title="Show password" checked={showPassword} onPress={() => setShowPassword(!showPassword)} />
           )}
-          <ButtonComponent title={submitButtonTitle} onPress={handleSubmit} loading={loading} />
-          {!!cancelAction && <ButtonComponent title={'Cancel'} onPress={cancelAction} loading={loading} />}
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 20
+            }}
+          >
+            <ButtonComponent
+              title={submitButtonTitle}
+              onPress={handleSubmit}
+              loading={loading}
+              style={{ marginRight: !!cancelAction ? 30 : 0 }}
+            />
+            {!!cancelAction && <ButtonComponent title={'Cancel'} onPress={cancelAction} loading={loading} />}
+          </View>
         </View>
       )}
     </Formik>
