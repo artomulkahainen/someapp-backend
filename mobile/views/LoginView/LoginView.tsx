@@ -1,29 +1,29 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import InputWithButton from '../../components/InputWithButton/InputWithButton';
 import { login, SuccessfulLoginResponse } from '../../services/loginService';
 import { red, white } from '../../util/Colors';
 import Snackbar from 'react-native-snackbar';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
-import RegisterForm from '../RegisterView/RegisterForm';
+import RegisterView from '../RegisterView/RegisterView';
 
 interface LoginProps {
   setLogged: (value: SetStateAction<boolean>) => void;
   saveToken: (token: string) => Promise<void>;
-  toggleRegisterForm: Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginView = ({
-  setLogged,
-  saveToken,
-  toggleRegisterForm
-}: LoginProps) => {
+const LoginView = ({ setLogged, saveToken }: LoginProps) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [registerFormOpen, setRegisterFormOpen] = useState<boolean>(false);
 
-  const handleFormOpen = () => {
-    toggleRegisterForm(true);
+  useEffect(() => {
+    console.log(registerFormOpen);
+  }, [registerFormOpen]);
+
+  const toggleRegisterForm = () => {
+    setRegisterFormOpen(!registerFormOpen);
   };
 
   const tryLogin = async () => {
@@ -52,26 +52,22 @@ const LoginView = ({
         marginTop: Dimensions.get('window').height / 5
       }}
     >
-      <View />
-      <Text style={{ textAlign: 'center', fontSize: 30, color: 'red' }}>
-        GimmeVibe
-      </Text>
-      <InputWithButton
-        inputPlaceholders={['Username', 'Password']}
-        stateSetters={[setUsername, setPassword]}
-        inputType="Login"
-        buttonAction={tryLogin}
-        loading={loading}
-      />
-      <ButtonComponent
-        onPress={handleFormOpen}
-        title="Register new user"
-        style={{ marginTop: 50 }}
-      />
-      {/* <RegisterForm
-        toggleForm={setRegisterFormOpen}
-        formOpen={registerFormOpen}
-      />*/}
+      {!registerFormOpen ? (
+        <View>
+          <Text style={{ textAlign: 'center', fontSize: 30, color: 'red' }}>GimmeVibe</Text>
+          <InputWithButton
+            inputPlaceholders={['Username', 'Password']}
+            stateSetters={[setUsername, setPassword]}
+            inputTitle="Login"
+            buttonAction={tryLogin}
+            loading={loading}
+            values={[username, password]}
+          />
+          <ButtonComponent onPress={toggleRegisterForm} title="Register new user" style={{ marginTop: 50 }} />
+        </View>
+      ) : (
+        <RegisterView toggleForm={toggleRegisterForm} />
+      )}
     </View>
   );
 };

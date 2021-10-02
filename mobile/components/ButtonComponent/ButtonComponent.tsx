@@ -7,7 +7,7 @@ export interface ButtonProps {
   title: string;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress: () => void;
 }
 
 const ButtonComponent = ({

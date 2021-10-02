@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { CheckBox, Input } from 'react-native-elements';
-import { GestureResponderEvent, Text, View } from 'react-native';
+import {
+  GestureResponderEvent,
+  NativeSyntheticEvent,
+  Text,
+  TextInput,
+  TextInputFocusEventData,
+  View
+} from 'react-native';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
+import { FormikValues } from 'formik';
 
 interface InputWithButtonProps {
   inputPlaceholders: Array<string>;
-  stateSetters: Array<React.Dispatch<React.SetStateAction<string>>>;
-  inputType: string;
+  stateSetters?: Array<React.Dispatch<React.SetStateAction<string>>>;
+  inputTitle: string;
   loading?: boolean;
-  buttonAction: (event: GestureResponderEvent) => void;
+  handleChange?: (e: string | React.ChangeEvent<any>) => void;
+  handleBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  buttonAction: (
+    e: GestureResponderEvent | React.FormEvent<HTMLFormElement> | undefined
+  ) => void;
+  values: any;
 }
 
 const InputWithButton = (props: InputWithButtonProps) => {
@@ -18,9 +31,21 @@ const InputWithButton = (props: InputWithButtonProps) => {
     (placeholder: string, index: number) => (
       <Input
         placeholder={placeholder}
-        onChangeText={(text: string) => props.stateSetters[index](text)}
+        onChangeText={(text: string) =>
+          !!props.stateSetters
+            ? props.stateSetters[index](text)
+            : props.handleChange!(placeholder)
+        }
+        /*onBlur={
+          !props.stateSetters ? undefined : props.handleBlur!(placeholder)
+        }*/
         key={index}
-        secureTextEntry={showPassword ? false : placeholder === 'Password'}
+        secureTextEntry={
+          showPassword ? false : placeholder.toLowerCase().includes('password')
+        }
+        value={
+          !props.stateSetters ? props.values[placeholder] : props.values[index]
+        }
       />
     )
   );
@@ -46,7 +71,7 @@ const InputWithButton = (props: InputWithButtonProps) => {
         />
       )}
       <ButtonComponent
-        title={props.inputType}
+        title={props.inputTitle}
         onPress={props.buttonAction}
         loading={props.loading}
       />

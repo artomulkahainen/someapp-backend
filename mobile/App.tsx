@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import FeedView from './views/FeedView/FeedView';
 import LoginView from './views/LoginView/LoginView';
 import NewPostView from './views/NewPostView/NewPostView';
 import ProfileView from './views/ProfileView/ProfileView';
 import SettingsView from './views/SettingsView/SettingsView';
-import { black, darkRed, red, white } from './util/Colors';
+import { darkRed, red, white } from './util/Colors';
 import { saveToken, removeToken } from './util/storage/AsyncStorage';
 import { ping, ServerStatus } from './services/pingService';
 import useInterval from './util/hooks/useInterval';
-import RegisterForm from './views/RegisterView/RegisterForm';
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   const [logged, setLogged] = useState(false);
-  const [registerFormOpen, setRegisterFormOpen] = useState<boolean>(false);
   const [serverOnline, setServerOnline] = useState<boolean>(true);
 
   useEffect(() => {
@@ -67,9 +64,7 @@ const App = () => {
       />
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => (
-            <Icon name={navIconNames.get(route.name)!} color={color} />
-          )
+          tabBarIcon: ({ focused, color, size }) => <Icon name={navIconNames.get(route.name)!} color={color} />
         })}
         tabBarOptions={{
           activeTintColor: red,
@@ -85,11 +80,7 @@ const App = () => {
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
-    <LoginView
-      saveToken={saveToken}
-      setLogged={() => setLogged(true)}
-      toggleRegisterForm={setRegisterFormOpen}
-    />
+    <LoginView saveToken={saveToken} setLogged={() => setLogged(true)} />
   );
 };
 
