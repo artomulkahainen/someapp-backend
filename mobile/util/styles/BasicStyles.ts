@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { errorRed } from './Colors';
 
 export const styles = StyleSheet.create({
   centerColumnView: {
@@ -12,5 +13,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20
+  },
+  smallRedText: {
+    color: errorRed,
+    marginLeft: 10
   }
 });

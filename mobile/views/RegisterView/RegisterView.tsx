@@ -58,6 +58,7 @@ const RegisterView = ({ toggleForm }: RegisterFormProps) => {
       submitOperation={trySave}
       loading={saving}
       cancelAction={toggleForm}
+      validationSchema={validationSchema}
     />
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Text } from 'react-native-elements';
 import { TextInput, View } from 'react-native';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { Formik, FormikValues } from 'formik';
@@ -26,18 +26,25 @@ const FormComponent = ({
 }: FormComponentProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const renderInputs = (handleChange: any, handleBlur: any, values: FormikValues) =>
-    inputPlaceholders.map((placeholder: string, index: number) => (
-      <TextInput
-        placeholder={placeholder}
-        onChangeText={handleChange(placeholder.toLowerCase().replace(' ', ''))}
-        onBlur={handleBlur(placeholder.toLowerCase().replace(' ', ''))}
-        key={index}
-        secureTextEntry={showPassword ? false : placeholder.toLowerCase().includes('password')}
-        value={values[placeholder.toLowerCase().replace(' ', '')]}
-        style={{ margin: 10, borderBottomWidth: 1, borderBottomColor: lightGrey }}
-      />
-    ));
+  const renderInputs = (handleChange: any, handleBlur: any, values: FormikValues, errors: any, touched: any) =>
+    inputPlaceholders.map((placeholder: string, index: number) => {
+      const phTrim = placeholder.toLowerCase().replace(' ', '');
+
+      return (
+        <View>
+          <TextInput
+            placeholder={placeholder}
+            onChangeText={handleChange(phTrim)}
+            onBlur={handleBlur(phTrim)}
+            key={index}
+            secureTextEntry={showPassword ? false : phTrim.includes('password')}
+            value={values[phTrim]}
+            style={{ margin: 10, borderBottomWidth: 1, borderBottomColor: lightGrey }}
+          />
+          {errors[phTrim] && touched[phTrim] ? <Text style={styles.smallRedText}>{errors[phTrim]}</Text> : null}
+        </View>
+      );
+    });
 
   const renderShowPasswordCheckbox = inputPlaceholders.some((placeholder: string) =>
     placeholder.toLowerCase().includes('password')
@@ -55,9 +62,9 @@ const FormComponent = ({
       onSubmit={submitOperation}
       validationSchema={validationSchema}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <View>
-          {renderInputs(handleChange, handleBlur, values)}
+          {renderInputs(handleChange, handleBlur, values, errors, touched)}
           {renderShowPasswordCheckbox && (
             <View style={styles.centerColumnView}>
               <CheckBox title="Show password" checked={showPassword} onPress={() => setShowPassword(!showPassword)} />

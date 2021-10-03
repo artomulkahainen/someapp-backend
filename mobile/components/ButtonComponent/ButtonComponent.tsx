@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Button, IconNode } from 'react-native-elements';
+import { red } from '../../util/styles/Colors';
 
 export interface ButtonProps {
   icon?: IconNode;
@@ -19,6 +20,7 @@ const ButtonComponent = ({ icon, title, loading, style, onPress }: ButtonProps) 
     onPress={onPress}
     disabled={loading}
     style={{ marginLeft: 10 }}
+    type="clear"
   />
 );
 
