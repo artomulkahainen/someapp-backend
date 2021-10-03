@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import { CheckBox, Input } from 'react-native-elements';
-import {
-  GestureResponderEvent,
-  NativeSyntheticEvent,
-  Text,
-  TextInput,
-  TextInputFocusEventData,
-  View
-} from 'react-native';
+import { CheckBox } from 'react-native-elements';
+import { TextInput, View } from 'react-native';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { Formik, FormikValues } from 'formik';
-import { lightGrey } from '../../util/Colors';
+import { lightGrey } from '../../util/styles/Colors';
+import { styles } from '../../util/styles/BasicStyles';
+import { AnyObjectSchema } from 'yup';
 
 interface FormComponentProps {
   inputPlaceholders: Array<string>;
@@ -18,6 +13,7 @@ interface FormComponentProps {
   loading?: boolean;
   cancelAction?: () => void;
   submitOperation: (values: FormikValues) => void;
+  validationSchema?: AnyObjectSchema;
 }
 
 const FormComponent = ({
@@ -25,7 +21,8 @@ const FormComponent = ({
   inputPlaceholders,
   submitButtonTitle,
   loading,
-  cancelAction
+  cancelAction,
+  validationSchema
 }: FormComponentProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -56,12 +53,15 @@ const FormComponent = ({
         {}
       )}
       onSubmit={submitOperation}
+      validationSchema={validationSchema}
     >
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View>
           {renderInputs(handleChange, handleBlur, values)}
           {renderShowPasswordCheckbox && (
-            <CheckBox title="Show password" checked={showPassword} onPress={() => setShowPassword(!showPassword)} />
+            <View style={styles.centerColumnView}>
+              <CheckBox title="Show password" checked={showPassword} onPress={() => setShowPassword(!showPassword)} />
+            </View>
           )}
           <View
             style={{

@@ -33,7 +33,8 @@
     "react-native-snackbar": "^2.4.0",
     "react-native-unimodules": "~0.10.1",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

@@ -7,7 +7,7 @@ import LoginView from './views/LoginView/LoginView';
 import NewPostView from './views/NewPostView/NewPostView';
 import ProfileView from './views/ProfileView/ProfileView';
 import SettingsView from './views/SettingsView/SettingsView';
-import { darkRed, red, white } from './util/Colors';
+import { darkRed, red, white } from './util/styles/Colors';
 import { saveToken, removeToken } from './util/storage/AsyncStorage';
 import { ping, ServerStatus } from './services/pingService';
 import useInterval from './util/hooks/useInterval';
@@ -29,10 +29,12 @@ const App = () => {
   }, 15000);
 
   const checkServerStatus = () => {
-    ping().then((res: ServerStatus) => {
-      res.httpStatus === 'OK' ? setServerOnline(true) : setServerOnline(false);
-      res.httpStatus === 'OK' && console.log(res);
-    });
+    ping()
+      .then((res: ServerStatus) => {
+        res.httpStatus === 'OK' ? setServerOnline(true) : setServerOnline(false);
+        res.httpStatus === 'OK' && console.log(res);
+      })
+      .catch(() => setServerOnline(false));
   };
 
   const navIconNames = new Map<string, string>([

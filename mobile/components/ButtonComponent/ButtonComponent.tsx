@@ -1,5 +1,5 @@
 import React from 'react';
-import { GestureResponderEvent, StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import { Button, IconNode } from 'react-native-elements';
 
 export interface ButtonProps {
@@ -19,7 +19,6 @@ const ButtonComponent = ({ icon, title, loading, style, onPress }: ButtonProps) 
     onPress={onPress}
     disabled={loading}
     style={{ marginLeft: 10 }}
-    //titleStyle={{ textAlign: 'center' }}
   />
 );
 

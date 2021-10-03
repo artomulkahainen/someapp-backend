@@ -1,11 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { View, Text, Dimensions, StyleSheet } from 'react-native';
-import InputWithButton from '../../components/InputWithButton/InputWithButton';
+import React, { SetStateAction, useEffect, useState } from 'react';
+import { View, Text, Dimensions } from 'react-native';
 import { login, SuccessfulLoginResponse } from '../../services/loginService';
-import { red, white } from '../../util/Colors';
+import { red } from '../../util/styles/Colors';
 import Snackbar from 'react-native-snackbar';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 import RegisterView from '../RegisterView/RegisterView';
+import FormComponent from '../../components/FormComponent/FormComponent';
+import { FormikValues } from 'formik';
+import { styles } from '../../util/styles/BasicStyles';
 
 interface LoginProps {
   setLogged: (value: SetStateAction<boolean>) => void;
@@ -13,8 +15,6 @@ interface LoginProps {
 }
 
 const LoginView = ({ setLogged, saveToken }: LoginProps) => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [registerFormOpen, setRegisterFormOpen] = useState<boolean>(false);
 
@@ -26,11 +26,11 @@ const LoginView = ({ setLogged, saveToken }: LoginProps) => {
     setRegisterFormOpen(!registerFormOpen);
   };
 
-  const tryLogin = async () => {
+  const tryLogin = async (values: FormikValues) => {
     setLoading(true);
 
     try {
-      const res: SuccessfulLoginResponse = await login({ username, password });
+      const res: SuccessfulLoginResponse = await login({ username: values.username, password: values.password });
       await saveToken(res.token);
       setLoading(false);
       setLogged(true);
@@ -55,15 +55,15 @@ const LoginView = ({ setLogged, saveToken }: LoginProps) => {
       {!registerFormOpen ? (
         <View>
           <Text style={{ textAlign: 'center', fontSize: 30, color: 'red' }}>GimmeVibe</Text>
-          <InputWithButton
+          <FormComponent
+            submitButtonTitle="Login"
             inputPlaceholders={['Username', 'Password']}
-            stateSetters={[setUsername, setPassword]}
-            inputTitle="Login"
-            buttonAction={tryLogin}
+            submitOperation={tryLogin}
             loading={loading}
-            values={[username, password]}
           />
-          <ButtonComponent onPress={toggleRegisterForm} title="Register new user" style={{ marginTop: 50 }} />
+          <View style={styles.centerColumnView}>
+            <ButtonComponent onPress={toggleRegisterForm} title="Register new user" style={{ marginTop: 50 }} />
+          </View>
         </View>
       ) : (
         <RegisterView toggleForm={toggleRegisterForm} />
