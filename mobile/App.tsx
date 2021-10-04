@@ -11,6 +11,9 @@ import { darkRed, red, white } from './util/styles/Colors';
 import { saveToken, removeToken } from './util/storage/AsyncStorage';
 import { ping, ServerStatus } from './services/pingService';
 import useInterval from './util/hooks/useInterval';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,38 +56,44 @@ const App = () => {
         return <SettingsView logout={logout} />;
     };
 
-    return logged ? (
-        <NavigationContainer>
-            <Header
-                centerComponent={{
-                    text: 'GimmeVibe',
-                    style: { color: red }
-                }}
-                containerStyle={{
-                    backgroundColor: white
-                }}
-            />
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Icon name={navIconNames.get(route.name)!} color={color} />
-                    )
-                })}
-                tabBarOptions={{
-                    activeTintColor: red,
-                    inactiveTintColor: darkRed,
-                    tabStyle: { backgroundColor: white },
-                    showLabel: false
-                }}
-            >
-                <Tab.Screen name="Feed" component={FeedView} />
-                <Tab.Screen name="NewPost" component={NewPostView} />
-                <Tab.Screen name="Profile" component={ProfileView} />
-                <Tab.Screen name="Settings" component={Settings} />
-            </Tab.Navigator>
-        </NavigationContainer>
-    ) : (
-        <LoginView saveToken={saveToken} setLogged={() => setLogged(true)} />
+    return (
+        <Provider store={store.store}>
+            <PersistGate loading={null} persistor={store.persistor}>
+                {logged ? (
+                    <NavigationContainer>
+                        <Header
+                            centerComponent={{
+                                text: 'GimmeVibe',
+                                style: { color: red }
+                            }}
+                            containerStyle={{
+                                backgroundColor: white
+                            }}
+                        />
+                        <Tab.Navigator
+                            screenOptions={({ route }) => ({
+                                tabBarIcon: ({ focused, color, size }) => (
+                                    <Icon name={navIconNames.get(route.name)!} color={color} />
+                                )
+                            })}
+                            tabBarOptions={{
+                                activeTintColor: red,
+                                inactiveTintColor: darkRed,
+                                tabStyle: { backgroundColor: white },
+                                showLabel: false
+                            }}
+                        >
+                            <Tab.Screen name="Feed" component={FeedView} />
+                            <Tab.Screen name="NewPost" component={NewPostView} />
+                            <Tab.Screen name="Profile" component={ProfileView} />
+                            <Tab.Screen name="Settings" component={Settings} />
+                        </Tab.Navigator>
+                    </NavigationContainer>
+                ) : (
+                    <LoginView saveToken={saveToken} setLogged={() => setLogged(true)} />
+                )}
+            </PersistGate>
+        </Provider>
     );
 };
 

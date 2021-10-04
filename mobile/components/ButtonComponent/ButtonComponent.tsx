@@ -9,7 +9,7 @@ export interface ButtonProps {
     loading?: boolean;
     style?: StyleProp<ViewStyle>;
     onPress: () => void;
-    type?: 'clear' | 'solid' | 'outline' | undefined;
+    type?: 'clear' | 'solid' | 'outline';
 }
 
 const ButtonComponent = ({ icon, title, loading, style, onPress, type = 'clear' }: ButtonProps) => (
