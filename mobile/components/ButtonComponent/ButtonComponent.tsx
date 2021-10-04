@@ -9,9 +9,10 @@ export interface ButtonProps {
     loading?: boolean;
     style?: StyleProp<ViewStyle>;
     onPress: () => void;
+    type?: 'clear' | 'solid' | 'outline' | undefined;
 }
 
-const ButtonComponent = ({ icon, title, loading, style, onPress }: ButtonProps) => (
+const ButtonComponent = ({ icon, title, loading, style, onPress, type = 'clear' }: ButtonProps) => (
     <Button
         buttonStyle={style}
         icon={icon}
@@ -20,7 +21,7 @@ const ButtonComponent = ({ icon, title, loading, style, onPress }: ButtonProps) 
         onPress={onPress}
         disabled={loading}
         style={{ marginLeft: 10 }}
-        type="clear"
+        type={type}
     />
 );
 

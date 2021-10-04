@@ -4,6 +4,7 @@ import PostListComponent from '../../components/PostListComponent/PostListCompon
 import { findMyUserDetails } from '../../services/userService';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { getFriendsPosts } from '../../services/postService';
+import { red } from '../../util/styles/Colors';
 
 const FeedView = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -23,7 +24,7 @@ const FeedView = () => {
 
     return (
         <View style={styles.container}>
-            {loading ? <ActivityIndicator size={100} color="#FF4500" /> : <PostListComponent />}
+            {loading ? <ActivityIndicator size={100} color={red} /> : <PostListComponent />}
         </View>
     );
 };

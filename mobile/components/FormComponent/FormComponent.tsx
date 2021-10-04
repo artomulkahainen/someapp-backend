@@ -32,18 +32,20 @@ const FormComponent = ({
             const phTrim = trimSpaces(placeholder);
 
             return (
-                <View>
+                <View key={index}>
                     <TextInput
                         placeholder={placeholder}
                         onChangeText={handleChange(phTrim)}
                         onBlur={handleBlur(phTrim)}
-                        key={index}
+                        key={index + 1}
                         secureTextEntry={showPassword ? false : phTrim.includes('password')}
                         value={values[phTrim]}
                         style={{ margin: 10, borderBottomWidth: 1, borderBottomColor: lightGrey }}
                     />
                     {errors[phTrim] && touched[phTrim] ? (
-                        <Text style={styles.smallRedText}>{errors[phTrim]}</Text>
+                        <Text key={index + 2} style={styles.smallRedText}>
+                            {errors[phTrim]}
+                        </Text>
                     ) : null}
                 </View>
             );
@@ -77,20 +79,13 @@ const FormComponent = ({
                             />
                         </View>
                     )}
-                    <View
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: 20
-                        }}
-                    >
+                    <View style={styles.centerRowView}>
                         <ButtonComponent
                             title={submitButtonTitle}
                             onPress={handleSubmit}
                             loading={loading}
                             style={{ marginRight: !!cancelAction ? 30 : 0 }}
+                            type="solid"
                         />
                         {!!cancelAction && (
                             <ButtonComponent title={'Cancel'} onPress={cancelAction} loading={loading} />
