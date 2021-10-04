@@ -54,7 +54,7 @@ const LoginView = ({ setLogged, saveToken }: LoginProps) => {
     >
       {!registerFormOpen ? (
         <View>
-          <Text style={{ textAlign: 'center', fontSize: 30, color: 'red' }}>GimmeVibe</Text>
+          <Text style={{ textAlign: 'center', fontSize: 30, color: red }}>GimmeVibe</Text>
           <FormComponent
             submitButtonTitle="Login"
             inputPlaceholders={['Username', 'Password']}

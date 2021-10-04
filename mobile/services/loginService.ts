@@ -4,15 +4,15 @@ import axios from 'axios';
 const baseUrl = `${API_URL}/api/v1/loginByUsingPOST`;
 
 export interface SuccessfulLoginResponse {
-  token: string;
+    token: string;
 }
 
 export interface UserProps {
-  username: string;
-  password: string;
+    username: string;
+    password: string;
 }
 
 export const login = async (creds: UserProps) => {
-  const res = await axios.post(baseUrl, creds);
-  return res.data;
+    const res = await axios.post(baseUrl, creds);
+    return res.data;
 };

@@ -15,11 +15,14 @@ const RegisterView = ({ toggleForm }: RegisterFormProps) => {
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
-      .min(3, 'Username is too short')
-      .max(15, 'Username is too long')
+      .min(3, 'Username must be at least 3 characters long')
+      .max(15, 'Username must be under 16 characters long')
       .required('Username is required'),
-    password: Yup.string().required().min(3, 'Password is too short').required('Password is required'),
-    passwordagain: Yup.string().required().min(3, 'Password is too short')
+    password: Yup.string()
+      .required('Password is required')
+      .min(3, 'Password is too short')
+      .required('Password is required'),
+    passwordagain: Yup.string().required('Write password again').min(3, 'Password is too short')
   });
 
   const trySave = (values: FormikValues) => {

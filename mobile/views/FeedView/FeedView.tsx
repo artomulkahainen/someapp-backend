@@ -6,37 +6,33 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { getFriendsPosts } from '../../services/postService';
 
 const FeedView = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchData = async () => {
-        setLoading(true);
-        const userDetailsRes = await findMyUserDetails();
-        const postsRes = await getFriendsPosts();
-        setLoading(false);
-      };
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
+                setLoading(true);
+                const userDetailsRes = await findMyUserDetails();
+                const postsRes = await getFriendsPosts();
+                setLoading(false);
+            };
 
-      fetchData();
-    }, [])
-  );
+            fetchData();
+        }, [])
+    );
 
-  return (
-    <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size={100} color="#FF4500" />
-      ) : (
-        <PostListComponent />
-      )}
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            {loading ? <ActivityIndicator size={100} color="#FF4500" /> : <PostListComponent />}
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center'
-  }
+    container: {
+        flex: 1,
+        justifyContent: 'center'
+    }
 });
 
 export default FeedView;

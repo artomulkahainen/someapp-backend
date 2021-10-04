@@ -1,5 +1,7 @@
 interface AsyncStorageProps {
-    getItem: (callback?: ((error?: Error | undefined, result?: string | undefined) => void) | undefined) => Promise<string | null>;
+    getItem: (
+        callback?: ((error?: Error | undefined, result?: string | undefined) => void) | undefined
+    ) => Promise<string | null>;
     setItem: (value: string, callback?: ((error?: Error | undefined) => void) | undefined) => Promise<void>;
     removeItem: (callback?: ((error?: Error | undefined) => void) | undefined) => Promise<void>;
 }
@@ -7,25 +9,25 @@ interface AsyncStorageProps {
 const AsyncStorageFunctions = ({ getItem, setItem, removeItem }: AsyncStorageProps) => {
     const getToken = async (): Promise<string | null> => {
         try {
-          return await getItem();
+            return await getItem();
         } catch (e: any) {
-          throw new Error(e.message);
+            throw new Error(e.message);
         }
     };
 
     const saveToken = async (token: string): Promise<void> => {
         try {
-          await setItem(token);
+            await setItem(token);
         } catch (e: any) {
-          throw new Error(e.message);
+            throw new Error(e.message);
         }
     };
 
     const removeToken = async (): Promise<void> => {
         try {
-          await removeItem();
+            await removeItem();
         } catch (e: any) {
-          throw new Error(e.message);
+            throw new Error(e.message);
         }
     };
 
