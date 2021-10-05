@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RelationshipServiceImpl {
@@ -26,6 +28,16 @@ public class RelationshipServiceImpl {
 
     @Autowired
     JWTTokenUtil jwtTokenUtil;
+
+    public List<Relationship> getRelationships(HttpServletRequest req) {
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+
+        return relationshipRepository
+                .findAll()
+                .stream()
+                .filter(relationship -> relationship.getUser1().equals(actionUserId) || relationship.getUser2().equals(actionUserId))
+                .collect(Collectors.toList());
+    }
 
     public Relationship save(HttpServletRequest req, NewRelationshipRequest relationshipRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));

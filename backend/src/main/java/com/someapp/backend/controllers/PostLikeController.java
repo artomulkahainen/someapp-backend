@@ -17,7 +17,7 @@ import javax.validation.Valid;
 public class PostLikeController {
 
     @Autowired
-    PostLikeServiceImpl postLikeService;
+    private PostLikeServiceImpl postLikeService;
 
     @PostMapping("/likePostByUsingPOST")
     public PostLike likePost(HttpServletRequest req, @Valid @RequestBody LikePostRequest likePostRequest,

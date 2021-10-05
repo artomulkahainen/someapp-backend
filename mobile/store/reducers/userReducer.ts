@@ -1,10 +1,20 @@
-const userReducer = (state = [], action: any) => {
-    switch (action.type) {
-        case action.type === 'SAVE_USER':
-            return action.data;
-        default:
-            return state;
-    }
-};
+import { createAction, createReducer } from '@reduxjs/toolkit';
 
-export default userReducer;
+interface UserState {
+    value: number;
+}
+
+const increment = createAction('user/increment');
+const decrement = createAction('user/decrement');
+
+const initialState = { value: 0 } as UserState;
+
+export const userReducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(increment, (state, action) => {
+            state.value++;
+        })
+        .addCase(decrement, (state, action) => {
+            state.value--;
+        });
+});

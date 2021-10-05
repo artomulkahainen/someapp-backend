@@ -17,7 +17,7 @@ import javax.validation.Valid;
 public class PostCommentController {
 
     @Autowired
-    PostCommentServiceImpl postCommentService;
+    private PostCommentServiceImpl postCommentService;
 
     @PostMapping("/sendPostCommentByUsingPOST")
     public PostComment sendNewPostComment(HttpServletRequest req, @Valid @RequestBody SendPostCommentRequest sendPostCommentRequest,

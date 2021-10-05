@@ -17,7 +17,7 @@ import java.util.Date;
 public class LoginController {
 
     @Autowired
-    LoginServiceImpl loginService;
+    private LoginServiceImpl loginService;
 
     @GetMapping("/ping")
     public PingResponse pingServerStatus() {

@@ -1,8 +1,9 @@
 package com.someapp.backend.controllers;
 
+import com.someapp.backend.dto.UserDTO;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.services.UserDetailsServiceImpl;
-import com.someapp.backend.util.customExceptions.BadArgumentException;
+import com.someapp.backend.util.mappers.UserMapper;
 import com.someapp.backend.util.requests.FindUserByNameRequest;
 import com.someapp.backend.util.responses.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,14 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
+
+    private UserMapper userMapper;
 
     @GetMapping("/findOwnUserDetailsByUsingGET")
-    public User findOwnUserDetails(HttpServletRequest req) {
-        return userDetailsService.findOwnUserDetails(req);
+    public UserDTO findOwnUserDetails(HttpServletRequest req) {
+        User user = userDetailsService.findOwnUserDetails(req);
+        return userMapper.mapUserToUserDTO(user);
     }
 
     @PostMapping("/findUsersByNameByUsingPOST")
@@ -31,11 +35,11 @@ public class UserController {
     }
 
     @PostMapping("/saveNewUserByUsingPOST")
-    public User saveNewUser(@Valid @RequestBody User user, BindingResult bindingResult) throws BindException {
+    public UserDTO saveNewUser(@Valid @RequestBody User user, BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-
-        return userDetailsService.save(user);
+        User savedUser = userDetailsService.save(user);
+        return userMapper.mapUserToUserDTO(savedUser);
     }
 }
