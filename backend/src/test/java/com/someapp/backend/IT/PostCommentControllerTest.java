@@ -1,4 +1,4 @@
-/*package com.someapp.backend.controllers;
+/*package com.someapp.backend.IT;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

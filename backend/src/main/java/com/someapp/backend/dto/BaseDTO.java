@@ -3,7 +3,7 @@ package com.someapp.backend.dto;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class BaseDTO {
+public abstract class BaseDTO {
 
     private UUID uuid;
     private Timestamp createdDate;

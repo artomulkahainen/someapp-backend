@@ -1,4 +1,4 @@
-package com.someapp.backend.controllers;
+package com.someapp.backend.IT;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

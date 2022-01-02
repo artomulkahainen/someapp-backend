@@ -22,23 +22,26 @@ import java.util.UUID;
 @Service
 public class PostCommentServiceImpl {
 
-    @Autowired
-    PostCommentRepository postCommentRepository;
+    private final PostCommentRepository postCommentRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final UserPostValidator userPostValidator;
+    private final RelationshipValidator relationshipValidator;
+    private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    PostRepository postRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    UserPostValidator userPostValidator;
-
-    @Autowired
-    RelationshipValidator relationshipValidator;
-
-    @Autowired
-    JWTTokenUtil jwtTokenUtil;
+    public PostCommentServiceImpl(PostCommentRepository postCommentRepository,
+                                  PostRepository postRepository,
+                                  UserRepository userRepository,
+                                  UserPostValidator userPostValidator,
+                                  RelationshipValidator relationshipValidator,
+                                  JWTTokenUtil jwtTokenUtil) {
+        this.postCommentRepository = postCommentRepository;
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.userPostValidator = userPostValidator;
+        this.relationshipValidator = relationshipValidator;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     public PostComment save(HttpServletRequest req, SendPostCommentRequest sendPostCommentRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
