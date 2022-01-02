@@ -14,12 +14,13 @@ import useInterval from './util/hooks/useInterval';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import { IIndexable } from './util/interfaces';
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
     const [logged, setLogged] = useState(false);
-    const [serverOnline, setServerOnline] = useState<boolean>(true);
+    const [serverOnline, setServerOnline] = useState(true);
 
     useEffect(() => {
         // check server status on app startup
@@ -40,19 +41,19 @@ const App = () => {
             .catch(() => setServerOnline(false));
     };
 
-    const navIconNames = new Map<string, string>([
-        ['Feed', 'comment'],
-        ['Profile', 'person'],
-        ['NewPost', 'edit'],
-        ['Settings', 'settings']
-    ]);
+    const navIconNames: IIndexable = {
+        Feed: 'comment',
+        Profile: 'person',
+        NewPost: 'edit',
+        Settings: 'settings'
+    };
 
     const logout = async () => {
         setLogged(false);
         await removeToken();
     };
 
-    const Settings = (): JSX.Element => {
+    const Settings = () => {
         return <SettingsView logout={logout} />;
     };
 
@@ -72,9 +73,7 @@ const App = () => {
                         />
                         <Tab.Navigator
                             screenOptions={({ route }) => ({
-                                tabBarIcon: ({ focused, color, size }) => (
-                                    <Icon name={navIconNames.get(route.name)!} color={color} />
-                                )
+                                tabBarIcon: ({ color }) => <Icon name={navIconNames[route.name]} color={color} />
                             })}
                             tabBarOptions={{
                                 activeTintColor: red,

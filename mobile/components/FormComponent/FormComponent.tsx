@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CheckBox, Text } from 'react-native-elements';
 import { TextInput, View } from 'react-native';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { Formik, FormikValues } from 'formik';
+import { Formik, FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { lightGrey } from '../../util/styles/Colors';
 import { styles } from '../../util/styles/BasicStyles';
 import { AnyObjectSchema } from 'yup';
@@ -17,6 +17,23 @@ interface FormComponentProps {
     validationSchema?: AnyObjectSchema;
 }
 
+interface IFormikHandlers {
+    handleChange: {
+        (e: React.ChangeEvent<any>): void;
+        <T = string | React.ChangeEvent<any>>(field: T): T extends React.ChangeEvent<any>
+            ? void
+            : (e: string | React.ChangeEvent<any>) => void;
+    };
+    handleBlur: {
+        (e: React.FocusEvent<any>): void;
+        <T = any>(fieldOrEvent: T): T extends string ? (e: any) => void : void;
+    };
+    handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+    values: FormikValues;
+    errors: FormikErrors<FormikValues>;
+    touched: FormikTouched<FormikValues>;
+}
+
 const FormComponent = ({
     submitOperation,
     inputPlaceholders,
@@ -27,7 +44,7 @@ const FormComponent = ({
 }: FormComponentProps) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const renderInputs = (handleChange: any, handleBlur: any, values: FormikValues, errors: any, touched: any) =>
+    const renderInputs = ({ handleChange, handleBlur, values, errors, touched }: IFormikHandlers) =>
         inputPlaceholders.map((placeholder: string, index: number) => {
             const phTrim = trimSpaces(placeholder);
 
@@ -42,11 +59,11 @@ const FormComponent = ({
                         value={values[phTrim]}
                         style={{ margin: 10, borderBottomWidth: 1, borderBottomColor: lightGrey }}
                     />
-                    {errors[phTrim] && touched[phTrim] ? (
+                    {errors[phTrim] && touched[phTrim] && (
                         <Text key={index + 2} style={styles.smallRedText}>
                             {errors[phTrim]}
                         </Text>
-                    ) : null}
+                    )}
                 </View>
             );
         });
@@ -67,9 +84,9 @@ const FormComponent = ({
             onSubmit={submitOperation}
             validationSchema={validationSchema}
         >
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+            {(handlers: IFormikHandlers) => (
                 <View>
-                    {renderInputs(handleChange, handleBlur, values, errors, touched)}
+                    {renderInputs(handlers)}
                     {renderShowPasswordCheckbox && (
                         <View style={styles.centerColumnView}>
                             <CheckBox
@@ -82,7 +99,7 @@ const FormComponent = ({
                     <View style={styles.centerRowView}>
                         <ButtonComponent
                             title={submitButtonTitle}
-                            onPress={handleSubmit}
+                            onPress={handlers.handleSubmit}
                             loading={loading}
                             style={{ marginRight: !!cancelAction ? 30 : 0 }}
                             type="solid"
