@@ -8,7 +8,7 @@ import { styles } from '../../util/styles/BasicStyles';
 import { AnyObjectSchema } from 'yup';
 import { trimSpaces } from '../../util/textUtil';
 
-interface FormComponentProps {
+interface IFormComponentProps {
     inputPlaceholders: Array<string>;
     submitButtonTitle: string;
     loading?: boolean;
@@ -41,7 +41,7 @@ const FormComponent = ({
     loading,
     cancelAction,
     validationSchema
-}: FormComponentProps) => {
+}: IFormComponentProps) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const renderInputs = ({ handleChange, handleBlur, values, errors, touched }: IFormikHandlers) =>

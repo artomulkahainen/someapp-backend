@@ -7,7 +7,7 @@ import { getFriendsPosts } from '../../services/postService';
 import { red } from '../../util/styles/Colors';
 
 const FeedView = () => {
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
