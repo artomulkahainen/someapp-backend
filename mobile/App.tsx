@@ -48,13 +48,9 @@ const App = () => {
         Settings: 'settings'
     };
 
-    const logout = async () => {
+    const logout = () => {
         setLogged(false);
-        await removeToken();
-    };
-
-    const Settings = () => {
-        return <SettingsView logout={logout} />;
+        return removeToken();
     };
 
     return (
@@ -85,7 +81,7 @@ const App = () => {
                             <Tab.Screen name="Feed" component={FeedView} />
                             <Tab.Screen name="NewPost" component={NewPostView} />
                             <Tab.Screen name="Profile" component={ProfileView} />
-                            <Tab.Screen name="Settings" component={Settings} />
+                            <Tab.Screen name="Settings" component={() => <SettingsView logout={logout} />} />
                         </Tab.Navigator>
                     </NavigationContainer>
                 ) : (
