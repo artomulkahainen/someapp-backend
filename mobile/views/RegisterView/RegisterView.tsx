@@ -21,14 +21,13 @@ const RegisterView = ({ toggleForm }: RegisterFormProps) => {
                 password: values.password
             })
                 .then(() => {
-                    setSaving(false);
                     toggleForm();
                 })
                 .catch((e: any) => {
-                    setSaving(false);
                     Snackbar.show(errorAlert(`${e.message}, ${e.status}`));
                     console.log('error with saving new user');
-                });
+                })
+                .finally(() => setSaving(false));
         } else {
             Snackbar.show(errorAlert(`You have to write same password twice.`));
         }

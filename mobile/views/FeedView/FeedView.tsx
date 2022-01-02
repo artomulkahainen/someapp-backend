@@ -11,14 +11,8 @@ const FeedView = () => {
 
     useFocusEffect(
         useCallback(() => {
-            const fetchData = async () => {
-                setLoading(true);
-                const userDetailsRes = await findMyUserDetails();
-                const postsRes = await getFriendsPosts();
-                setLoading(false);
-            };
-
-            fetchData();
+            setLoading(true);
+            Promise.all([findMyUserDetails(), getFriendsPosts()]).finally(() => setLoading(false));
         }, [])
     );
 

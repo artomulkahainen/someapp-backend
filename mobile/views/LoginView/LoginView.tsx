@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { login, SuccessfulLoginResponse } from '../../services/loginService';
 import { red } from '../../util/styles/Colors';
@@ -8,6 +8,7 @@ import RegisterView from '../RegisterView/RegisterView';
 import FormComponent from '../../components/FormComponent/FormComponent';
 import { FormikValues } from 'formik';
 import { styles } from '../../util/styles/BasicStyles';
+import { errorAlert } from '../../util/alertMessages';
 
 interface LoginProps {
     setLogged: (value: SetStateAction<boolean>) => void;
@@ -15,12 +16,8 @@ interface LoginProps {
 }
 
 const LoginView = ({ setLogged, saveToken }: LoginProps) => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [registerFormOpen, setRegisterFormOpen] = useState<boolean>(false);
-
-    useEffect(() => {
-        console.log(registerFormOpen);
-    }, [registerFormOpen]);
+    const [loading, setLoading] = useState(false);
+    const [registerFormOpen, setRegisterFormOpen] = useState(false);
 
     const toggleRegisterForm = () => {
         setRegisterFormOpen(!registerFormOpen);
@@ -37,11 +34,7 @@ const LoginView = ({ setLogged, saveToken }: LoginProps) => {
         } catch (e: any) {
             // send snackbar message here instead of console log
             console.log(`${e.response.data.message}, ${e.response.data.status}`);
-            Snackbar.show({
-                text: `${e.response.data.message}, ${e.response.data.status}`,
-                duration: Snackbar.LENGTH_SHORT,
-                backgroundColor: red
-            });
+            Snackbar.show(errorAlert(`${e.response.data.message}, ${e.response.data.status}`));
             setLoading(false);
         }
     };

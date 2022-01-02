@@ -7,12 +7,8 @@ interface SettingsViewProps {
 }
 
 const SettingsView = ({ logout }: SettingsViewProps) => {
-    const tryLogout = async () => {
-        try {
-            await logout();
-        } catch (e) {
-            console.log(e);
-        }
+    const tryLogout = () => {
+        logout().catch((e: any) => console.log(e));
     };
 
     return (
