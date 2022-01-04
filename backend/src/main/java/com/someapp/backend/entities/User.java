@@ -49,6 +49,10 @@ public class User extends AbstractPersistable<UUID> {
         return this.getId();
     }
 
+    public void setUUID(UUID uuid) {
+        this.setId(uuid);
+    }
+
     public String getUsername() {
         return this.username;
     }

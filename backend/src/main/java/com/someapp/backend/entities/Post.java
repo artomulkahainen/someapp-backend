@@ -59,4 +59,8 @@ public class Post extends AbstractPersistable<UUID> {
     public UUID getUUID() {
         return this.getId();
     }
+
+    public void setUUID(UUID uuid) {
+        this.setId(uuid);
+    }
 }
