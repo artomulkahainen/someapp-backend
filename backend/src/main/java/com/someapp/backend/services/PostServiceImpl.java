@@ -2,16 +2,16 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.RelationshipRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.PostRepository;
+import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
 import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.DeletePostRequest;
 import com.someapp.backend.util.requests.SendPostRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
-import com.someapp.backend.util.validators.RelationshipValidator;
+import com.someapp.backend.validators.RelationshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class PostServiceImpl {
+public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepository;
@@ -37,6 +37,7 @@ public class PostServiceImpl {
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
+    @Override
     public Post save(HttpServletRequest req, SendPostRequest sendPostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
 
@@ -48,6 +49,7 @@ public class PostServiceImpl {
         }
     }
 
+    @Override
     public DeleteResponse delete(HttpServletRequest req, DeletePostRequest deletePostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
         Optional<Post> postToDelete = postRepository.findById(deletePostRequest.getPostId());
@@ -64,6 +66,7 @@ public class PostServiceImpl {
         }
     }
 
+    @Override
     public List<Post> findPostsByRelationships(HttpServletRequest req) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
         Set<UUID> friendIds = relationshipRepository

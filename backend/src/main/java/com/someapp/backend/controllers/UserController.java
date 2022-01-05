@@ -2,8 +2,9 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.dto.UserDTO;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.services.UserDetailsServiceImpl;
-import com.someapp.backend.util.mappers.UserMapper;
+import com.someapp.backend.interfaces.api.UserApi;
+import com.someapp.backend.services.ExtendedUserDetailsService;
+import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.util.requests.FindUserByNameRequest;
 import com.someapp.backend.util.responses.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,34 +13,33 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class UserController {
+public class UserController implements UserApi {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private ExtendedUserDetailsService extendedUserDetailsService;
 
     private UserMapper userMapper;
 
-    @GetMapping("/findOwnUserDetailsByUsingGET")
+    @Override
     public UserDTO findOwnUserDetails(HttpServletRequest req) {
-        User user = userDetailsService.findOwnUserDetails(req);
+        User user = extendedUserDetailsService.findOwnUserDetails(req);
         return userMapper.mapUserToUserDTO(user);
     }
 
-    @PostMapping("/findUsersByNameByUsingPOST")
-    public List<UserNameIdResponse> findUsersByName(@RequestBody FindUserByNameRequest findUserByNameRequest) {
-        return userDetailsService.findUsersByName(findUserByNameRequest);
+    @Override
+    public List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest) {
+        return extendedUserDetailsService.findUsersByName(findUserByNameRequest);
     }
 
-    @PostMapping("/saveNewUserByUsingPOST")
-    public UserDTO saveNewUser(@Valid @RequestBody User user, BindingResult bindingResult) throws BindException {
+    @Override
+    public UserDTO saveNewUser(User user, BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        User savedUser = userDetailsService.save(user);
+        User savedUser = extendedUserDetailsService.save(user);
         return userMapper.mapUserToUserDTO(savedUser);
     }
 }

@@ -8,9 +8,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.PostCommentRepository;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.PostCommentRepository;
+import com.someapp.backend.interfaces.repositories.PostRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.services.PostCommentService;
 import com.someapp.backend.services.PostCommentServiceImpl;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.SendPostCommentRequest;
@@ -48,8 +49,8 @@ public class PostCommentServiceTest {
     public void testSave() {
         when(req.getHeader("Authorization")).thenReturn("fds35352sgdg");
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
-        when(postRepository.getById(any())).thenReturn(new Post());
-        when(userRepository.getById(any())).thenReturn(new User());
+        when(postRepository.findById(any())).thenReturn(Optional.of(new Post()));
+        when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
         when(postCommentRepository.save(any())).then(returnsFirstArg());
 
         PostComment postComment = postCommentService.save(req,

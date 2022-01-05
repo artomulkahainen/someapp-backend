@@ -1,4 +1,4 @@
-package com.someapp.backend.repositories;
+package com.someapp.backend.interfaces.repositories;
 
 import com.someapp.backend.entities.PostComment;
 import org.springframework.data.jpa.repository.JpaRepository;

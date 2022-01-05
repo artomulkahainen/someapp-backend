@@ -1,4 +1,4 @@
-package com.someapp.backend.util.mappers;
+package com.someapp.backend.mappers;
 
 import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;

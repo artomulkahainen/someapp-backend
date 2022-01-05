@@ -1,7 +1,7 @@
-package com.someapp.backend.util.validators;
+package com.someapp.backend.validators;
 
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.PostRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

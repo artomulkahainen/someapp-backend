@@ -1,10 +1,10 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
-import com.someapp.backend.util.extendedclasses.ExtendedUser;
-import com.someapp.backend.util.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.entities.extendedclasses.ExtendedUser;
+import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.FindUserByNameRequest;
 import com.someapp.backend.util.responses.UserNameIdResponse;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsService {
 
     @Autowired
     UserRepository userRepository;

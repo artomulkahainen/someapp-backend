@@ -1,17 +1,17 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.repositories.PostLikeRepository;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.PostLikeRepository;
+import com.someapp.backend.interfaces.repositories.PostRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
 import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.LikePostRequest;
 import com.someapp.backend.util.requests.UnlikePostRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
-import com.someapp.backend.util.validators.RelationshipValidator;
-import com.someapp.backend.util.validators.UserPostValidator;
+import com.someapp.backend.validators.RelationshipValidator;
+import com.someapp.backend.validators.UserPostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class PostLikeServiceImpl {
+public class PostLikeServiceImpl implements PostLikeService {
 
     @Autowired
     PostRepository postRepository;
@@ -45,6 +45,7 @@ public class PostLikeServiceImpl {
             .findByUserUUIDAndPostUUID(actionUserId, likePostRequest.getPostId()).isPresent();
     }
 
+    @Override
     public PostLike save(HttpServletRequest req, LikePostRequest likePostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
 
@@ -69,6 +70,7 @@ public class PostLikeServiceImpl {
 
     }
 
+    @Override
     public DeleteResponse delete(HttpServletRequest req, UnlikePostRequest unlikePostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
         Optional<PostLike> likeToDelete = getLikeById(unlikePostRequest.getPostLikeId());

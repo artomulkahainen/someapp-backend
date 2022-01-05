@@ -1,7 +1,8 @@
 package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.services.PostLikeServiceImpl;
+import com.someapp.backend.interfaces.api.PostLikeApi;
+import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.util.requests.LikePostRequest;
 import com.someapp.backend.util.requests.UnlikePostRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
@@ -11,16 +12,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RestController
-public class PostLikeController {
+public class PostLikeController implements PostLikeApi {
 
     @Autowired
-    private PostLikeServiceImpl postLikeService;
+    private PostLikeService postLikeService;
 
-    @PostMapping("/likePostByUsingPOST")
-    public PostLike likePost(HttpServletRequest req, @Valid @RequestBody LikePostRequest likePostRequest,
+    @Override
+    public PostLike likePost(HttpServletRequest req, LikePostRequest likePostRequest,
                              BindingResult bindingResult) throws BindException {
 
         // IF VALIDATION ERRORS, THROW AN EXCEPTION
@@ -31,9 +31,9 @@ public class PostLikeController {
         return postLikeService.save(req, likePostRequest);
     }
 
-    @PostMapping("/unlikePostByUsingPOST")
+    @Override
     public DeleteResponse unlikePost(HttpServletRequest req,
-                                     @Valid @RequestBody UnlikePostRequest unlikePostRequest,
+                                     UnlikePostRequest unlikePostRequest,
                                      BindingResult bindingResult) throws BindException {
 
         // IF VALIDATION ERRORS, THROW AN EXCEPTION

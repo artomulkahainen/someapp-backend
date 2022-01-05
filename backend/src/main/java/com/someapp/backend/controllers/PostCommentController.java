@@ -1,7 +1,8 @@
 package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.services.PostCommentServiceImpl;
+import com.someapp.backend.interfaces.api.PostCommentApi;
+import com.someapp.backend.services.PostCommentService;
 import com.someapp.backend.util.requests.SendPostCommentRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
@@ -11,16 +12,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RestController
-public class PostCommentController {
+public class PostCommentController implements PostCommentApi {
 
     @Autowired
-    private PostCommentServiceImpl postCommentService;
+    private PostCommentService postCommentService;
 
-    @PostMapping("/sendPostCommentByUsingPOST")
-    public PostComment sendNewPostComment(HttpServletRequest req, @Valid @RequestBody SendPostCommentRequest sendPostCommentRequest,
+    @Override
+    public PostComment sendNewPostComment(HttpServletRequest req, SendPostCommentRequest sendPostCommentRequest,
                                           BindingResult bindingResult) throws BindException {
         // IF VALIDATION ERRORS
         if (bindingResult.hasErrors()) {
@@ -30,11 +30,10 @@ public class PostCommentController {
         return postCommentService.save(req, sendPostCommentRequest);
     }
 
-    @PostMapping("/deletePostCommentByUsingPOST")
+    @Override
     public DeleteResponse deletePostCommentById(HttpServletRequest req,
-                                                @Valid @RequestBody UUIDRequest postCommentId,
+                                                UUIDRequest postCommentId,
                                                 BindingResult bindingResult) throws BindException {
-
         return postCommentService.delete(req, postCommentId);
     }
 }

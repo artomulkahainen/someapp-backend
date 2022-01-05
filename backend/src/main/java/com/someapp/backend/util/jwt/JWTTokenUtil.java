@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 
-import com.someapp.backend.util.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

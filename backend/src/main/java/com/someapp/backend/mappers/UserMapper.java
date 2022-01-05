@@ -1,4 +1,4 @@
-package com.someapp.backend.util.mappers;
+package com.someapp.backend.mappers;
 
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.UserDTO;

@@ -1,6 +1,6 @@
 package com.someapp.backend.services;
 
-import com.someapp.backend.util.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.LoginRequest;
 import com.someapp.backend.util.responses.JWTResponse;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Service
 @CrossOrigin
-public class LoginServiceImpl {
+public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -24,7 +24,7 @@ public class LoginServiceImpl {
     private JWTTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private ExtendedUserDetailsService extendedUserDetailsService;
 
     private void authenticate(String username, String password) throws Exception {
         try {
@@ -36,10 +36,11 @@ public class LoginServiceImpl {
         }
     }
 
+    @Override
     public ResponseEntity<?> login(LoginRequest loginRequest) throws Exception {
         authenticate(loginRequest.getUsername(), loginRequest.getPassword());
 
-        final ExtendedUserDetails userDetails = userDetailsService
+        final ExtendedUserDetails userDetails = extendedUserDetailsService
                 .loadUserByUsername(loginRequest.getUsername());
 
         final String token = jwtTokenUtil.generateToken(userDetails);

@@ -1,6 +1,6 @@
 package com.someapp.backend.util.config;
 
-import com.someapp.backend.services.UserDetailsServiceImpl;
+import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.util.jwt.JwtAuthenticationEntryPoint;
 import com.someapp.backend.util.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    ExtendedUserDetailsService userDetailsService;
 
     @Autowired
     JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -48,13 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, signUpUrl).permitAll()
                 .antMatchers(HttpMethod.POST, loginUrl).permitAll()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
-                .antMatchers(HttpMethod.GET, "/posts").denyAll()
-                .antMatchers(HttpMethod.GET, "/users").denyAll()
-                .antMatchers(HttpMethod.GET, "/relationships").denyAll()
-                .antMatchers(HttpMethod.POST, "/posts").denyAll()
-                .antMatchers(HttpMethod.POST, "/posts/**").denyAll()
-                .antMatchers(HttpMethod.POST, "/users").denyAll()
-                .antMatchers(HttpMethod.POST, "/relationships").denyAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

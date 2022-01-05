@@ -1,6 +1,6 @@
-package com.someapp.backend.util.extendedclasses;
+package com.someapp.backend.entities.extendedclasses;
 
-import com.someapp.backend.util.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

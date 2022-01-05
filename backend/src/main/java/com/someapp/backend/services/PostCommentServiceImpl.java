@@ -3,9 +3,9 @@ package com.someapp.backend.services;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.PostCommentRepository;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.PostCommentRepository;
+import com.someapp.backend.interfaces.repositories.PostRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.util.requests.SendPostCommentRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
@@ -14,11 +14,10 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class PostCommentServiceImpl {
+public class PostCommentServiceImpl implements PostCommentService {
 
     private final PostCommentRepository postCommentRepository;
     private final PostRepository postRepository;
@@ -35,26 +34,23 @@ public class PostCommentServiceImpl {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
+    @Override
     public PostComment save(HttpServletRequest req, SendPostCommentRequest sendPostCommentRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
-        Optional<Post> post = postRepository.getByUUID(sendPostCommentRequest.getPostId());
-        Optional<User> user = userRepository.getByUUID(actionUserId);
+        Post post = postRepository.findById(sendPostCommentRequest.getPostId())
+                .orElseThrow(ResourceNotFoundException::new);
+        User user = userRepository.findById(actionUserId).orElseThrow(ResourceNotFoundException::new);
 
-        return postCommentRepository.save(new PostComment(sendPostCommentRequest.getPostComment(),
-                post.orElseThrow(ResourceNotFoundException::new),
-                user.orElseThrow(ResourceNotFoundException::new)));
+        return postCommentRepository.save(new PostComment(sendPostCommentRequest.getPostComment(), post, user));
     }
 
+    @Override
     public DeleteResponse delete(HttpServletRequest req, UUIDRequest postCommentId) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
-        Optional<PostComment> commentToDelete = postCommentRepository.findById(postCommentId.getUuid());
+        PostComment commentToDelete = postCommentRepository.findById(postCommentId.getUuid())
+                .orElseThrow(ResourceNotFoundException::new);
 
-        // IF COMMENT IS NOT FOUND, THROW AN EXCEPTION
-        /*if (!commentToDelete.isPresent()) {
-            throw new BadArgumentException();
-        }*/
-
-        postCommentRepository.deleteById(postCommentId.getUuid());
+        postCommentRepository.deleteById(commentToDelete.getId());
         return new DeleteResponse(postCommentId.getUuid(), "Successfully deleted post comment");
     }
 }

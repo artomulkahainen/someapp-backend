@@ -1,7 +1,7 @@
 package com.someapp.backend.util;
 
 import com.someapp.backend.entities.*;
-import com.someapp.backend.repositories.*;
+import com.someapp.backend.interfaces.repositories.*;
 
 import java.util.UUID;
 

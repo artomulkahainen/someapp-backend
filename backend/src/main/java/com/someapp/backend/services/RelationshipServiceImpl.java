@@ -1,8 +1,8 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.Relationship;
-import com.someapp.backend.repositories.RelationshipRepository;
-import com.someapp.backend.repositories.UserRepository;
+import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.util.customExceptions.BadArgumentException;
 import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class RelationshipServiceImpl {
+public class RelationshipServiceImpl implements RelationshipService {
 
     @Autowired
     private UserRepository userRepository;
@@ -29,6 +29,7 @@ public class RelationshipServiceImpl {
     @Autowired
     JWTTokenUtil jwtTokenUtil;
 
+    @Override
     public List<Relationship> getRelationships(HttpServletRequest req) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
 
@@ -39,6 +40,7 @@ public class RelationshipServiceImpl {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Relationship save(HttpServletRequest req, NewRelationshipRequest relationshipRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
 
@@ -59,6 +61,7 @@ public class RelationshipServiceImpl {
         }
     }
 
+    @Override
     public Relationship update(HttpServletRequest req, ModifyRelationshipRequest modifyRelationshipRequest) {
         UUID modifyingUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
         Optional<Relationship> relationship = relationshipRepository

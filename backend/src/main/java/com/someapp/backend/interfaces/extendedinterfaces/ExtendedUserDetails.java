@@ -1,4 +1,4 @@
-package com.someapp.backend.util.extendedinterfaces;
+package com.someapp.backend.interfaces.extendedinterfaces;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

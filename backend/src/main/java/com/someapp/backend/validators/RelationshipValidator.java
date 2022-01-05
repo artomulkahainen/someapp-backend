@@ -1,7 +1,7 @@
-package com.someapp.backend.util.validators;
+package com.someapp.backend.validators;
 
 import com.someapp.backend.entities.Relationship;
-import com.someapp.backend.repositories.RelationshipRepository;
+import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
