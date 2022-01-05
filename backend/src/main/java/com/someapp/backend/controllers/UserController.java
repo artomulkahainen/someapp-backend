@@ -21,6 +21,7 @@ public class UserController implements UserApi {
     @Autowired
     private ExtendedUserDetailsService extendedUserDetailsService;
 
+    @Autowired
     private UserMapper userMapper;
 
     @Override

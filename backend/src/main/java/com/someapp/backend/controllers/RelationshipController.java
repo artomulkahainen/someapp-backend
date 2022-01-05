@@ -9,6 +9,7 @@ import com.someapp.backend.util.jwt.JWTTokenUtil;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.util.requests.ModifyRelationshipRequest;
 import com.someapp.backend.util.requests.NewRelationshipRequest;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ public class RelationshipController implements RelationshipApi {
     @Autowired
     private RelationshipService relationshipService;
 
+    @Autowired
     private RelationshipMapper relationshipMapper;
 
     private JWTTokenUtil jwtTokenUtil;

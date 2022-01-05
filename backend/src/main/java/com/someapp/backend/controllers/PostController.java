@@ -23,6 +23,7 @@ public class PostController implements PostApi {
     @Autowired
     private PostService postService;
 
+    @Autowired
     private PostMapper postMapper;
 
     @Override

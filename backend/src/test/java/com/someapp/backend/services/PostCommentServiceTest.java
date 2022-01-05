@@ -1,20 +1,18 @@
-package com.someapp.backend.Service;
+package com.someapp.backend.services;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.services.PostCommentService;
-import com.someapp.backend.services.PostCommentServiceImpl;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
-import com.someapp.backend.util.requests.SendPostCommentRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +52,7 @@ public class PostCommentServiceTest {
         when(postCommentRepository.save(any())).then(returnsFirstArg());
 
         PostComment postComment = postCommentService.save(req,
-                new SendPostCommentRequest("Nice post!",
+                new PostCommentSaveDTO("Nice post!",
                         UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"),
                         UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612")));
 
@@ -74,4 +72,9 @@ public class PostCommentServiceTest {
         verify(postCommentRepository, times(1))
                 .deleteById(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
     }
+
+    /**
+     * Create tests for trying to save without post or user
+     * Create tests for trying to delete comment with id that is not in db
+     */
 }

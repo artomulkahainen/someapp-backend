@@ -1,17 +1,36 @@
 package com.someapp.backend.validators;
 
+import com.someapp.backend.dto.PostCommentSaveDTO;
+import com.someapp.backend.services.PostCommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-@Component
-public class PostCommentValidator implements Validator {
+import javax.servlet.http.HttpServletRequest;
 
-    public boolean supports(Class<?> clazz) {
-        return true;
+@Component
+public class PostCommentSaveDTOValidator implements Validator {
+
+    private final PostCommentService postCommentService;
+
+    @Autowired
+    private HttpServletRequest req;
+
+    public PostCommentSaveDTOValidator(PostCommentService postCommentService) {
+        this.postCommentService = postCommentService;
     }
 
-    public void validate(Object object, Errors errors) {
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return PostCommentSaveDTO.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        req.getHeader("Authorization");
+        final PostCommentSaveDTO postCommentSaveDTO = (PostCommentSaveDTO) target;
+
         /** ServletRequest validation
          *
          *         if (actionUserId == null) {

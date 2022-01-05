@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -85,6 +86,6 @@ public class User extends AbstractPersistable<UUID> {
 
     public List<Post> getPosts() {
         Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
-        return posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList());
+        return posts != null ? posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList()) : null;
     }
 }

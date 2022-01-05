@@ -1,5 +1,6 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
@@ -7,7 +8,6 @@ import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.util.jwt.JWTTokenUtil;
-import com.someapp.backend.util.requests.SendPostCommentRequest;
 import com.someapp.backend.util.requests.UUIDRequest;
 import com.someapp.backend.util.responses.DeleteResponse;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -35,13 +35,13 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostComment save(HttpServletRequest req, SendPostCommentRequest sendPostCommentRequest) {
+    public PostComment save(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
-        Post post = postRepository.findById(sendPostCommentRequest.getPostId())
+        Post post = postRepository.findById(postCommentSaveDTO.getPostId())
                 .orElseThrow(ResourceNotFoundException::new);
         User user = userRepository.findById(actionUserId).orElseThrow(ResourceNotFoundException::new);
 
-        return postCommentRepository.save(new PostComment(sendPostCommentRequest.getPostComment(), post, user));
+        return postCommentRepository.save(new PostComment(postCommentSaveDTO.getPostComment(), post, user));
     }
 
     @Override

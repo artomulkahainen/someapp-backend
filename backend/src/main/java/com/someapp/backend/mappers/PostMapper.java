@@ -3,7 +3,9 @@ package com.someapp.backend.mappers;
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.PostDTO;
 import com.someapp.backend.entities.Post;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostMapper {
 
     public PostDTO mapPostToPostDTO(Post post) {

@@ -2,9 +2,11 @@ package com.someapp.backend.mappers;
 
 import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
 public class RelationshipMapper {
 
     public RelationshipDTO mapRelationshipToRelationshipDTO(Relationship relationship, UUID userId) {
