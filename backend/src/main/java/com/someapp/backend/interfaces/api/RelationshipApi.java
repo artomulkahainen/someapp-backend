@@ -1,8 +1,8 @@
 package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.dto.RelationshipDTO;
-import com.someapp.backend.testUtility.requests.ModifyRelationshipRequest;
-import com.someapp.backend.testUtility.requests.NewRelationshipRequest;
+import com.someapp.backend.utils.requests.ModifyRelationshipRequest;
+import com.someapp.backend.utils.requests.NewRelationshipRequest;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

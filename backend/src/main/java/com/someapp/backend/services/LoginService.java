@@ -1,6 +1,6 @@
 package com.someapp.backend.services;
 
-import com.someapp.backend.testUtility.requests.LoginRequest;
+import com.someapp.backend.utils.requests.LoginRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface LoginService {

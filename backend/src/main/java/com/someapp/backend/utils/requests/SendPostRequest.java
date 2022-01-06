@@ -1,4 +1,4 @@
-package com.someapp.backend.testUtility.requests;
+package com.someapp.backend.utils.requests;
 
 import com.sun.istack.NotNull;
 

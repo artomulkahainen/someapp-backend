@@ -1,9 +1,9 @@
 package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.dto.PostDTO;
-import com.someapp.backend.testUtility.requests.DeletePostRequest;
-import com.someapp.backend.testUtility.requests.SendPostRequest;
-import com.someapp.backend.testUtility.responses.DeleteResponse;
+import com.someapp.backend.utils.requests.DeletePostRequest;
+import com.someapp.backend.utils.requests.SendPostRequest;
+import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

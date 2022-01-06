@@ -1,4 +1,4 @@
-package com.someapp.backend.testUtility.jwt;
+package com.someapp.backend.utils.jwt;
 
 import java.io.IOException;
 import java.io.Serializable;

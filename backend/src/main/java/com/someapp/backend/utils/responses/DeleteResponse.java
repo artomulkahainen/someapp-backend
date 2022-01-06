@@ -1,4 +1,4 @@
-package com.someapp.backend.testUtility.responses;
+package com.someapp.backend.utils.responses;
 
 import java.util.UUID;
 

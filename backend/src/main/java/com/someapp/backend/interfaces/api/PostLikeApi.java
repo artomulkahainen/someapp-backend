@@ -1,9 +1,9 @@
 package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.testUtility.requests.LikePostRequest;
-import com.someapp.backend.testUtility.requests.UnlikePostRequest;
-import com.someapp.backend.testUtility.responses.DeleteResponse;
+import com.someapp.backend.utils.requests.LikePostRequest;
+import com.someapp.backend.utils.requests.UnlikePostRequest;
+import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;

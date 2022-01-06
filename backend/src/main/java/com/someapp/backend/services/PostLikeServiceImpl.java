@@ -1,17 +1,15 @@
 package com.someapp.backend.services;
 
-import static com.someapp.backend.testUtility.jwt.JWTTokenUtil.getIdFromToken;
-
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.testUtility.customExceptions.BadArgumentException;
-import com.someapp.backend.testUtility.customExceptions.ResourceNotFoundException;
-import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
-import com.someapp.backend.testUtility.requests.LikePostRequest;
-import com.someapp.backend.testUtility.requests.UnlikePostRequest;
-import com.someapp.backend.testUtility.responses.DeleteResponse;
+import com.someapp.backend.utils.customExceptions.BadArgumentException;
+import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import com.someapp.backend.utils.requests.LikePostRequest;
+import com.someapp.backend.utils.requests.UnlikePostRequest;
+import com.someapp.backend.utils.responses.DeleteResponse;
 import com.someapp.backend.validators.RelationshipValidator;
 import com.someapp.backend.validators.UserPostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +72,7 @@ public class PostLikeServiceImpl implements PostLikeService {
 
     @Override
     public DeleteResponse delete(HttpServletRequest req, UnlikePostRequest unlikePostRequest) {
-        UUID actionUserId = getIdFromToken(req);
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         Optional<PostLike> likeToDelete = getLikeById(unlikePostRequest.getPostLikeId());
 
         // IF LIKE IS NOT FOUND, THROW AN EXCEPTION

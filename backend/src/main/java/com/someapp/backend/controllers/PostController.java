@@ -6,9 +6,9 @@ import com.someapp.backend.entities.Post;
 import com.someapp.backend.interfaces.api.PostApi;
 import com.someapp.backend.services.PostService;
 import com.someapp.backend.mappers.PostMapper;
-import com.someapp.backend.testUtility.requests.DeletePostRequest;
-import com.someapp.backend.testUtility.requests.SendPostRequest;
-import com.someapp.backend.testUtility.responses.DeleteResponse;
+import com.someapp.backend.utils.requests.DeletePostRequest;
+import com.someapp.backend.utils.requests.SendPostRequest;
+import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -20,11 +20,13 @@ import java.util.List;
 @RestController
 public class PostController implements PostApi {
 
-    @Autowired
     private PostService postService;
-
-    @Autowired
     private PostMapper postMapper;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+        this.postMapper = new PostMapper();
+    }
 
     @Override
     public List<PostDTO> getPostsByRelationships(HttpServletRequest req) {

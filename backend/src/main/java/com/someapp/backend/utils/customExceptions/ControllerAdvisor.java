@@ -1,4 +1,4 @@
-package com.someapp.backend.testUtility.customExceptions;
+package com.someapp.backend.utils.customExceptions;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

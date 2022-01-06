@@ -2,12 +2,12 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.testUtility.customExceptions.BadArgumentException;
+import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
-import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
-import com.someapp.backend.testUtility.requests.FindUserByNameRequest;
-import com.someapp.backend.testUtility.responses.UserNameIdResponse;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.utils.responses.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

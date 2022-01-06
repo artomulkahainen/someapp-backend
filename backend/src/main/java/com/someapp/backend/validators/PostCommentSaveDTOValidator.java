@@ -2,7 +2,7 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.services.PostCommentService;
-import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -32,7 +32,7 @@ public class PostCommentSaveDTOValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        final UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
+        final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         final PostCommentSaveDTO postCommentSaveDTO = (PostCommentSaveDTO) target;
 
         if (actionUserId == null) {

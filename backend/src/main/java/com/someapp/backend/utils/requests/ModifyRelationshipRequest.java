@@ -1,4 +1,4 @@
-package com.someapp.backend.testUtility.requests;
+package com.someapp.backend.utils.requests;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

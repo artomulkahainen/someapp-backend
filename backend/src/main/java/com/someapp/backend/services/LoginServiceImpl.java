@@ -1,9 +1,9 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
-import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
-import com.someapp.backend.testUtility.requests.LoginRequest;
-import com.someapp.backend.testUtility.responses.JWTResponse;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.utils.responses.JWTResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

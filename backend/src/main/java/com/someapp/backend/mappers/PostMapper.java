@@ -5,8 +5,10 @@ import com.someapp.backend.dto.PostDTO;
 import com.someapp.backend.entities.Post;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class PostMapper {
+
+    public PostMapper() {}
 
     public PostDTO mapPostToPostDTO(Post post) {
         return new PostDTO(

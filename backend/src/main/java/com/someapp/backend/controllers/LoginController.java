@@ -2,8 +2,8 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.interfaces.api.LoginApi;
 import com.someapp.backend.services.LoginService;
-import com.someapp.backend.testUtility.requests.LoginRequest;
-import com.someapp.backend.testUtility.responses.PingResponse;
+import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.utils.responses.PingResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
