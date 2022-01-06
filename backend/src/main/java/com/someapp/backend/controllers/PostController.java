@@ -20,13 +20,11 @@ import java.util.List;
 @RestController
 public class PostController implements PostApi {
 
+    @Autowired
     private PostService postService;
-    private PostMapper postMapper;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-        this.postMapper = new PostMapper();
-    }
+    @Autowired
+    private PostMapper postMapper;
 
     @Override
     public List<PostDTO> getPostsByRelationships(HttpServletRequest req) {
