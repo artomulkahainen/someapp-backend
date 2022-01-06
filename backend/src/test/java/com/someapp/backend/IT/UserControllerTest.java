@@ -6,9 +6,9 @@ import static org.hamcrest.Matchers.*;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.util.Format;
-import com.someapp.backend.util.requests.FindUserByNameRequest;
-import com.someapp.backend.util.responses.UserNameIdResponse;
+import com.someapp.backend.testUtility.Format;
+import com.someapp.backend.testUtility.requests.FindUserByNameRequest;
+import com.someapp.backend.testUtility.responses.UserNameIdResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

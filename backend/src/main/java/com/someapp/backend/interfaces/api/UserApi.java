@@ -2,8 +2,8 @@ package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.dto.UserDTO;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.util.requests.FindUserByNameRequest;
-import com.someapp.backend.util.responses.UserNameIdResponse;
+import com.someapp.backend.testUtility.requests.FindUserByNameRequest;
+import com.someapp.backend.testUtility.responses.UserNameIdResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

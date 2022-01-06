@@ -3,11 +3,11 @@ package com.someapp.backend.services;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.util.customExceptions.BadArgumentException;
-import com.someapp.backend.util.customExceptions.ResourceNotFoundException;
-import com.someapp.backend.util.jwt.JWTTokenUtil;
-import com.someapp.backend.util.requests.ModifyRelationshipRequest;
-import com.someapp.backend.util.requests.NewRelationshipRequest;
+import com.someapp.backend.testUtility.customExceptions.BadArgumentException;
+import com.someapp.backend.testUtility.customExceptions.ResourceNotFoundException;
+import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
+import com.someapp.backend.testUtility.requests.ModifyRelationshipRequest;
+import com.someapp.backend.testUtility.requests.NewRelationshipRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public List<Relationship> getRelationships(HttpServletRequest req) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
 
         return relationshipRepository
                 .findAll()
@@ -42,7 +42,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public Relationship save(HttpServletRequest req, NewRelationshipRequest relationshipRequest) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
 
         // If relationship is already created, throw an exception
         if (relationshipAlreadyExists(actionUserId, relationshipRequest)) {
@@ -63,7 +63,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public Relationship update(HttpServletRequest req, ModifyRelationshipRequest modifyRelationshipRequest) {
-        UUID modifyingUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        UUID modifyingUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
         Optional<Relationship> relationship = relationshipRepository
                 .findById(modifyRelationshipRequest.getRelationshipId());
 

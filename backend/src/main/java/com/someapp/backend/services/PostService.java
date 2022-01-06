@@ -1,9 +1,9 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.Post;
-import com.someapp.backend.util.requests.DeletePostRequest;
-import com.someapp.backend.util.requests.SendPostRequest;
-import com.someapp.backend.util.responses.DeleteResponse;
+import com.someapp.backend.testUtility.requests.DeletePostRequest;
+import com.someapp.backend.testUtility.requests.SendPostRequest;
+import com.someapp.backend.testUtility.responses.DeleteResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

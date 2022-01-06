@@ -1,4 +1,4 @@
-package com.someapp.backend.util;
+package com.someapp.backend.testUtility;
 
 import com.someapp.backend.entities.*;
 import com.someapp.backend.interfaces.repositories.*;

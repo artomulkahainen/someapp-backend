@@ -1,9 +1,9 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.util.requests.LikePostRequest;
-import com.someapp.backend.util.requests.UnlikePostRequest;
-import com.someapp.backend.util.responses.DeleteResponse;
+import com.someapp.backend.testUtility.requests.LikePostRequest;
+import com.someapp.backend.testUtility.requests.UnlikePostRequest;
+import com.someapp.backend.testUtility.responses.DeleteResponse;
 
 import javax.servlet.http.HttpServletRequest;
 

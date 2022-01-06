@@ -1,8 +1,8 @@
-package com.someapp.backend.util.config;
+package com.someapp.backend.testUtility.config;
 
 import com.someapp.backend.services.ExtendedUserDetailsService;
-import com.someapp.backend.util.jwt.JwtAuthenticationEntryPoint;
-import com.someapp.backend.util.jwt.JwtRequestFilter;
+import com.someapp.backend.testUtility.jwt.JwtAuthenticationEntryPoint;
+import com.someapp.backend.testUtility.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

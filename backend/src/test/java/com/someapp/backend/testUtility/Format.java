@@ -1,4 +1,4 @@
-package com.someapp.backend.util;
+package com.someapp.backend.testUtility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

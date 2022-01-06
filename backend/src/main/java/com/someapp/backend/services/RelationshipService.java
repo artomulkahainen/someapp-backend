@@ -1,8 +1,8 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.Relationship;
-import com.someapp.backend.util.requests.ModifyRelationshipRequest;
-import com.someapp.backend.util.requests.NewRelationshipRequest;
+import com.someapp.backend.testUtility.requests.ModifyRelationshipRequest;
+import com.someapp.backend.testUtility.requests.NewRelationshipRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

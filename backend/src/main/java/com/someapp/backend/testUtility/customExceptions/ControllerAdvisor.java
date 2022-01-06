@@ -1,10 +1,9 @@
-package com.someapp.backend.util.customExceptions;
+package com.someapp.backend.testUtility.customExceptions;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -25,14 +24,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleResourceNotFoundException(
             ResourceNotFoundException exception, WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-
-        List<String> errors = new ArrayList<>();
-        errors.add(exception.getMessage());
-
-        body.put("errors", errors);
-
+        Map<String, Object> body = bodyCreator(exception);
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
@@ -40,6 +32,19 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBadArgumentException(
             BadArgumentException exception, WebRequest request) {
 
+        Map<String, Object> body = bodyCreator(exception);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<Object> handleTokenNotFoundException(
+            TokenNotFoundException exception, WebRequest request) {
+
+        Map<String, Object> body = bodyCreator(exception);
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
+    private Map<String, Object> bodyCreator(RuntimeException exception) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
 
@@ -48,7 +53,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         body.put("errors", errors);
 
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return body;
     }
 
     @Override
@@ -68,24 +73,4 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
-
-    /*@Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers,
-            HttpStatus status, WebRequest request) {
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDate.now());
-        body.put("status", status.value());
-
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(x -> x.getDefaultMessage())
-                .collect(Collectors.toList());
-
-        body.put("errors", errors);
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }*/
 }

@@ -5,11 +5,10 @@ import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.api.RelationshipApi;
 import com.someapp.backend.services.RelationshipService;
-import com.someapp.backend.util.jwt.JWTTokenUtil;
+import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
 import com.someapp.backend.mappers.RelationshipMapper;
-import com.someapp.backend.util.requests.ModifyRelationshipRequest;
-import com.someapp.backend.util.requests.NewRelationshipRequest;
-import org.checkerframework.checker.units.qual.A;
+import com.someapp.backend.testUtility.requests.ModifyRelationshipRequest;
+import com.someapp.backend.testUtility.requests.NewRelationshipRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -32,7 +31,7 @@ public class RelationshipController implements RelationshipApi {
 
     @Override
     public List<RelationshipDTO> getUserRelationships(HttpServletRequest req) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
         List<Relationship> relationships = relationshipService.getRelationships(req);
 
         return relationships
@@ -50,7 +49,7 @@ public class RelationshipController implements RelationshipApi {
             throw new BindException(bindingResult);
         }
 
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
         Relationship relationship = relationshipService.save(req, relationshipRequest);
 
         return relationshipMapper.mapRelationshipToRelationshipDTO(relationship, actionUserId);
@@ -66,7 +65,7 @@ public class RelationshipController implements RelationshipApi {
             throw new BindException(bindingResult);
         }
 
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization").substring(7));
+        UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
         Relationship relationship = relationshipService.update(req, modifyRelationshipRequest);
 
         return relationshipMapper.mapRelationshipToRelationshipDTO(relationship, actionUserId);

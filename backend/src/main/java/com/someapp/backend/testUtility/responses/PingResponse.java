@@ -1,6 +1,5 @@
-package com.someapp.backend.util.responses;
+package com.someapp.backend.testUtility.responses;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;

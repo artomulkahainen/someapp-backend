@@ -2,23 +2,27 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.services.PostCommentService;
+import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Component
 public class PostCommentSaveDTOValidator implements Validator {
 
     private final PostCommentService postCommentService;
+    private final JWTTokenUtil jwtTokenUtil;
 
     @Autowired
     private HttpServletRequest req;
 
-    public PostCommentSaveDTOValidator(PostCommentService postCommentService) {
+    public PostCommentSaveDTOValidator(PostCommentService postCommentService, JWTTokenUtil jwtTokenUtil) {
         this.postCommentService = postCommentService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
@@ -28,15 +32,12 @@ public class PostCommentSaveDTOValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        req.getHeader("Authorization");
+        final UUID actionUserId = jwtTokenUtil.getIdFromToken(req.getHeader("Authorization"));
         final PostCommentSaveDTO postCommentSaveDTO = (PostCommentSaveDTO) target;
 
-        /** ServletRequest validation
-         *
-         *         if (actionUserId == null) {
-         *             errors.reject("Not authenticated");
-         *         }
-         */
+        if (actionUserId == null) {
+            errors.reject("Not authenticated");
+        }
 
 
         /**
@@ -46,7 +47,7 @@ public class PostCommentSaveDTOValidator implements Validator {
 
          // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP
          if (!relationshipValidator.isActiveRelationship(actionUserId, sendPostCommentRequest.getPostCreatorId())) {
-            errors.reject("Active relationship with post creator is needed to write a comment")
+         errors.reject("Active relationship with post creator is needed to write a comment")
          }
          */
 
@@ -56,10 +57,10 @@ public class PostCommentSaveDTOValidator implements Validator {
          // USERS CAN DELETE ONLY THEIR OWN POST COMMENTS
 
          if (!commentToDelete.get().getUserId().equals(actionUserId)) {
-            errors.reject("Users can delete only their own post comments");
+         errors.reject("Users can delete only their own post comments");
          }
 
-        */
+         */
     }
 
 

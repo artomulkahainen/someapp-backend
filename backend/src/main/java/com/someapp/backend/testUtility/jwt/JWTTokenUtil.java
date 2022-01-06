@@ -1,4 +1,4 @@
-package com.someapp.backend.util.jwt;
+package com.someapp.backend.testUtility.jwt;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,6 +14,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
@@ -23,7 +24,7 @@ public class JWTTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 
     @Value("${env.SECRET}")
-    private String secret;
+    private static String secret;
 
     @Value("${env.EXPIRATION_TIME}")
     private String expirationTime;
@@ -33,8 +34,8 @@ public class JWTTokenUtil implements Serializable {
         return subject[1];
     }
 
-    public UUID getIdFromToken(String token) {
-        String subject[] = getClaimFromToken(token, Claims::getSubject).split(";");
+    public static UUID getIdFromToken(HttpServletRequest req) {
+        String subject[] = getClaimFromToken(req.getHeader("Authorization").substring(7), Claims::getSubject).split(";");
         return UUID.fromString(subject[0]);
     }
 
@@ -42,12 +43,12 @@ public class JWTTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims getAllClaimsFromToken(String token) {
+    private static Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 

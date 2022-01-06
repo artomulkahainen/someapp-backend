@@ -2,12 +2,12 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.util.customExceptions.BadArgumentException;
+import com.someapp.backend.testUtility.customExceptions.BadArgumentException;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
-import com.someapp.backend.util.jwt.JWTTokenUtil;
-import com.someapp.backend.util.requests.FindUserByNameRequest;
-import com.someapp.backend.util.responses.UserNameIdResponse;
+import com.someapp.backend.testUtility.jwt.JWTTokenUtil;
+import com.someapp.backend.testUtility.requests.FindUserByNameRequest;
+import com.someapp.backend.testUtility.responses.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +56,7 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     }
 
     public User findOwnUserDetails(HttpServletRequest req) {
-        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req.getHeader("Authorization").substring(7));
+        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req.getHeader("Authorization"));
         return userRepository.findByUsername(usernameFromToken);
     }
 
