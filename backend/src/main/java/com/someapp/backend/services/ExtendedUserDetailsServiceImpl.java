@@ -5,6 +5,7 @@ import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.utils.responses.UserNameIdResponse;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,27 +39,27 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     @Override
     public ExtendedUserDetails loadUserByUsername(String username) {
 
-        User user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByUsername(username);
 
-        if (user == null) {
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("No such user: " + username);
         }
 
         return new ExtendedUser(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
+                user.get().getId(),
+                user.get().getUsername(),
+                user.get().getPassword(),
                 true,
                 true,
                 true,
                 true,
-                Arrays.asList(user.isAdmin() ? new SimpleGrantedAuthority("ADMIN") : new SimpleGrantedAuthority("USER"))
+                Arrays.asList(user.get().isAdmin() ? new SimpleGrantedAuthority("ADMIN") : new SimpleGrantedAuthority("USER"))
         );
     }
 
     public User findOwnUserDetails(HttpServletRequest req) {
         String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req.getHeader("Authorization"));
-        return userRepository.findByUsername(usernameFromToken);
+        return userRepository.findByUsername(usernameFromToken).orElseThrow(RuntimeException::new);
     }
 
     public List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest) {

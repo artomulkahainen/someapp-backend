@@ -1,12 +1,13 @@
 package com.someapp.backend.controllers;
 
 import com.someapp.backend.dto.UserDTO;
-import com.someapp.backend.entities.User;
+import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.interfaces.api.UserApi;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.utils.responses.UserNameIdResponse;
+import com.someapp.backend.validators.UserSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -22,12 +23,14 @@ public class UserController implements UserApi {
     private ExtendedUserDetailsService extendedUserDetailsService;
 
     @Autowired
+    private UserSaveDTOValidator validator;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Override
     public UserDTO findOwnUserDetails(HttpServletRequest req) {
-        User user = extendedUserDetailsService.findOwnUserDetails(req);
-        return userMapper.mapUserToUserDTO(user);
+        return userMapper.mapUserToUserDTO(extendedUserDetailsService.findOwnUserDetails(req));
     }
 
     @Override
@@ -36,11 +39,14 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public UserDTO saveNewUser(User user, BindingResult bindingResult) throws BindException {
+    public UserDTO saveNewUser(UserSaveDTO userSaveDTO, BindingResult bindingResult) throws BindException {
+        validator.validate(userSaveDTO, bindingResult);
+
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        User savedUser = extendedUserDetailsService.save(user);
-        return userMapper.mapUserToUserDTO(savedUser);
+
+        return userMapper.mapUserToUserDTO(
+                extendedUserDetailsService.save(userMapper.mapUserSaveDTOToUser(userSaveDTO)));
     }
 }

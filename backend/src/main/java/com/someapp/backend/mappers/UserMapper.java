@@ -2,6 +2,7 @@ package com.someapp.backend.mappers;
 
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.UserDTO;
+import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.User;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,14 @@ public class UserMapper {
                 user.getCreatedDate(),
                 user.getUsername(),
                 user.isAdmin(),
-                user.getPosts() != null ? user.getPosts() : new ArrayList<>(),
-                user.getPostLikes() != null ? user.getPostLikes()
+                user.getPosts(),
+                user.getPostLikes().size() > 0 ? user.getPostLikes()
                         .stream().map(PostLike::getPostUUID)
                         .collect(ImmutableList.toImmutableList()) : new ArrayList<>()
         );
+    }
+
+    public User mapUserSaveDTOToUser(UserSaveDTO userSaveDTO) {
+        return new User(userSaveDTO.getUsername(), userSaveDTO.getPassword());
     }
 }

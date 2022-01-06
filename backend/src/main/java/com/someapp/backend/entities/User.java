@@ -42,6 +42,8 @@ public class User extends AbstractPersistable<UUID> {
         this.username = username;
         this.password = password;
         this.admin = false;
+        this.posts = new ArrayList<>();
+        this.postLikes = new ArrayList<>();
     }
 
     public User() {};
@@ -86,6 +88,6 @@ public class User extends AbstractPersistable<UUID> {
 
     public List<Post> getPosts() {
         Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
-        return posts != null ? posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList()) : null;
+        return posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList());
     }
 }

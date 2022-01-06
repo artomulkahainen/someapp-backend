@@ -63,11 +63,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("timestamp", LocalDate.now());
         body.put("status", status.value());
 
+        // Hibernate validator error messages
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(x -> x.getDefaultMessage())
                 .collect(Collectors.toList());
+
+        // Spring validator error codes
+        ex.getGlobalErrors().stream().forEach(error -> errors.add(error.getCode()));
 
         body.put("errors", errors);
 

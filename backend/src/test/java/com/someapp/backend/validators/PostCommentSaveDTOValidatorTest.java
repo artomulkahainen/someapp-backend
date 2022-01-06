@@ -55,7 +55,7 @@ public class PostCommentSaveDTOValidatorTest {
     }
 
     @Test
-    public void cantCommentAPostIfValidRelationshipIsNotFound() {
+    public void cantCommentAPost_IfValidRelationshipIsNotFound() {
         when(relationshipRepository.findAll()).thenReturn(new ArrayList<>());
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
 

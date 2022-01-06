@@ -1,7 +1,7 @@
 package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.dto.UserDTO;
-import com.someapp.backend.entities.User;
+import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.utils.responses.UserNameIdResponse;
 import org.springframework.validation.BindException;
@@ -24,6 +24,5 @@ public interface UserApi {
     List<UserNameIdResponse> findUsersByName(@RequestBody FindUserByNameRequest findUserByNameRequest);
 
     @PostMapping("/saveNewUserByUsingPOST")
-    UserDTO saveNewUser(@Valid @RequestBody User user, BindingResult bindingResult) throws BindException;
-
+    UserDTO saveNewUser(@Valid @RequestBody UserSaveDTO userSaveDTO, BindingResult bindingResult) throws BindException;
 }
