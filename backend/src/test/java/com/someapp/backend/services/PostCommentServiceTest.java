@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -44,8 +45,7 @@ public class PostCommentServiceTest {
     private PostCommentServiceImpl postCommentService;
 
     @Test
-    public void testSave() {
-        when(req.getHeader("Authorization")).thenReturn("fds35352sgdg");
+    public void saveIsSuccessful() {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         when(postRepository.findById(any())).thenReturn(Optional.of(new Post()));
         when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
@@ -59,12 +59,20 @@ public class PostCommentServiceTest {
         assertThat(postComment.getPostComment()).isEqualTo("Nice post!");
     }
 
+    @Test(expected = ResourceNotFoundException.class)
+    public void saveThrowsError_IfPostIsNotFound() {
+        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
+
+        postCommentService.save(req, new PostCommentSaveDTO("Nice post!",
+                        UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"),
+                        UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612")));
+    }
+
     @Test
-    public void testDelete() {
+    public void deleteIsSuccessful() {
         PostComment postComment = new PostComment("Easy", new Post(), new User());
         postComment.setUUID(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
 
-        when(req.getHeader("Authorization")).thenReturn("fds35352sgdg");
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         when(postCommentRepository.findById(any())).thenReturn(Optional.of(postComment));
 
@@ -73,8 +81,9 @@ public class PostCommentServiceTest {
                 .deleteById(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
     }
 
-    /**
-     * Create tests for trying to save without post or user
-     * Create tests for trying to delete comment with id that is not in db
-     */
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteThrowsError_ifPostCommentIsNotFound() {
+        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
+        postCommentService.delete(req, new UUIDRequest(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118")));
+    }
 }

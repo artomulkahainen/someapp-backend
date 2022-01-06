@@ -44,6 +44,10 @@ public class PostCommentSaveDTOValidator implements Validator {
     }
 
     private void isActiveRelationship(UUID actionUserId, UUID postCreatorId, Errors errors) {
+        /**
+         *  REPLACE THIS WITH RELATIONSHIP SERVICE'S "usersHaveActiveRelationship" METHOD
+         */
+
         List<Relationship> matches = relationshipRepository
                 .findAll()
                 .stream()
