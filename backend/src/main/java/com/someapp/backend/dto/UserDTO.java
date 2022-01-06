@@ -1,7 +1,9 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 import com.someapp.backend.entities.Post;
-import com.someapp.backend.entities.PostLike;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,9 +16,10 @@ public class UserDTO extends BaseDTO {
     private List<Post> posts;
     private List<UUID> likedPostsIds;
 
-    public UserDTO(UUID uuid, Timestamp createdDate,
-                   String username, boolean admin,
-                   List<Post> posts, List<UUID> likedPostsIds) {
+    @JsonCreator
+    public UserDTO(@JsonProperty("uuid") UUID uuid, @JsonProperty("createdDate") Timestamp createdDate,
+                   @JsonProperty("username") String username, @JsonProperty("admin") boolean admin,
+                   @JsonProperty("posts") List<Post> posts, @JsonProperty("likedPostsIds") List<UUID> likedPostsIds) {
         super(uuid, createdDate);
         this.username = username;
         this.admin = admin;

@@ -1,5 +1,9 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.someapp.backend.dto.abstractDTOs.BaseDTO;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -9,7 +13,10 @@ public class RelationshipDTO extends BaseDTO {
     private UUID actionUserUuid;
     private int status;
 
-    public RelationshipDTO(UUID uuid, Timestamp createdDate, UUID friendUuid, UUID actionUserUuid, int status) {
+    @JsonCreator
+    public RelationshipDTO(@JsonProperty("uuid") UUID uuid, @JsonProperty("createdDate") Timestamp createdDate,
+                           @JsonProperty("friendUuid") UUID friendUuid,
+                           @JsonProperty("actionUserUuid") UUID actionUserUuid, @JsonProperty("status") int status) {
         super(uuid, createdDate);
         this.friendUuid = friendUuid;
         this.actionUserUuid = actionUserUuid;

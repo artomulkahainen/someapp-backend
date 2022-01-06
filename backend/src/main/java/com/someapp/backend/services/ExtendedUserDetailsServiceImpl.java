@@ -5,10 +5,9 @@ import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
-import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.utils.responses.UserNameIdResponse;
+import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -67,7 +66,7 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
 
         return userRepository.findAll(pageable).stream()
                 .filter(user -> user.getUsername().contains(findUserByNameRequest.getUsername()))
-                .map(user -> new UserNameIdResponse(user.getUsername(), user.getId()))
+                .map(user -> new UserNameIdResponse(user.getId(), user.getUsername()))
                 .collect(Collectors.toList());
     }
 

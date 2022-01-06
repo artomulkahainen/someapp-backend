@@ -3,7 +3,7 @@ package com.someapp.backend.interfaces.api;
 import com.someapp.backend.dto.UserDTO;
 import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.utils.responses.UserNameIdResponse;
+import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

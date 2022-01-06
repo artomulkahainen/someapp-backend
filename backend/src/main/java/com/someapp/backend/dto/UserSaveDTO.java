@@ -1,5 +1,8 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -12,7 +15,8 @@ public class UserSaveDTO {
     @Size(min = 3, message = "Password must be longer or equal to 3")
     private String password;
 
-    public UserSaveDTO(String username, String password) {
+    @JsonCreator
+    public UserSaveDTO(@JsonProperty("username") String username, @JsonProperty("password") String password) {
         this.username = username;
         this.password = password;
     }

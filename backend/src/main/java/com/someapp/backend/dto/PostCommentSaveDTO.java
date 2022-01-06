@@ -1,5 +1,8 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,7 +19,10 @@ public class PostCommentSaveDTO {
     @NotNull
     private UUID postCreatorId;
 
-    public PostCommentSaveDTO(String postComment, UUID postId, UUID postCreatorId) {
+    @JsonCreator
+    public PostCommentSaveDTO(@JsonProperty("postComment") String postComment,
+                              @JsonProperty("postId") UUID postId,
+                              @JsonProperty("postCreatorId") UUID postCreatorId) {
         this.postComment = postComment;
         this.postId = postId;
         this.postCreatorId = postCreatorId;

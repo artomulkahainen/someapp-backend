@@ -6,7 +6,7 @@ import com.someapp.backend.interfaces.api.UserApi;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.utils.responses.UserNameIdResponse;
+import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.validators.UserSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;

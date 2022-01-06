@@ -1,5 +1,8 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 import com.someapp.backend.entities.PostComment;
 
 import java.sql.Timestamp;
@@ -13,9 +16,11 @@ public class PostDTO extends BaseDTO {
     private List<PostComment> postComments;
     private List<UUID> postLikerIds;
 
-    public PostDTO(UUID uuid, Timestamp createdDate,
-                   String post, UUID userUuid,
-                   List<PostComment> postComments, List<UUID> postLikerIds) {
+    @JsonCreator
+    public PostDTO(@JsonProperty("uuid") UUID uuid, @JsonProperty("createdDate") Timestamp createdDate,
+                   @JsonProperty("post") String post, @JsonProperty("userUuid") UUID userUuid,
+                   @JsonProperty("postComments") List<PostComment> postComments,
+                   @JsonProperty("postLikerIds") List<UUID> postLikerIds) {
         super(uuid, createdDate);
         this.post = post;
         this.userUuid = userUuid;

@@ -8,7 +8,7 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.utils.responses.UserNameIdResponse;
+import com.someapp.backend.dto.UserNameIdResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
