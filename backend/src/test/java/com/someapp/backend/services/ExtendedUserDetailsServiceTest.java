@@ -13,6 +13,7 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import org.junit.Before;
 import org.junit.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +43,13 @@ public class ExtendedUserDetailsServiceTest {
     @InjectMocks
     private ExtendedUserDetailsServiceImpl extendedUserDetailsService;
 
+    private List<User> foundUsers;
+
+    @Before
+    public void setup() {
+        foundUsers = foundUsers();
+    }
+
     @Test
     public void findOwnUserDetailsSuccessfully() {
         when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn("donald");
@@ -61,7 +69,6 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByNameSuccessfully() {
         FindUserByNameRequest request = new FindUserByNameRequest("rilla");
-        List<User> foundUsers = foundUsers();
 
         when(userRepository.findAll()).thenReturn(foundUsers);
 
@@ -73,7 +80,6 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByName_returnsMaximumOfTenUsernames() {
         FindUserByNameRequest request = new FindUserByNameRequest("oyota");
-        List<User> foundUsers = foundUsers();
 
         when(userRepository.findAll()).thenReturn(foundUsers);
 
@@ -85,7 +91,6 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByName_returnsEmptyList_WhenUsernameNotFoundInDb() {
         FindUserByNameRequest request = new FindUserByNameRequest("zorro");
-        List<User> foundUsers = foundUsers();
 
         when(userRepository.findAll()).thenReturn(foundUsers);
 
