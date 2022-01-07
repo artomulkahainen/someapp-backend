@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.PostDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.interfaces.api.PostApi;
-import com.someapp.backend.services.PostService;
+import com.someapp.backend.dto.services.PostService;
 import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.utils.requests.DeletePostRequest;
 import com.someapp.backend.utils.requests.SendPostRequest;

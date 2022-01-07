@@ -3,7 +3,7 @@ package com.someapp.backend.controllers;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.interfaces.api.PostCommentApi;
-import com.someapp.backend.services.PostCommentService;
+import com.someapp.backend.dto.services.PostCommentService;
 import com.someapp.backend.utils.requests.UUIDRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;

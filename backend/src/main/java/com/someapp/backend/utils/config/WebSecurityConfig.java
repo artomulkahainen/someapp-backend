@@ -1,6 +1,6 @@
 package com.someapp.backend.utils.config;
 
-import com.someapp.backend.services.ExtendedUserDetailsService;
+import com.someapp.backend.dto.services.ExtendedUserDetailsService;
 import com.someapp.backend.utils.jwt.JwtAuthenticationEntryPoint;
 import com.someapp.backend.utils.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;

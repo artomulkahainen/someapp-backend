@@ -2,7 +2,7 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.interfaces.api.PostLikeApi;
-import com.someapp.backend.services.PostLikeService;
+import com.someapp.backend.dto.services.PostLikeService;
 import com.someapp.backend.utils.requests.LikePostRequest;
 import com.someapp.backend.utils.requests.UnlikePostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;

@@ -5,13 +5,11 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.isA;
 
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.UserNameIdResponse;
+import com.someapp.backend.dto.services.ExtendedUserDetailsServiceImpl;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.entities.extendedclasses.ExtendedUser;
-import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
@@ -23,7 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,6 +37,8 @@ public class ExtendedUserDetailsServiceTest {
     private JWTTokenUtil jwtTokenUtil;
     @Mock
     private HttpServletRequest req;
+    @Mock
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @InjectMocks
     private ExtendedUserDetailsServiceImpl extendedUserDetailsService;
 
@@ -61,9 +61,9 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByNameSuccessfully() {
         FindUserByNameRequest request = new FindUserByNameRequest("rilla");
-        Page<User> foundUsers = foundUsers();
+        List<User> foundUsers = foundUsers();
 
-        when(userRepository.findAll(isA(Pageable.class))).thenReturn(foundUsers);
+        when(userRepository.findAll()).thenReturn(foundUsers);
 
         List<UserNameIdResponse> users = extendedUserDetailsService.findUsersByName(request);
         assertThat(users.size()).isEqualTo(2);
@@ -73,7 +73,7 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByName_returnsMaximumOfTenUsernames() {
         FindUserByNameRequest request = new FindUserByNameRequest("oyota");
-        Page<User> foundUsers = new PageImpl<>(ImmutableList.of(
+        List<User> foundUsers = ImmutableList.of(
                 new User("Toyota", "Payne"),
                 new User("Toyota1", "noice"),
                 new User("Toyota2", "lul"),
@@ -85,9 +85,9 @@ public class ExtendedUserDetailsServiceTest {
                 new User("Toyota8", "lul"),
                 new User("Toyota9", "lul"),
                 new User("Toyota10", "lul"),
-                new User("Toyota11", "lul")));
+                new User("Toyota11", "lul"));
 
-        when(userRepository.findAll(isA(Pageable.class))).thenReturn(foundUsers);
+        when(userRepository.findAll()).thenReturn(foundUsers);
 
         List<UserNameIdResponse> users = extendedUserDetailsService.findUsersByName(request);
         assertThat(users.size()).isEqualTo(10);
@@ -97,20 +97,35 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByName_returnsEmptyList_WhenUsernameNotFoundInDb() {
         FindUserByNameRequest request = new FindUserByNameRequest("zorro");
-        Page<User> foundUsers = foundUsers();
+        List<User> foundUsers = foundUsers();
 
-        when(userRepository.findAll(isA(Pageable.class))).thenReturn(foundUsers);
+        when(userRepository.findAll()).thenReturn(foundUsers);
 
         List<UserNameIdResponse> users = extendedUserDetailsService.findUsersByName(request);
         assertThat(users.size()).isEqualTo(0);
     }
 
-    private Page<User> foundUsers() {
-        return new PageImpl<>(ImmutableList.of(
+    @Test
+    public void saveIsSuccessful() {
+        String bCryptHash = "$2a$10$Ju1Esie2dKHJFWeF/WS9LebOTk5P8QCTw6lBMW04qPM0PflB.F.sC";
+        when(bCryptPasswordEncoder.encode(any()))
+                .thenReturn(bCryptHash);
+        when(userRepository.save(any())).then(returnsFirstArg());
+
+        User user = extendedUserDetailsService.save(new User("Reindeer", "moro"));
+        assertThat(user.getUsername()).isEqualTo("Reindeer");
+        assertThat(user.getPassword()).isEqualTo(bCryptHash);
+        assertFalse(user.isAdmin());
+        assertThat(user.getPostLikes()).isEmpty();
+        assertThat(user.getPosts()).isEmpty();
+    }
+
+    private List<User> foundUsers() {
+        return ImmutableList.of(
                 new User("Max", "Payne"),
                 new User("rilla", "noice"),
                 new User("uulalaa", "lul"),
-                new User("gorilla", "boi")));
+                new User("gorilla", "boi"));
     }
 
 

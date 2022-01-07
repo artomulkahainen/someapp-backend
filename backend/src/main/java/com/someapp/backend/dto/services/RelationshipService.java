@@ -1,4 +1,4 @@
-package com.someapp.backend.services;
+package com.someapp.backend.dto.services;
 
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.utils.requests.ModifyRelationshipRequest;

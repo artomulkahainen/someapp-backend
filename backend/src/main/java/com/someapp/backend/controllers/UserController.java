@@ -3,7 +3,7 @@ package com.someapp.backend.controllers;
 import com.someapp.backend.dto.UserDTO;
 import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.interfaces.api.UserApi;
-import com.someapp.backend.services.ExtendedUserDetailsService;
+import com.someapp.backend.dto.services.ExtendedUserDetailsService;
 import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.dto.UserNameIdResponse;

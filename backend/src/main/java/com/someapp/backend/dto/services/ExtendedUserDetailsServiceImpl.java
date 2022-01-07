@@ -1,4 +1,4 @@
-package com.someapp.backend.services;
+package com.someapp.backend.dto.services;
 
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
@@ -9,9 +9,6 @@ import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -62,11 +59,10 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     }
 
     public List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("username").descending());
-
-        return userRepository.findAll(pageable).stream()
+        return userRepository.findAll().stream()
                 .filter(user -> user.getUsername().contains(findUserByNameRequest.getUsername()))
                 .map(user -> new UserNameIdResponse(user.getId(), user.getUsername()))
+                .limit(10)
                 .collect(Collectors.toList());
     }
 

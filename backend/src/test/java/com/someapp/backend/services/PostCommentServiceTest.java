@@ -6,6 +6,7 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
+import com.someapp.backend.dto.services.PostCommentServiceImpl;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;

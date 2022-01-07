@@ -1,4 +1,4 @@
-package com.someapp.backend.services;
+package com.someapp.backend.dto.services;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;

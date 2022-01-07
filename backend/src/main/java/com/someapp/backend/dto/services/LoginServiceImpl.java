@@ -1,4 +1,4 @@
-package com.someapp.backend.services;
+package com.someapp.backend.dto.services;
 
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;

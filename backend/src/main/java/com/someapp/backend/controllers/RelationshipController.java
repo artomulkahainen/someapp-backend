@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.api.RelationshipApi;
-import com.someapp.backend.services.RelationshipService;
+import com.someapp.backend.dto.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.utils.requests.ModifyRelationshipRequest;
