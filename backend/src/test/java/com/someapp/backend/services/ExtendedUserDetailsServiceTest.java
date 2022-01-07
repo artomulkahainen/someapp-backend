@@ -73,19 +73,7 @@ public class ExtendedUserDetailsServiceTest {
     @Test
     public void findUsersByName_returnsMaximumOfTenUsernames() {
         FindUserByNameRequest request = new FindUserByNameRequest("oyota");
-        List<User> foundUsers = ImmutableList.of(
-                new User("Toyota", "Payne"),
-                new User("Toyota1", "noice"),
-                new User("Toyota2", "lul"),
-                new User("Toyota3", "boi"),
-                new User("Toyota4", "lul"),
-                new User("Toyota5", "lul"),
-                new User("Toyota6", "lul"),
-                new User("Toyota7", "lul"),
-                new User("Toyota8", "lul"),
-                new User("Toyota9", "lul"),
-                new User("Toyota10", "lul"),
-                new User("Toyota11", "lul"));
+        List<User> foundUsers = foundUsers();
 
         when(userRepository.findAll()).thenReturn(foundUsers);
 
@@ -125,7 +113,19 @@ public class ExtendedUserDetailsServiceTest {
                 new User("Max", "Payne"),
                 new User("rilla", "noice"),
                 new User("uulalaa", "lul"),
-                new User("gorilla", "boi"));
+                new User("gorilla", "boi"),
+                new User("Toyota", "Payne"),
+                new User("Toyota1", "noice"),
+                new User("Toyota2", "lul"),
+                new User("Toyota3", "boi"),
+                new User("Toyota4", "lul"),
+                new User("Toyota5", "lul"),
+                new User("Toyota6", "lul"),
+                new User("Toyota7", "lul"),
+                new User("Toyota8", "lul"),
+                new User("Toyota9", "lul"),
+                new User("Toyota10", "lul"),
+                new User("Toyota11", "lul"));
     }
 
 
