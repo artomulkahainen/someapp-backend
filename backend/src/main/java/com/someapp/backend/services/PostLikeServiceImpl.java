@@ -7,7 +7,7 @@ import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.LikePostRequest;
+import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.utils.requests.UnlikePostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import com.someapp.backend.validators.RelationshipValidator;
@@ -42,32 +42,21 @@ public class PostLikeServiceImpl implements PostLikeService {
 
     private boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
         return !postLikeRepository
-            .findByUserUUIDAndPostUUID(actionUserId, likePostRequest.getPostId()).isPresent();
+                .findByUserUUIDAndPostUUID(actionUserId, likePostRequest.getPostId()).isPresent();
     }
 
     @Override
     public PostLike save(HttpServletRequest req, LikePostRequest likePostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
-        // IF ACTION USER AND USER WHO MADE THE POST ARE NOT FRIENDS, THROW AN EXCEPTION
-        if (!relationshipValidator.isActiveRelationship(actionUserId, likePostRequest.getPostUserId())) {
-            throw new BadArgumentException("Relationship with given users is not active");
-
-            // IF POSTLIKE REPOSITORY ALREADY CONTAINS THE LIKE, THROW AN EXCEPTION
-        } else if (!likeAlreadyExists(actionUserId, likePostRequest)) {
-            throw new BadArgumentException("Post like is already found with given uuids");
-
-            // CHECK IF POST AND USER IS FOUND FROM DB
-        } else if (!userPostValidator.isValid(likePostRequest.getPostId(), actionUserId)) {
+        // CHECK IF POST AND USER IS FOUND FROM DB
+        if (!userPostValidator.isValid(likePostRequest.getPostId(), actionUserId)) {
             throw new ResourceNotFoundException("Either post or user was not found");
-
-            // IF ABOVE CHECKS DON'T MATCH, LIKE THE POST
-        } else {
-            return postLikeRepository.save(
-                    new PostLike(postRepository.getById(likePostRequest.getPostId()),
-                            userRepository.getById(actionUserId)));
         }
 
+        return postLikeRepository.save(
+                new PostLike(postRepository.getById(likePostRequest.getPostId()),
+                        userRepository.getById(actionUserId)));
     }
 
     @Override

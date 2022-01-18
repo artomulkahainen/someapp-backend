@@ -1,7 +1,7 @@
 package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.utils.requests.LikePostRequest;
+import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.utils.requests.UnlikePostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.validation.BindException;

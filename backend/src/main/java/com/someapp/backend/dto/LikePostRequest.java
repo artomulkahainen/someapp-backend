@@ -1,4 +1,4 @@
-package com.someapp.backend.utils.requests;
+package com.someapp.backend.dto;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
