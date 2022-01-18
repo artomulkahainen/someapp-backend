@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.UserNameIdResponse;
-import com.someapp.backend.dto.services.ExtendedUserDetailsServiceImpl;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;

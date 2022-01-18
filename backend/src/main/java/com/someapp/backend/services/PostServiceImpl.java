@@ -1,4 +1,4 @@
-package com.someapp.backend.dto.services;
+package com.someapp.backend.services;
 
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.User;

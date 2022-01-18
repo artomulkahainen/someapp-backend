@@ -5,8 +5,6 @@ import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.google.common.collect.ImmutableList;
-import com.someapp.backend.dto.services.ExtendedUserDetailsService;
-import com.someapp.backend.dto.services.LoginServiceImpl;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
@@ -22,7 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -31,8 +28,6 @@ import java.util.UUID;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginServiceTest {
 
-    @Mock
-    AuthenticationManager authenticationManager;
     @Mock
     JWTTokenUtil jwtTokenUtil;
     @Mock

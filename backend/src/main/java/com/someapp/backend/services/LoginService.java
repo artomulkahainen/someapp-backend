@@ -1,4 +1,4 @@
-package com.someapp.backend.dto.services;
+package com.someapp.backend.services;
 
 import com.someapp.backend.utils.requests.LoginRequest;
 import org.springframework.http.ResponseEntity;

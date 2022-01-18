@@ -1,4 +1,4 @@
-package com.someapp.backend.dto.services;
+package com.someapp.backend.services;
 
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
