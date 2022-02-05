@@ -6,11 +6,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertTrue;
 
-import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.PostCommentSaveDTO;
-import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +28,7 @@ import java.util.UUID;
 public class PostCommentSaveDTOValidatorTest {
 
     @Mock
-    private RelationshipRepository relationshipRepository;
+    private RelationshipService relationshipService;
     @Mock
     private JWTTokenUtil jwtTokenUtil;
     @InjectMocks
@@ -56,21 +53,7 @@ public class PostCommentSaveDTOValidatorTest {
 
     @Test
     public void cantCommentAPost_IfValidRelationshipIsNotFound() {
-        when(relationshipRepository.findAll()).thenReturn(new ArrayList<>());
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
-
-        validator.validate(postCommentSaveDTO, errors);
-        assertTrue(errors.hasErrors());
-        assertThat(errors.getAllErrors().get(0).getCode())
-                .isEqualTo("Active relationship with post creator is needed to write a comment");
-    }
-
-    @Test
-    public void cantCommentAPost_IfRelationshipIsFound_ButItsNotActive() {
-        Relationship relationship = new Relationship(user1, user2, user1.getUUID(), 2);
-
-        when(relationshipRepository
-                .findAll()).thenReturn(ImmutableList.of(relationship));
+        when(relationshipService.usersHaveActiveRelationship(any(), any())).thenReturn(false);
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
 
         validator.validate(postCommentSaveDTO, errors);
@@ -81,10 +64,7 @@ public class PostCommentSaveDTOValidatorTest {
 
     @Test
     public void validatorPassesIfNothingIsRejected() {
-        Relationship relationship = new Relationship(user1, user2, user1.getUUID(), 1);
-
-        when(relationshipRepository
-                .findAll()).thenReturn(ImmutableList.of(relationship));
+        when(relationshipService.usersHaveActiveRelationship(any(), any())).thenReturn(true);
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
 
         validator.validate(postCommentSaveDTO, errors);

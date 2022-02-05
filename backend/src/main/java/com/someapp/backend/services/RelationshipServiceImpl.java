@@ -88,6 +88,17 @@ public class RelationshipServiceImpl implements RelationshipService {
         }
     }
 
+    public boolean usersHaveActiveRelationship(UUID userId, UUID userId2) {
+        List<Relationship> matches = relationshipRepository
+                .findAll()
+                .stream()
+                .filter(relationship ->
+                        (relationship.getUser1().getUUID().equals(userId) && relationship.getUser2().getUUID().equals(userId2)) ||
+                                (relationship.getUser2().getUUID().equals(userId) && relationship.getUser1().getUUID().equals(userId2)))
+                .collect(Collectors.toList());
+        return !matches.isEmpty() && matches.get(0).getStatus() == 1;
+    }
+
     private boolean relationshipAlreadyExists(UUID actionUserId, NewRelationshipRequest relationshipRequest) {
         return !relationshipRepository
                 .findAll()

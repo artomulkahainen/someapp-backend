@@ -1,8 +1,7 @@
 package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
-import com.someapp.backend.entities.Relationship;
-import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,22 +9,20 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 public class PostCommentSaveDTOValidator implements Validator {
 
-    private final RelationshipRepository relationshipRepository;
+    private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
     @Autowired
     private HttpServletRequest req;
 
-    public PostCommentSaveDTOValidator(RelationshipRepository relationshipRepository,
+    public PostCommentSaveDTOValidator(RelationshipService relationshipService,
                                        JWTTokenUtil jwtTokenUtil) {
-        this.relationshipRepository = relationshipRepository;
+        this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -44,19 +41,7 @@ public class PostCommentSaveDTOValidator implements Validator {
     }
 
     private void isActiveRelationship(UUID actionUserId, UUID postCreatorId, Errors errors) {
-        /**
-         *  REPLACE THIS WITH RELATIONSHIP SERVICE'S "usersHaveActiveRelationship" METHOD
-         */
-
-        List<Relationship> matches = relationshipRepository
-                .findAll()
-                .stream()
-                .filter(relationship ->
-                        (relationship.getUser1().getUUID().equals(actionUserId) && relationship.getUser2().getUUID().equals(postCreatorId)) ||
-                                (relationship.getUser2().getUUID().equals(actionUserId) && relationship.getUser1().getUUID().equals(postCreatorId)))
-                .collect(Collectors.toList());
-
-        if (matches.size() == 0 || matches.get(0).getStatus() != 1) {
+        if (!relationshipService.usersHaveActiveRelationship(actionUserId, postCreatorId)) {
             errors.reject("Active relationship with post creator is needed to write a comment");
         }
     }
