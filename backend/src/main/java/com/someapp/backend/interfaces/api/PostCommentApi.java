@@ -1,5 +1,6 @@
 package com.someapp.backend.interfaces.api;
 
+import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.utils.requests.UUIDRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 public interface PostCommentApi {
 
@@ -21,6 +23,6 @@ public interface PostCommentApi {
 
     @PostMapping("/deletePostCommentByUsingPOST")
     DeleteResponse deletePostCommentById(@NotNull HttpServletRequest req,
-                                         @Valid @RequestBody UUIDRequest postCommentId,
+                                         @Valid @RequestBody PostCommentDeleteDTO postCommentDeleteDTO,
                                          BindingResult bindingResult) throws BindException;
 }

@@ -1,16 +1,47 @@
 package com.someapp.backend.validators;
 
-public class PostCommentDeleteDTOValidator {
+import com.someapp.backend.dto.PostCommentDeleteDTO;
+import com.someapp.backend.entities.PostComment;
+import com.someapp.backend.interfaces.repositories.PostCommentRepository;
+import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-    /** POST COMMENT DELETE VALIDATION
-     *
-     *
-     // USERS CAN DELETE ONLY THEIR OWN POST COMMENTS
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+import java.util.UUID;
 
-     if (!commentToDelete.get().getUserId().equals(actionUserId)) {
-     errors.reject("Users can delete only their own post comments");
-     }
+@Component
+public class PostCommentDeleteDTOValidator implements Validator {
 
-     */
+    private final PostCommentRepository postCommentRepository;
+    private final JWTTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private HttpServletRequest req;
+
+    public PostCommentDeleteDTOValidator(PostCommentRepository postCommentRepository, JWTTokenUtil jwtTokenUtil) {
+        this.postCommentRepository = postCommentRepository;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return PostCommentDeleteDTO.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
+        final PostCommentDeleteDTO postCommentDeleteDTO = (PostCommentDeleteDTO) target;
+
+        Optional<PostComment> postComment = postCommentRepository.findById(postCommentDeleteDTO.getUuid());
+
+        if (postComment.isPresent() && postComment.get().getUserId() != actionUserId) {
+            errors.reject("User can delete only their own post comments");
+        }
+    }
 }

@@ -6,10 +6,11 @@ import com.someapp.backend.utils.requests.UUIDRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 public interface PostCommentService {
 
     PostComment save(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO);
 
-    DeleteResponse delete(HttpServletRequest req, UUIDRequest postCommentId);
+    DeleteResponse delete(HttpServletRequest req, UUID postCommentId);
 }
