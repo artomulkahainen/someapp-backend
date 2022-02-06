@@ -5,9 +5,9 @@ import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.interfaces.api.PostCommentApi;
 import com.someapp.backend.services.PostCommentService;
-import com.someapp.backend.utils.requests.UUIDRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import com.someapp.backend.validators.PostCommentDeleteDTOValidator;
+import com.someapp.backend.validators.PostCommentSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -22,12 +22,16 @@ public class PostCommentController implements PostCommentApi {
     private PostCommentService postCommentService;
 
     @Autowired
-    private PostCommentDeleteDTOValidator deleteDTOValidator;
+    private PostCommentSaveDTOValidator saveValidator;
+
+    @Autowired
+    private PostCommentDeleteDTOValidator deleteValidator;
 
     @Override
     public PostComment sendNewPostComment(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO,
                                           BindingResult bindingResult) throws BindException {
-        // IF VALIDATION ERRORS
+        saveValidator.validate(postCommentSaveDTO, bindingResult);
+
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
@@ -39,7 +43,7 @@ public class PostCommentController implements PostCommentApi {
     public DeleteResponse deletePostCommentById(HttpServletRequest req,
                                                 PostCommentDeleteDTO postCommentDeleteDTO,
                                                 BindingResult bindingResult) throws BindException {
-        deleteDTOValidator.validate(postCommentDeleteDTO, bindingResult);
+        deleteValidator.validate(postCommentDeleteDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
