@@ -31,7 +31,7 @@ public class PostController implements PostApi {
         List<Post> posts = postService.findPostsByRelationships(req);
         return posts
                 .stream()
-                .map(post -> postMapper.mapPostToPostDTO(post))
+                .map(postMapper::mapPostToPostDTO)
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -42,14 +42,14 @@ public class PostController implements PostApi {
             throw new BindException(bindingResult);
         }
 
-        Post post = postService.save(req, sendPostRequest);
-        return postMapper.mapPostToPostDTO(post);
+        return postMapper.mapPostToPostDTO(postService.save(req, sendPostRequest));
     }
 
     @Override
     public DeleteResponse deletePost(HttpServletRequest req,
                                      DeletePostRequest deletePostRequest,
                                      BindingResult bindingResult) throws BindException {
+        // ADD VALIDATOR TO PREVENT DELETING OTHER USER'S POSTS
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
