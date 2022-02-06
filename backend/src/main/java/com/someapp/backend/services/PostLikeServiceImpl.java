@@ -10,7 +10,6 @@ import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.utils.requests.UnlikePostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
-import com.someapp.backend.validators.RelationshipValidator;
 import com.someapp.backend.validators.UserPostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,16 +31,14 @@ public class PostLikeServiceImpl implements PostLikeService {
     PostLikeRepository postLikeRepository;
 
     @Autowired
-    RelationshipValidator relationshipValidator;
-
-    @Autowired
     UserPostValidator userPostValidator;
 
     @Autowired
     JWTTokenUtil jwtTokenUtil;
 
-    private boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
-        return !postLikeRepository
+    @Override
+    public boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
+        return postLikeRepository
                 .findByUserUUIDAndPostUUID(actionUserId, likePostRequest.getPostId()).isPresent();
     }
 
@@ -79,7 +76,8 @@ public class PostLikeServiceImpl implements PostLikeService {
         }
     }
 
-    private Optional<PostLike> getLikeById(UUID id) {
+    @Override
+    public Optional<PostLike> getLikeById(UUID id) {
         return postLikeRepository.findById(id);
     }
 }
