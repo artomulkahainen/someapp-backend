@@ -1,13 +1,12 @@
 package com.someapp.backend.validators;
 
-import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
-import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.services.RelationshipServiceImpl;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +34,7 @@ public class LikePostRequestValidatorTest {
     @Mock
     PostLikeRepository postLikeRepository;
     @Mock
-    RelationshipRepository relationshipRepository;
+    RelationshipServiceImpl relationshipService;
     @Mock
     JWTTokenUtil jwtTokenUtil;
     @InjectMocks
@@ -73,11 +72,11 @@ public class LikePostRequestValidatorTest {
     @Test
     public void cannotLikePost_ifLikeIsAlreadyFound() {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612"));
-        when(relationshipRepository.findAll()).thenReturn(ImmutableList.of(relationship));
+        when(relationshipService.usersHaveActiveRelationship(any(), any())).thenReturn(true);
         when(postLikeRepository.findByUserUUIDAndPostUUID(any(), any())).thenReturn(Optional.of(new PostLike()));
         validator.validate(likePostRequest, errors);
         assertTrue(errors.hasErrors());
         assertThat(errors.getAllErrors().get(0).getCode())
-                .isEqualTo("Action user and post creator user doesn't have active relationship");
+                .isEqualTo("Post is already liked by the action user");
     }
 }

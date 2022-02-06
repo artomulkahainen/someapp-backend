@@ -4,6 +4,7 @@ import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,17 +20,17 @@ import java.util.stream.Collectors;
 public class LikePostRequestValidator implements Validator {
 
     private final PostLikeRepository postLikeRepository;
-    private final RelationshipRepository relationshipRepository;
+    private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
     @Autowired
     HttpServletRequest req;
 
     public LikePostRequestValidator(PostLikeRepository postLikeRepository,
-                                    RelationshipRepository relationshipRepository,
+                                    RelationshipService relationshipService,
                                     JWTTokenUtil jwtTokenUtil) {
         this.postLikeRepository = postLikeRepository;
-        this.relationshipRepository = relationshipRepository;
+        this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -44,7 +45,7 @@ public class LikePostRequestValidator implements Validator {
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
         // IF ACTION USER AND USER WHO MADE THE POST ARE NOT FRIENDS, REJECT
-        if (!isActiveRelationship(actionUserId, likePostRequest.getPostUserId())) {
+        if (!relationshipService.usersHaveActiveRelationship(actionUserId, likePostRequest.getPostUserId())) {
             errors.reject("Action user and post creator user doesn't have active relationship");
         }
 
@@ -52,27 +53,10 @@ public class LikePostRequestValidator implements Validator {
         if (likeAlreadyExists(actionUserId, likePostRequest)) {
             errors.reject("Post is already liked by the action user");
         }
-
-    }
-
-    public boolean isActiveRelationship(UUID userId1, UUID userId2) {
-        List<Relationship> matches = relationshipRepository
-                .findAll()
-                .stream()
-                .filter(relationship ->
-                        (relationship.getUser1().getUUID().equals(userId1) && relationship.getUser2().getUUID().equals(userId2)) ||
-                                (relationship.getUser2().getUUID().equals(userId1) && relationship.getUser1().getUUID().equals(userId2)))
-                .collect(Collectors.toList());
-
-        if (matches.size() > 0 && matches.get(0).getStatus() == 1) {
-            return true;
-        }
-
-        return false;
     }
 
     private boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
-        return !postLikeRepository
+        return postLikeRepository
                 .findByUserUUIDAndPostUUID(actionUserId, likePostRequest.getPostId()).isPresent();
     }
 }

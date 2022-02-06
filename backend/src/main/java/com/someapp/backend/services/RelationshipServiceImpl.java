@@ -88,6 +88,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         }
     }
 
+    @Override
     public boolean usersHaveActiveRelationship(UUID userId, UUID userId2) {
         List<Relationship> matches = relationshipRepository
                 .findAll()
