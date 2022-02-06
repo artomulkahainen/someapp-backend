@@ -6,6 +6,7 @@ import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
+import com.someapp.backend.services.PostLikeServiceImpl;
 import com.someapp.backend.services.RelationshipServiceImpl;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Before;

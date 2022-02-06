@@ -1,9 +1,8 @@
 package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.LikePostRequest;
-import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
-import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +11,22 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 public class LikePostRequestValidator implements Validator {
 
-    private final PostLikeRepository postLikeRepository;
+    private final PostLikeService postLikeService;
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
     @Autowired
     HttpServletRequest req;
 
-    public LikePostRequestValidator(PostLikeRepository postLikeRepository,
+    public LikePostRequestValidator(PostLikeService postLikeService,
                                     RelationshipService relationshipService,
                                     JWTTokenUtil jwtTokenUtil) {
-        this.postLikeRepository = postLikeRepository;
+        this.postLikeService = postLikeService;
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -50,13 +47,8 @@ public class LikePostRequestValidator implements Validator {
         }
 
         // IF POSTLIKE REPOSITORY ALREADY CONTAINS THE LIKE, REJECT
-        if (likeAlreadyExists(actionUserId, likePostRequest)) {
+        if (postLikeService.likeAlreadyExists(actionUserId, likePostRequest)) {
             errors.reject("Post is already liked by the action user");
         }
-    }
-
-    private boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
-        return postLikeRepository
-                .findByUserUUIDAndPostUUID(actionUserId, likePostRequest.getPostId()).isPresent();
     }
 }
