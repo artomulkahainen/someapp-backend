@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -40,6 +41,8 @@ public class LoginServiceTest {
     ExtendedUserDetails userDetails;
     @Mock
     ExtendedUserDetailsService extendedUserDetailsService;
+    @Mock
+    AuthenticationManager authenticationManager;
     @InjectMocks
     LoginServiceImpl loginService;
 

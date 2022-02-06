@@ -72,7 +72,6 @@ public class PostCommentServiceTest {
         PostComment postComment = new PostComment("Easy", new Post(), new User());
         postComment.setUUID(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
 
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         when(postCommentRepository.findById(any())).thenReturn(Optional.of(postComment));
 
         postCommentService.delete(req, UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
@@ -82,7 +81,6 @@ public class PostCommentServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void deleteThrowsError_ifPostCommentIsNotFound() {
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         postCommentService.delete(req, UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
     }
 }
