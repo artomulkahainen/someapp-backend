@@ -39,12 +39,14 @@ public class PostLikeController implements PostLikeApi {
     public DeleteResponse unlikePost(HttpServletRequest req,
                                      UnlikePostRequest unlikePostRequest,
                                      BindingResult bindingResult) throws BindException {
+        /**
+         * Add custom validator
+         */
 
-        // IF VALIDATION ERRORS, THROW AN EXCEPTION
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        return postLikeService.delete(req, unlikePostRequest);
+        return postLikeService.delete(unlikePostRequest);
     }
 }
