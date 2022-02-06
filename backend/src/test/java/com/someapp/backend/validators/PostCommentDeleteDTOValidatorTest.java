@@ -1,11 +1,5 @@
 package com.someapp.backend.validators;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertTrue;
-
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
@@ -25,6 +19,11 @@ import org.springframework.validation.Errors;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)

@@ -6,8 +6,6 @@ import com.someapp.backend.entities.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
-
 @Component
 public class PostMapper {
 

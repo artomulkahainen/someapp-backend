@@ -1,6 +1,5 @@
 package com.someapp.backend.entities;
 
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 

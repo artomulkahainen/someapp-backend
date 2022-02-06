@@ -8,7 +8,6 @@ import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.UUIDRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,5 @@
 package com.someapp.backend.validators;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertTrue;
-
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
@@ -13,7 +7,6 @@ import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
-import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Before;
@@ -29,6 +22,11 @@ import org.springframework.validation.Errors;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)

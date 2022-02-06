@@ -3,7 +3,6 @@ package com.someapp.backend.validators;
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
-import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

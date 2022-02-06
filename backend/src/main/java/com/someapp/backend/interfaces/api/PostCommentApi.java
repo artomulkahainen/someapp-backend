@@ -3,7 +3,6 @@ package com.someapp.backend.interfaces.api;
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.utils.requests.UUIDRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 public interface PostCommentApi {
 

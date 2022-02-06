@@ -1,10 +1,5 @@
 package com.someapp.backend.services;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
@@ -13,7 +8,6 @@ import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.UUIDRequest;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -26,6 +20,11 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
