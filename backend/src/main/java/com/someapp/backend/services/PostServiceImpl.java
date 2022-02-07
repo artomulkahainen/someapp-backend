@@ -67,6 +67,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> findPostsByRelationships(HttpServletRequest req) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
+
+        // Change this to use BooleanBuilder and QPost querys
         Set<UUID> friendIds = relationshipRepository
                 .findAll()
                 .stream()
