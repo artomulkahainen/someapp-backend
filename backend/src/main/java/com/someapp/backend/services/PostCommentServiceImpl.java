@@ -7,6 +7,7 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -19,28 +20,21 @@ import java.util.UUID;
 public class PostCommentServiceImpl implements PostCommentService {
 
     private final PostCommentRepository postCommentRepository;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final PostCommentMapper postCommentMapper;
     private final JWTTokenUtil jwtTokenUtil;
 
     public PostCommentServiceImpl(PostCommentRepository postCommentRepository,
-                                  PostRepository postRepository,
-                                  UserRepository userRepository,
+                                  PostCommentMapper postCommentMapper,
                                   JWTTokenUtil jwtTokenUtil) {
         this.postCommentRepository = postCommentRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
+        this.postCommentMapper = postCommentMapper;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
     public PostComment save(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        Post post = postRepository.findById(postCommentSaveDTO.getPostId())
-                .orElseThrow(ResourceNotFoundException::new);
-        User user = userRepository.findById(actionUserId).orElseThrow(ResourceNotFoundException::new);
-
-        return postCommentRepository.save(new PostComment(postCommentSaveDTO.getPostComment(), post, user));
+        return postCommentRepository.save(postCommentMapper.mapPostCommentSaveDTOToPostComment(actionUserId, postCommentSaveDTO));
     }
 
     @Override

@@ -7,12 +7,14 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -33,15 +35,16 @@ public class PostCommentServiceTest {
     @Mock
     private PostCommentRepository postCommentRepository;
     @Mock
-    private PostRepository postRepository;
-    @Mock
-    private UserRepository userRepository;
-    @Mock
     private JWTTokenUtil jwtTokenUtil;
     @Mock
     private HttpServletRequest req;
     @InjectMocks
     private PostCommentServiceImpl postCommentService;
+
+    private PostRepository postRepository = mock(PostRepository.class);
+    private UserRepository userRepository = mock(UserRepository.class);
+    @Spy
+    private PostCommentMapper postCommentMapper = new PostCommentMapper(postRepository, userRepository);
 
     @Test
     public void saveIsSuccessful() {
