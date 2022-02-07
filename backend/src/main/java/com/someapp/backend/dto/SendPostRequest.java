@@ -1,10 +1,9 @@
-package com.someapp.backend.utils.requests;
+package com.someapp.backend.dto;
 
 import com.sun.istack.NotNull;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 public class SendPostRequest {
 
@@ -12,19 +11,14 @@ public class SendPostRequest {
     @NotNull
     @NotEmpty
     private String post;
-    private UUID userId;
 
-    public SendPostRequest(String post, UUID userId) {
+    public SendPostRequest(String post) {
         this.post = post;
-        this.userId = userId;
     }
 
     public String getPost() {
         return post;
     }
 
-    public UUID getUserId() {
-        return userId;
-    }
 
 }

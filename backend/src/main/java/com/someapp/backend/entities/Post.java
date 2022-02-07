@@ -40,20 +40,44 @@ public class Post extends AbstractPersistable<UUID> {
 
     public List<PostLike> getPostLikes() { return postLikes; }
 
+    public void setPostLikes(List<PostLike> postLikes) {
+        this.postLikes = postLikes;
+    }
+
     public String getPost() {
         return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
     }
 
     public UUID getUserId() {
         return user.getId();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<PostComment> getPostComments() {
         return postComments;
     }
 
+    public void setPostComments(List<PostComment> postComments) {
+        this.postComments = postComments;
+    }
+
     public Timestamp getCreatedDate() {
         return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
 
     public UUID getUUID() {

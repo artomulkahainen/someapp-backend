@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface ExtendedUserDetailsService extends UserDetailsService {
 
@@ -18,4 +20,6 @@ public interface ExtendedUserDetailsService extends UserDetailsService {
     User save(User user);
 
     ExtendedUserDetails loadUserByUsername(String username);
+
+    Optional<User> findUserById(UUID uuid);
 }

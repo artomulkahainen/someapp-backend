@@ -5,11 +5,12 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.DeletePostRequest;
-import com.someapp.backend.utils.requests.SendPostRequest;
+import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import com.someapp.backend.validators.RelationshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
 
     @Autowired
+    private PostMapper postMapper;
+
+    @Autowired
     private RelationshipRepository relationshipRepository;
 
     @Autowired
@@ -40,13 +44,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post save(HttpServletRequest req, SendPostRequest sendPostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-
-        try {
-            User user = userRepository.getById(actionUserId);
-            return postRepository.save(new Post(sendPostRequest.getPost(), user));
-        } catch (ResourceNotFoundException e) {
-            throw new ResourceNotFoundException("User not found");
-        }
+        return postRepository.save(postMapper.mapSendPostRequestToPost(actionUserId, sendPostRequest));
     }
 
     @Override

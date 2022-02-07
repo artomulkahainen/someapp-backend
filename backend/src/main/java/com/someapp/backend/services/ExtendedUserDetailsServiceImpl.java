@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,6 +65,10 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
                 .map(user -> new UserNameIdResponse(user.getId(), user.getUsername()))
                 .limit(10)
                 .collect(Collectors.toList());
+    }
+
+    public Optional<User> findUserById(UUID uuid) {
+        return userRepository.findById(uuid);
     }
 
     public User save(User user) {

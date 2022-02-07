@@ -1,13 +1,11 @@
 package com.someapp.backend.controllers;
 
-import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.PostDTO;
-import com.someapp.backend.entities.Post;
 import com.someapp.backend.interfaces.api.PostApi;
 import com.someapp.backend.services.PostService;
 import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.utils.requests.DeletePostRequest;
-import com.someapp.backend.utils.requests.SendPostRequest;
+import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
