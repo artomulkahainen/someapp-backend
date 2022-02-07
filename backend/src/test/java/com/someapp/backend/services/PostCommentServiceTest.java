@@ -61,15 +61,6 @@ public class PostCommentServiceTest {
         assertThat(postComment.getPostComment()).isEqualTo("Nice post!");
     }
 
-    @Test(expected = ResourceNotFoundException.class)
-    public void saveThrowsError_IfPostIsNotFound() {
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
-
-        postCommentService.save(req, new PostCommentSaveDTO("Nice post!",
-                        UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"),
-                        UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612")));
-    }
-
     @Test
     public void deleteIsSuccessful() {
         PostComment postComment = new PostComment("Easy", new Post(), new User());
