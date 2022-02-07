@@ -6,11 +6,20 @@ import com.someapp.backend.entities.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class PostMapper {
 
     @Autowired
     PostCommentMapper postCommentMapper;
+
+    public List<PostDTO> mapPostsToPostDTOs(List<Post> posts) {
+        return posts
+                .stream()
+                .map(this::mapPostToPostDTO)
+                .collect(ImmutableList.toImmutableList());
+    }
 
     public PostDTO mapPostToPostDTO(Post post) {
         return new PostDTO(

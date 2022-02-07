@@ -28,11 +28,7 @@ public class PostController implements PostApi {
 
     @Override
     public List<PostDTO> getPostsByRelationships(HttpServletRequest req) {
-        List<Post> posts = postService.findPostsByRelationships(req);
-        return posts
-                .stream()
-                .map(postMapper::mapPostToPostDTO)
-                .collect(ImmutableList.toImmutableList());
+        return postMapper.mapPostsToPostDTOs(postService.findPostsByRelationships(req));
     }
 
     @Override
