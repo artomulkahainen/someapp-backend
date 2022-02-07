@@ -1,14 +1,9 @@
 package com.someapp.backend.services;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
-import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.LoginRequest;
 import org.junit.Test;
@@ -22,8 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 
-import java.util.Optional;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
@@ -31,8 +29,6 @@ public class LoginServiceTest {
 
     @Mock
     JWTTokenUtil jwtTokenUtil;
-    @Mock
-    UserRepository userRepository;
     @Mock
     ExtendedUser extendedUser;
     @Mock
@@ -51,7 +47,6 @@ public class LoginServiceTest {
         user = new User("donald", "duck");
         extendedUser = new ExtendedUser(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"),
                 "donald", "duck", ImmutableList.of());
-        when(userRepository.findByUsername("donald")).thenReturn(Optional.of(user));
         when(extendedUserDetailsService.loadUserByUsername("donald")).thenReturn(userDetails);
         when(userDetails.getUsername()).thenReturn("donald");
         when(jwtTokenUtil.generateToken(any()))
