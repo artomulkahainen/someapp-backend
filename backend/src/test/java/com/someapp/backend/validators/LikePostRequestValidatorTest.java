@@ -2,10 +2,8 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
-import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.PostLikeRepository;
 import com.someapp.backend.services.PostLikeServiceImpl;
 import com.someapp.backend.services.RelationshipServiceImpl;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
@@ -20,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -33,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class LikePostRequestValidatorTest {
 
     @Mock
-    PostLikeRepository postLikeRepository;
+    PostLikeServiceImpl postLikeService;
     @Mock
     RelationshipServiceImpl relationshipService;
     @Mock
@@ -63,7 +60,7 @@ public class LikePostRequestValidatorTest {
 
     @Test
     public void cannotLikePost_ifRelationshipIsNotFound() {
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612"));
+        when(postLikeService.likeAlreadyExists(any(), any())).thenReturn(false);
         validator.validate(likePostRequest, errors);
         assertTrue(errors.hasErrors());
         assertThat(errors.getAllErrors().get(0).getCode())
@@ -72,9 +69,8 @@ public class LikePostRequestValidatorTest {
 
     @Test
     public void cannotLikePost_ifLikeIsAlreadyFound() {
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612"));
         when(relationshipService.usersHaveActiveRelationship(any(), any())).thenReturn(true);
-        when(postLikeRepository.findByUserUUIDAndPostUUID(any(), any())).thenReturn(Optional.of(new PostLike()));
+        when(postLikeService.likeAlreadyExists(any(), any())).thenReturn(true);
         validator.validate(likePostRequest, errors);
         assertTrue(errors.hasErrors());
         assertThat(errors.getAllErrors().get(0).getCode())
