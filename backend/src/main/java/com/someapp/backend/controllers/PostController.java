@@ -53,7 +53,7 @@ public class PostController implements PostApi {
             throw new BindException(bindingResult);
         }
 
-        return postService.delete(req, deletePostRequest);
+        return postService.delete(deletePostRequest);
     }
 
 }

@@ -12,7 +12,7 @@ public interface PostService {
 
     Post save(HttpServletRequest req, SendPostRequest sendPostRequest);
 
-    DeleteResponse delete(HttpServletRequest req, DeletePostRequest deletePostRequest);
+    DeleteResponse delete(DeletePostRequest deletePostRequest);
 
     List<Post> findPostsByRelationships(HttpServletRequest req);
 
