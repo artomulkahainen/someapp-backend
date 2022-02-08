@@ -39,7 +39,7 @@ public class DeletePostRequestValidator implements Validator {
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
         if (postToDelete.isPresent() && !postToDelete.get().getUserId().equals(actionUserId)) {
-            errors.reject("Posts can be deleted only by owners.");
+            errors.reject("Post can be deleted only by post creator.");
         }
     }
 
