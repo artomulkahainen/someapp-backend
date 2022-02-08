@@ -1,14 +1,14 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.DeletePostRequest;
+import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.entities.Post;
+import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.mappers.PostMapper;
-import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.dto.DeletePostRequest;
-import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 import com.someapp.backend.validators.RelationshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +67,9 @@ public class PostServiceImpl implements PostService {
         Set<UUID> friendIds = relationshipRepository
                 .findAll()
                 .stream()
-                .filter(relationship -> relationshipValidator.isUserInActiveRelationship(actionUserId, relationship))
+                .filter(relationship -> isUserInActiveRelationship(actionUserId, relationship))
                 .map(relationship -> relationship.getUser1().getUUID().equals(actionUserId) ?
-                        relationship.getUser1().getUUID() : relationship.getUser2().getUUID())
+                        relationship.getUser2().getUUID() : relationship.getUser1().getUUID())
                 .collect(Collectors.toSet());
 
         Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
@@ -82,5 +82,10 @@ public class PostServiceImpl implements PostService {
                         .anyMatch(friendId -> friendId.equals(post.getUserId())))
                 .sorted(byCreatedDate).limit(10)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isUserInActiveRelationship(UUID actionUserId, Relationship relationship) {
+        return (relationship.getUser1().getUUID().equals(actionUserId) || relationship.getUser2().getUUID().equals(actionUserId))
+                && relationship.getStatus() == 1;
     }
 }
