@@ -1,12 +1,8 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
-import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
-import com.someapp.backend.interfaces.repositories.PostRepository;
-import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.responses.DeleteResponse;
@@ -38,7 +34,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public DeleteResponse delete(HttpServletRequest req, UUID postCommentId) {
+    public DeleteResponse delete(UUID postCommentId) {
         PostComment commentToDelete = postCommentRepository.findById(postCommentId)
                 .orElseThrow(ResourceNotFoundException::new);
 

@@ -11,5 +11,5 @@ public interface PostCommentService {
 
     PostComment save(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO);
 
-    DeleteResponse delete(HttpServletRequest req, UUID postCommentId);
+    DeleteResponse delete(UUID postCommentId);
 }

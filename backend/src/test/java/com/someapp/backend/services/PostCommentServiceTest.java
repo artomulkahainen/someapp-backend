@@ -68,13 +68,13 @@ public class PostCommentServiceTest {
 
         when(postCommentRepository.findById(any())).thenReturn(Optional.of(postComment));
 
-        postCommentService.delete(req, UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
+        postCommentService.delete(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
         verify(postCommentRepository, times(1))
                 .deleteById(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void deleteThrowsError_ifPostCommentIsNotFound() {
-        postCommentService.delete(req, UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
+        postCommentService.delete(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
     }
 }

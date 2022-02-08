@@ -49,6 +49,6 @@ public class PostCommentController implements PostCommentApi {
             throw new BindException(bindingResult);
         }
 
-        return postCommentService.delete(req, postCommentDeleteDTO.getUuid());
+        return postCommentService.delete(postCommentDeleteDTO.getUuid());
     }
 }
