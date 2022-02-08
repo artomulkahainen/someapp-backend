@@ -1,8 +1,7 @@
 package com.someapp.backend.dto;
 
-import com.sun.istack.NotNull;
-
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class SendPostRequest {

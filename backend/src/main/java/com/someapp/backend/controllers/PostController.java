@@ -7,6 +7,7 @@ import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.dto.DeletePostRequest;
 import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.validators.DeletePostRequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,9 @@ public class PostController implements PostApi {
 
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private DeletePostRequestValidator validator;
 
     @Override
     public List<PostDTO> getPostsByRelationships(HttpServletRequest req) {
@@ -43,7 +47,8 @@ public class PostController implements PostApi {
     public DeleteResponse deletePost(HttpServletRequest req,
                                      DeletePostRequest deletePostRequest,
                                      BindingResult bindingResult) throws BindException {
-        // ADD VALIDATOR TO PREVENT DELETING OTHER USER'S POSTS
+        validator.validate(deletePostRequest, bindingResult);
+
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
