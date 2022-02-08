@@ -1,7 +1,7 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.entities.Post;
-import com.someapp.backend.utils.requests.DeletePostRequest;
+import com.someapp.backend.dto.DeletePostRequest;
 import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.utils.responses.DeleteResponse;
 
@@ -15,4 +15,6 @@ public interface PostService {
     DeleteResponse delete(HttpServletRequest req, DeletePostRequest deletePostRequest);
 
     List<Post> findPostsByRelationships(HttpServletRequest req);
+
+    Optional<Post> findPostById(UUID uuid);
 }
