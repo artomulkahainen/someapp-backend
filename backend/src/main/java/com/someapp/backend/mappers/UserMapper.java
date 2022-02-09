@@ -12,16 +12,22 @@ import java.util.ArrayList;
 @Component
 public class UserMapper {
 
+    private final PostMapper postMapper;
+
+    public UserMapper(PostMapper postMapper) {
+        this.postMapper = postMapper;
+    }
+
     public UserDTO mapUserToUserDTO(User user) {
         return new UserDTO(
                 user.getUUID(),
                 user.getCreatedDate(),
                 user.getUsername(),
                 user.isAdmin(),
-                user.getPosts(),
-                user.getPostLikes().size() > 0 ? user.getPostLikes()
+                postMapper.mapPostsToPostDTOs(user.getPosts()),
+                user.getPostLikes()
                         .stream().map(PostLike::getPostUUID)
-                        .collect(ImmutableList.toImmutableList()) : new ArrayList<>()
+                        .collect(ImmutableList.toImmutableList())
         );
     }
 
