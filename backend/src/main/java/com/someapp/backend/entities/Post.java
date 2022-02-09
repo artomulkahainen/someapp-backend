@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,8 @@ public class Post extends AbstractPersistable<UUID> {
     public Post(String post, User user) {
         this.post = post;
         this.user = user;
+        this.postComments = new ArrayList<>();
+        this.postLikes = new ArrayList<>();
     }
 
     public Post() {};

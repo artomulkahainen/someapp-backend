@@ -1,5 +1,8 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,7 +14,8 @@ public class SendPostRequest {
     @NotEmpty
     private String post;
 
-    public SendPostRequest(String post) {
+    @JsonCreator
+    public SendPostRequest(@JsonProperty("post") String post) {
         this.post = post;
     }
 

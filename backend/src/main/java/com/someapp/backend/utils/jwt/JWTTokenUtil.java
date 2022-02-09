@@ -29,13 +29,13 @@ public class JWTTokenUtil implements Serializable {
     @Value("${env.EXPIRATION_TIME}")
     private String expirationTime;
 
-    public String getUsernameFromToken(String token) {
-        String subject[] = getClaimFromToken(token, Claims::getSubject).split(";");
+    public String getUsernameFromToken(HttpServletRequest req) {
+        String subject[] = getClaimFromToken(getTokenFromRequest(req), Claims::getSubject).split(";");
         return subject[1];
     }
 
     public UUID getIdFromToken(HttpServletRequest req) {
-        String subject[] = getClaimFromToken(req.getHeader("Authorization").substring(7), Claims::getSubject).split(";");
+        String subject[] = getClaimFromToken(getTokenFromRequest(req), Claims::getSubject).split(";");
         return UUID.fromString(subject[0]);
     }
 
@@ -69,9 +69,9 @@ public class JWTTokenUtil implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public Boolean validateToken(String token, ExtendedUserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(HttpServletRequest req, ExtendedUserDetails userDetails) {
+        final String username = getUsernameFromToken(req);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(getTokenFromRequest(req)));
     }
 
     public String verifyAndDecodeToken(String token) throws Exception {
@@ -94,5 +94,9 @@ public class JWTTokenUtil implements Serializable {
         String payload = new String(decoder.decode(chunks[1]));
 
         return "Boolean.TRUE;";
+    }
+
+    private String getTokenFromRequest(HttpServletRequest req) {
+        return req.getHeader("Authorization").substring(7);
     }
 }

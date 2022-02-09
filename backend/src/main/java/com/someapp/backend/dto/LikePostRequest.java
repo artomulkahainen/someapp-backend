@@ -1,5 +1,8 @@
 package com.someapp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -10,7 +13,9 @@ public class LikePostRequest {
     @NotNull
     private UUID postId;
 
-    public LikePostRequest(UUID postUserId, UUID postId) {
+    @JsonCreator
+    public LikePostRequest(@JsonProperty("postUserId") UUID postUserId,
+                           @JsonProperty("postId") UUID postId) {
         this.postUserId = postUserId;
         this.postId = postId;
     }

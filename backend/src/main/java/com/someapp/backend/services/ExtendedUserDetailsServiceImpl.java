@@ -55,7 +55,7 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     }
 
     public User findOwnUserDetails(HttpServletRequest req) {
-        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req.getHeader("Authorization"));
+        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req);
         return userRepository.findByUsername(usernameFromToken).orElseThrow(RuntimeException::new);
     }
 
