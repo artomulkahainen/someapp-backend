@@ -6,25 +6,15 @@ public class DeleteResponse {
 
     public String message;
     public UUID id;
-    public int status;
 
-    public DeleteResponse(String message, int status) {
+    public DeleteResponse(String message) {
         this.message = message;
-        this.status = status;
-    }
-
-    public DeleteResponse(UUID id, String message, int status) {
-        this.id = id;
-        this.message = message;
-        this.status = status;
     }
 
     public DeleteResponse(UUID id, String message) {
-        this.message = message;
         this.id = id;
+        this.message = message;
     }
-
-    public DeleteResponse() {}
 
     public UUID getId() {
         return id;
@@ -40,13 +30,5 @@ public class DeleteResponse {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }
