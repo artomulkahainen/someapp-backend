@@ -16,16 +16,12 @@ public class PostCommentSaveDTO {
     private String postComment;
     @NotNull
     private UUID postId;
-    @NotNull
-    private UUID postCreatorId;
 
     @JsonCreator
     public PostCommentSaveDTO(@JsonProperty("postComment") String postComment,
-                              @JsonProperty("postId") UUID postId,
-                              @JsonProperty("postCreatorId") UUID postCreatorId) {
+                              @JsonProperty("postId") UUID postId) {
         this.postComment = postComment;
         this.postId = postId;
-        this.postCreatorId = postCreatorId;
     }
 
     public String getPostComment() {
@@ -35,9 +31,4 @@ public class PostCommentSaveDTO {
     public UUID getPostId() {
         return postId;
     }
-
-    public UUID getPostCreatorId() {
-        return postCreatorId;
-    }
-
 }

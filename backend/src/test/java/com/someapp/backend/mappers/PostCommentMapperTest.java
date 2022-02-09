@@ -65,7 +65,7 @@ public class PostCommentMapperTest {
     public void mapPostCommentSaveDTOToPostCommentSuccessfully() {
         when(postRepository.findById(any())).thenReturn(Optional.of(post));
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        PostCommentSaveDTO dto = new PostCommentSaveDTO("hellurei", post.getUUID(), user.getUUID());
+        PostCommentSaveDTO dto = new PostCommentSaveDTO("hellurei", post.getUUID());
         PostComment postComment = postCommentMapper.mapPostCommentSaveDTOToPostComment(user.getUUID(), dto);
 
         assertTrue(!postComment.getPostComment().isEmpty());
@@ -76,14 +76,14 @@ public class PostCommentMapperTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void mapperThrowsError_IfPostIsNotFound() {
-        PostCommentSaveDTO dto = new PostCommentSaveDTO("hellurei", post.getUUID(), user.getUUID());
+        PostCommentSaveDTO dto = new PostCommentSaveDTO("hellurei", post.getUUID());
         postCommentMapper.mapPostCommentSaveDTOToPostComment(user.getUUID(), dto);
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void mapperThrowsError_IfUserIsNotFound() {
         when(postRepository.findById(any())).thenReturn(Optional.of(post));
-        PostCommentSaveDTO dto = new PostCommentSaveDTO("hellurei", post.getUUID(), user.getUUID());
+        PostCommentSaveDTO dto = new PostCommentSaveDTO("hellurei", post.getUUID());
         postCommentMapper.mapPostCommentSaveDTOToPostComment(user.getUUID(), dto);
     }
 

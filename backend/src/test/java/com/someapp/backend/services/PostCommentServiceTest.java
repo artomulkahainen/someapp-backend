@@ -55,8 +55,7 @@ public class PostCommentServiceTest {
 
         PostComment postComment = postCommentService.save(req,
                 new PostCommentSaveDTO("Nice post!",
-                        UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"),
-                        UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612")));
+                        UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118")));
 
         assertThat(postComment.getPostComment()).isEqualTo("Nice post!");
     }

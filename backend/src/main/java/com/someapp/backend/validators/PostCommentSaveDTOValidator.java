@@ -1,6 +1,8 @@
 package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
+import com.someapp.backend.entities.Post;
+import com.someapp.backend.services.PostService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +11,24 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
 public class PostCommentSaveDTOValidator implements Validator {
 
     private final RelationshipService relationshipService;
+    private final PostService postService;
     private final JWTTokenUtil jwtTokenUtil;
 
     @Autowired
     private HttpServletRequest req;
 
     public PostCommentSaveDTOValidator(RelationshipService relationshipService,
+                                       PostService postService,
                                        JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
+        this.postService = postService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -35,9 +41,13 @@ public class PostCommentSaveDTOValidator implements Validator {
     public void validate(Object target, Errors errors) {
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         final PostCommentSaveDTO postCommentSaveDTO = (PostCommentSaveDTO) target;
+        final Optional<Post> post = postService.findPostById(postCommentSaveDTO.getPostId());
+        final UUID postUserId = post.orElse(null).getUserId();
 
-        // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP
-        isActiveRelationship(actionUserId, postCommentSaveDTO.getPostCreatorId(), errors);
+        // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP, UNLESS COMMENTING OWN POST EXCEPTION HAVE TO BE ADDED
+        if (post.isPresent() && !actionUserId.equals(postUserId)) {
+            isActiveRelationship(actionUserId, postUserId, errors);
+        }
     }
 
     private void isActiveRelationship(UUID actionUserId, UUID postCreatorId, Errors errors) {
