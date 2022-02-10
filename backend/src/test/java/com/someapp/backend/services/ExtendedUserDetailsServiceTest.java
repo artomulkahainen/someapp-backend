@@ -3,10 +3,12 @@ package com.someapp.backend.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.*;
 
 import com.google.common.collect.ImmutableList;
+import com.someapp.backend.dto.DeletePostRequest;
+import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
@@ -21,11 +23,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
@@ -110,6 +114,18 @@ public class ExtendedUserDetailsServiceTest {
         assertFalse(user.isAdmin());
         assertThat(user.getPostLikes()).isEmpty();
         assertThat(user.getPosts()).isEmpty();
+    }
+
+    @Test
+    public void deleteIsSuccessful() {
+        ExtendedUserDetailsServiceImpl userService = mock(ExtendedUserDetailsServiceImpl.class);
+        User user = new User("delete", "meee");
+        user.setUUID(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        DeleteUserRequest request = new DeleteUserRequest(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
+
+        userService.deleteUser(request);
+        verify(userService, times(1)).deleteUser(request);
     }
 
     private List<User> foundUsers() {

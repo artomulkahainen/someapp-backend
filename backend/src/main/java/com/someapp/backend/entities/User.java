@@ -32,7 +32,7 @@ public class User extends AbstractPersistable<UUID> {
     @CreationTimestamp
     private Timestamp createdDate;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<Post> posts;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })

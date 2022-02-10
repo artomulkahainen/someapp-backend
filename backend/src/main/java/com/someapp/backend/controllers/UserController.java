@@ -2,14 +2,15 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.dto.*;
 import com.someapp.backend.interfaces.api.UserApi;
-import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.mappers.UserMapper;
+import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.validators.DeleteUserRequestValidator;
 import com.someapp.backend.validators.UserSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,7 +22,10 @@ public class UserController implements UserApi {
     private ExtendedUserDetailsService extendedUserDetailsService;
 
     @Autowired
-    private UserSaveDTOValidator validator;
+    private UserSaveDTOValidator saveValidator;
+
+    @Autowired
+    private DeleteUserRequestValidator deleteValidator;
 
     @Autowired
     private UserMapper userMapper;
@@ -38,7 +42,7 @@ public class UserController implements UserApi {
 
     @Override
     public UserDTO saveNewUser(UserSaveDTO userSaveDTO, BindingResult bindingResult) throws BindException {
-        validator.validate(userSaveDTO, bindingResult);
+        saveValidator.validate(userSaveDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
@@ -49,8 +53,13 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public DeleteResponse deleteUser(DeleteUserRequest deleteUserRequest, BindingResult bindingResult) {
-        // add validator
-        return extendedUserDetailsService.deleteUser(deleteUserRequest);
+    public DeleteResponse deleteUser(DeleteUserRequest request, BindingResult bindingResult) throws BindException {
+        deleteValidator.validate(request, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new BindException(bindingResult);
+        }
+
+        return extendedUserDetailsService.deleteUser(request);
     }
 }
