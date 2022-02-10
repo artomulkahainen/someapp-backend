@@ -9,7 +9,7 @@ import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.UnlikePostRequest;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

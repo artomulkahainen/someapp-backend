@@ -6,7 +6,7 @@ import com.someapp.backend.services.PostService;
 import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.dto.DeletePostRequest;
 import com.someapp.backend.dto.SendPostRequest;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.validators.DeletePostRequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;

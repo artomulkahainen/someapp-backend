@@ -1,12 +1,10 @@
 package com.someapp.backend.controllers;
 
-import com.someapp.backend.dto.UserDTO;
-import com.someapp.backend.dto.UserSaveDTO;
+import com.someapp.backend.dto.*;
 import com.someapp.backend.interfaces.api.UserApi;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.validators.UserSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
@@ -48,5 +46,11 @@ public class UserController implements UserApi {
 
         return userMapper.mapUserToUserDTO(
                 extendedUserDetailsService.save(userMapper.mapUserSaveDTOToUser(userSaveDTO)));
+    }
+
+    @Override
+    public DeleteResponse deleteUser(DeleteUserRequest deleteUserRequest, BindingResult bindingResult) {
+        // add validator
+        return extendedUserDetailsService.deleteUser(deleteUserRequest);
     }
 }

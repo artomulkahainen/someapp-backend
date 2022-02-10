@@ -3,7 +3,7 @@ package com.someapp.backend.interfaces.api;
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;

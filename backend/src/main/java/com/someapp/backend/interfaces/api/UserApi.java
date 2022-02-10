@@ -1,9 +1,7 @@
 package com.someapp.backend.interfaces.api;
 
-import com.someapp.backend.dto.UserDTO;
-import com.someapp.backend.dto.UserSaveDTO;
+import com.someapp.backend.dto.*;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,4 +23,7 @@ public interface UserApi {
 
     @PostMapping("/saveNewUserByUsingPOST")
     UserDTO saveNewUser(@Valid @RequestBody UserSaveDTO userSaveDTO, BindingResult bindingResult) throws BindException;
+
+    @PostMapping("/deleteUserByUsingPOST")
+    DeleteResponse deleteUser(@Valid @RequestBody DeleteUserRequest deleteUserRequest, BindingResult bindingResult) throws BindException;
 }

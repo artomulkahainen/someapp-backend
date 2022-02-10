@@ -5,7 +5,7 @@ import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 

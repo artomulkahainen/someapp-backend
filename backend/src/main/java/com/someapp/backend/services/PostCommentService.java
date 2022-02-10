@@ -2,7 +2,7 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;

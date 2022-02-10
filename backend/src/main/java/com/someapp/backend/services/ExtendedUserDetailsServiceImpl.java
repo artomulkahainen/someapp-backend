@@ -1,5 +1,7 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.DeleteResponse;
+import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
@@ -9,6 +11,7 @@ import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -78,6 +81,12 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
         } catch (Exception e) {
             throw new BadArgumentException("Given values are not suitable for user account");
         }
+    }
+
+    public DeleteResponse deleteUser(DeleteUserRequest request) {
+        User user = userRepository.findById(request.getUuid()).orElseThrow(ResourceNotFoundException::new);
+        userRepository.delete(user);
+        return new DeleteResponse(request.getUuid(), "Successfully deleted user");
     }
 
 }

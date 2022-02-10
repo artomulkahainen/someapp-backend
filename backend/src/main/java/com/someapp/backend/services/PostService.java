@@ -3,7 +3,7 @@ package com.someapp.backend.services;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.dto.DeletePostRequest;
 import com.someapp.backend.dto.SendPostRequest;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

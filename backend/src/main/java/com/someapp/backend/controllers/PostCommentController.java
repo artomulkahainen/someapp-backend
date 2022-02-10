@@ -5,7 +5,7 @@ import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.interfaces.api.PostCommentApi;
 import com.someapp.backend.services.PostCommentService;
-import com.someapp.backend.utils.responses.DeleteResponse;
+import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.validators.PostCommentDeleteDTOValidator;
 import com.someapp.backend.validators.PostCommentSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;

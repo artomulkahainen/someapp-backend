@@ -1,5 +1,7 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.DeleteResponse;
+import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
@@ -22,4 +24,6 @@ public interface ExtendedUserDetailsService extends UserDetailsService {
     ExtendedUserDetails loadUserByUsername(String username);
 
     Optional<User> findUserById(UUID uuid);
+
+    DeleteResponse deleteUser(DeleteUserRequest request);
 }
