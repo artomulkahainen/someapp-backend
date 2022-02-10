@@ -60,6 +60,10 @@ public class UserController implements UserApi {
             throw new BindException(bindingResult);
         }
 
+        /**
+         * Add transactional annotation and make sure to delete user's relationships
+         */
+
         return extendedUserDetailsService.deleteUser(request);
     }
 }
