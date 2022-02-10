@@ -8,13 +8,14 @@ import com.someapp.backend.interfaces.repositories.PostLikeRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.UnlikePostRequest;
+import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,9 +50,14 @@ public class PostLikeServiceImpl implements PostLikeService {
 
     @Override
     public DeleteResponse delete(UnlikePostRequest unlikePostRequest) {
-        postLikeRepository.findById(unlikePostRequest.getPostLikeId())
+        postLikeRepository.findById(unlikePostRequest.getUuid())
                 .orElseThrow(ResourceNotFoundException::new);
-        postLikeRepository.deleteById(unlikePostRequest.getPostLikeId());
-        return new DeleteResponse(unlikePostRequest.getPostLikeId(), "Successfully unliked");
+        postLikeRepository.deleteById(unlikePostRequest.getUuid());
+        return new DeleteResponse(unlikePostRequest.getUuid(), "Successfully unliked");
+    }
+
+    @Override
+    public Optional<PostLike> findPostLikeById(UUID uuid) {
+        return postLikeRepository.findById(uuid);
     }
 }

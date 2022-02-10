@@ -1,7 +1,7 @@
 package com.someapp.backend.interfaces.api;
 
 import com.someapp.backend.utils.requests.LoginRequest;
-import com.someapp.backend.utils.responses.PingResponse;
+import com.someapp.backend.dto.PingResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

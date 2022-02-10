@@ -1,4 +1,4 @@
-package com.someapp.backend.utils.responses;
+package com.someapp.backend.dto;
 
 import java.io.Serializable;
 

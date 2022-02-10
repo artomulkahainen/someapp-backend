@@ -4,9 +4,10 @@ import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.interfaces.api.PostLikeApi;
 import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.dto.LikePostRequest;
-import com.someapp.backend.utils.requests.UnlikePostRequest;
+import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.validators.LikePostRequestValidator;
+import com.someapp.backend.validators.UnlikePostRequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -23,11 +24,14 @@ public class PostLikeController implements PostLikeApi {
     @Autowired
     private LikePostRequestValidator likePostRequestValidator;
 
+    @Autowired
+    private UnlikePostRequestValidator unlikeValidator;
+
     @Override
     public PostLike likePost(HttpServletRequest req, LikePostRequest likePostRequest,
                              BindingResult bindingResult) throws BindException {
-
         likePostRequestValidator.validate(likePostRequest, bindingResult);
+
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
@@ -39,9 +43,7 @@ public class PostLikeController implements PostLikeApi {
     public DeleteResponse unlikePost(HttpServletRequest req,
                                      UnlikePostRequest unlikePostRequest,
                                      BindingResult bindingResult) throws BindException {
-        /**
-         * Add custom validator
-         */
+        unlikeValidator.validate(unlikePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
