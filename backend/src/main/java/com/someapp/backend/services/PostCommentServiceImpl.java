@@ -6,6 +6,7 @@ import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.dto.DeleteResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final PostCommentMapper postCommentMapper;
     private final JWTTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private HttpServletRequest req;
+
     public PostCommentServiceImpl(PostCommentRepository postCommentRepository,
                                   PostCommentMapper postCommentMapper,
                                   JWTTokenUtil jwtTokenUtil) {
@@ -28,9 +32,9 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostComment save(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        return postCommentRepository.save(postCommentMapper.mapPostCommentSaveDTOToPostComment(actionUserId, postCommentSaveDTO));
+    public PostComment save(PostCommentSaveDTO postCommentSaveDTO) {
+        return postCommentRepository.save(postCommentMapper.mapPostCommentSaveDTOToPostComment(
+                jwtTokenUtil.getIdFromToken(req), postCommentSaveDTO));
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.List;
 public interface UserApi {
 
     @GetMapping("/findOwnUserDetailsByUsingGET")
-    UserDTO findOwnUserDetails(@NotNull HttpServletRequest req);
+    UserDTO findOwnUserDetails();
 
     @PostMapping("/findUsersByNameByUsingPOST")
     List<UserNameIdResponse> findUsersByName(@RequestBody FindUserByNameRequest findUserByNameRequest);

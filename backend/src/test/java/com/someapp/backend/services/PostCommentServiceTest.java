@@ -53,8 +53,7 @@ public class PostCommentServiceTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
         when(postCommentRepository.save(any())).then(returnsFirstArg());
 
-        PostComment postComment = postCommentService.save(req,
-                new PostCommentSaveDTO("Nice post!",
+        PostComment postComment = postCommentService.save(new PostCommentSaveDTO("Nice post!",
                         UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118")));
 
         assertThat(postComment.getPostComment()).isEqualTo("Nice post!");

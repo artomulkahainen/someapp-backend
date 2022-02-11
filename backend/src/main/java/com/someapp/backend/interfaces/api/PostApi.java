@@ -18,14 +18,13 @@ import java.util.List;
 public interface PostApi {
 
     @GetMapping("/getPostsByRelationshipsByUsingGET")
-    List<PostDTO> getPostsByRelationships(@NotNull HttpServletRequest req);
+    List<PostDTO> getPostsByRelationships();
 
     @PostMapping("/sendNewPostByUsingPOST")
-    PostDTO sendPost(@NotNull HttpServletRequest req, @Valid @RequestBody SendPostRequest sendPostRequest,
+    PostDTO sendPost(@Valid @RequestBody SendPostRequest sendPostRequest,
                      BindingResult bindingResult) throws BindException;
 
     @PostMapping("/deletePostByUsingPOST")
-    DeleteResponse deletePost(@NotNull HttpServletRequest req,
-                              @Valid @RequestBody DeletePostRequest deletePostRequest,
+    DeleteResponse deletePost(@Valid @RequestBody DeletePostRequest deletePostRequest,
                               BindingResult bindingResult) throws BindException;
 }

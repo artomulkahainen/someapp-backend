@@ -83,7 +83,7 @@ public class PostServiceTest {
         when(postRepository.save(any())).then(returnsFirstArg());
         SendPostRequest request = new SendPostRequest("hola");
 
-        Post post = postService.save(req, request);
+        Post post = postService.save(request);
         assertThat(post.getPost()).isEqualTo("hola");
         assertTrue(post.getUserId().equals(user.getUUID()));
     }
@@ -92,7 +92,7 @@ public class PostServiceTest {
     public void saveThrowsError_ifUserIsNotFound() {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         SendPostRequest request = new SendPostRequest("hola");
-        postService.save(req, request);
+        postService.save(request);
     }
 
     @Test
@@ -133,7 +133,7 @@ public class PostServiceTest {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
         when(postRepository.findAll()).thenReturn(ImmutableList.of(post, anotherPost, anotherOtherPost));
 
-        List<Post> posts = postService.findPostsByRelationships(req);
+        List<Post> posts = postService.findPostsByRelationships();
         assertThat(posts.size()).isEqualTo(1);
         assertTrue(posts.get(0).getPost().equals("hola"));
     }
@@ -143,7 +143,7 @@ public class PostServiceTest {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
         when(postRepository.findAll()).thenReturn(ImmutableList.of(post, anotherPost, anotherOtherPost));
 
-        List<Post> posts = postService.findPostsByRelationships(req);
+        List<Post> posts = postService.findPostsByRelationships();
         assertThat(posts.size()).isEqualTo(0);
     }
 
@@ -156,7 +156,7 @@ public class PostServiceTest {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
         when(postRepository.findAll()).thenReturn(ImmutableList.of());
 
-        List<Post> posts = postService.findPostsByRelationships(req);
+        List<Post> posts = postService.findPostsByRelationships();
         assertThat(posts.size()).isEqualTo(0);
     }
 }

@@ -18,15 +18,13 @@ import java.util.List;
 public interface RelationshipApi {
 
     @GetMapping("/getUserRelationshipsByUsingGET")
-    List<RelationshipDTO> getUserRelationships(@NotNull HttpServletRequest req);
+    List<RelationshipDTO> getUserRelationships();
 
     @PostMapping("/saveNewRelationshipByUsingPOST")
-    RelationshipDTO saveNewRelationship(@NotNull HttpServletRequest req,
-                                        @Valid @RequestBody NewRelationshipRequest relationshipRequest,
+    RelationshipDTO saveNewRelationship(@Valid @RequestBody NewRelationshipRequest relationshipRequest,
                                         BindingResult bindingResult) throws BindException;
 
     @PutMapping("/updateRelationshipByUsingPUT")
-    RelationshipDTO updateRelationship(@NotNull HttpServletRequest req,
-                                       @Valid @RequestBody ModifyRelationshipRequest modifyRelationshipRequest,
+    RelationshipDTO updateRelationship(@Valid @RequestBody ModifyRelationshipRequest modifyRelationshipRequest,
                                        BindingResult bindingResult) throws BindException;
 }

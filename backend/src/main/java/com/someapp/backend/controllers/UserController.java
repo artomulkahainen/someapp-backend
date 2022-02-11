@@ -31,8 +31,8 @@ public class UserController implements UserApi {
     private UserMapper userMapper;
 
     @Override
-    public UserDTO findOwnUserDetails(HttpServletRequest req) {
-        return userMapper.mapUserToUserDTO(extendedUserDetailsService.findOwnUserDetails(req));
+    public UserDTO findOwnUserDetails() {
+        return userMapper.mapUserToUserDTO(extendedUserDetailsService.findOwnUserDetails());
     }
 
     @Override

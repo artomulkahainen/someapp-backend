@@ -34,6 +34,9 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     JWTTokenUtil jwtTokenUtil;
 
     @Autowired
+    HttpServletRequest req;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -57,7 +60,7 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
         );
     }
 
-    public User findOwnUserDetails(HttpServletRequest req) {
+    public User findOwnUserDetails() {
         String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req);
         return userRepository.findByUsername(usernameFromToken).orElseThrow(RuntimeException::new);
     }

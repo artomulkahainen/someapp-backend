@@ -29,23 +29,22 @@ public class PostController implements PostApi {
     private DeletePostRequestValidator validator;
 
     @Override
-    public List<PostDTO> getPostsByRelationships(HttpServletRequest req) {
-        return postMapper.mapPostsToPostDTOs(postService.findPostsByRelationships(req));
+    public List<PostDTO> getPostsByRelationships() {
+        return postMapper.mapPostsToPostDTOs(postService.findPostsByRelationships());
     }
 
     @Override
-    public PostDTO sendPost(HttpServletRequest req, SendPostRequest sendPostRequest,
+    public PostDTO sendPost(SendPostRequest sendPostRequest,
                             BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        return postMapper.mapPostToPostDTO(postService.save(req, sendPostRequest));
+        return postMapper.mapPostToPostDTO(postService.save(sendPostRequest));
     }
 
     @Override
-    public DeleteResponse deletePost(HttpServletRequest req,
-                                     DeletePostRequest deletePostRequest,
+    public DeleteResponse deletePost(DeletePostRequest deletePostRequest,
                                      BindingResult bindingResult) throws BindException {
         validator.validate(deletePostRequest, bindingResult);
 

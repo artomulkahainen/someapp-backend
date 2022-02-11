@@ -40,8 +40,11 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private HttpServletRequest req;
+
     @Override
-    public Post save(HttpServletRequest req, SendPostRequest sendPostRequest) {
+    public Post save(SendPostRequest sendPostRequest) {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         return postRepository.save(postMapper.mapSendPostRequestToPost(actionUserId, sendPostRequest));
     }
@@ -60,7 +63,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findPostsByRelationships(HttpServletRequest req) {
+    public List<Post> findPostsByRelationships() {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
         // Change this to use BooleanBuilder and QPost querys

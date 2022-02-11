@@ -10,11 +10,11 @@ import java.util.*;
 
 public interface PostService {
 
-    Post save(HttpServletRequest req, SendPostRequest sendPostRequest);
+    Post save(SendPostRequest sendPostRequest);
 
     DeleteResponse delete(DeletePostRequest deletePostRequest);
 
-    List<Post> findPostsByRelationships(HttpServletRequest req);
+    List<Post> findPostsByRelationships();
 
     Optional<Post> findPostById(UUID uuid);
 }

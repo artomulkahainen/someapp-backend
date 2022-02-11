@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface PostCommentService {
 
-    PostComment save(HttpServletRequest req, PostCommentSaveDTO postCommentSaveDTO);
+    PostComment save(PostCommentSaveDTO postCommentSaveDTO);
 
     DeleteResponse delete(UUID postCommentId);
 }

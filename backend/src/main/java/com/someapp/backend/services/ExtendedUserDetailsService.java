@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface ExtendedUserDetailsService extends UserDetailsService {
 
-    User findOwnUserDetails(HttpServletRequest req);
+    User findOwnUserDetails();
 
     List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest);
 

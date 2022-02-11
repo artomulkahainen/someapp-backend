@@ -59,14 +59,14 @@ public class ExtendedUserDetailsServiceTest {
         when(userRepository.findByUsername(any())).thenReturn(
                 Optional.of(new User("uncle", "scrooge")));
 
-        User user = extendedUserDetailsService.findOwnUserDetails(req);
+        User user = extendedUserDetailsService.findOwnUserDetails();
         assertThat(user.getUsername()).isEqualTo("uncle");
     }
 
     @Test(expected = RuntimeException.class)
     public void findOwnUserDetails_throwsErrorIfUserNotInDb() {
         when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn("donald");
-        extendedUserDetailsService.findOwnUserDetails(req);
+        extendedUserDetailsService.findOwnUserDetails();
     }
 
     @Test

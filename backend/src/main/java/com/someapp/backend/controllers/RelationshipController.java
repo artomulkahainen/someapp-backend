@@ -27,10 +27,13 @@ public class RelationshipController implements RelationshipApi {
     @Autowired
     private RelationshipMapper relationshipMapper;
 
+    @Autowired
+    private HttpServletRequest req;
+
     private JWTTokenUtil jwtTokenUtil;
 
     @Override
-    public List<RelationshipDTO> getUserRelationships(HttpServletRequest req) {
+    public List<RelationshipDTO> getUserRelationships() {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         List<Relationship> relationships = relationshipService.getRelationships(req);
 
@@ -41,8 +44,7 @@ public class RelationshipController implements RelationshipApi {
     }
 
     @Override
-    public RelationshipDTO saveNewRelationship(HttpServletRequest req,
-                                               NewRelationshipRequest relationshipRequest,
+    public RelationshipDTO saveNewRelationship(NewRelationshipRequest relationshipRequest,
                                                BindingResult bindingResult) throws BindException {
         // If validation errors, throw an error
         if (bindingResult.hasErrors()) {
@@ -56,8 +58,7 @@ public class RelationshipController implements RelationshipApi {
     }
 
     @Override
-    public RelationshipDTO updateRelationship(HttpServletRequest req,
-                                              ModifyRelationshipRequest modifyRelationshipRequest,
+    public RelationshipDTO updateRelationship(ModifyRelationshipRequest modifyRelationshipRequest,
                                               BindingResult bindingResult) throws BindException {
 
         // If validation errors, throw an error
