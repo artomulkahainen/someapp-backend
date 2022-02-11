@@ -13,17 +13,17 @@ public class UserDTO extends BaseDTO {
     private String username;
     private boolean admin;
     private List<PostDTO> posts;
-    private List<UUID> likedPostsIds;
+    private List<PostLikeDTO> likedPosts;
 
     @JsonCreator
     public UserDTO(@JsonProperty("uuid") UUID uuid, @JsonProperty("createdDate") Timestamp createdDate,
                    @JsonProperty("username") String username, @JsonProperty("admin") boolean admin,
-                   @JsonProperty("posts") List<PostDTO> posts, @JsonProperty("likedPostsIds") List<UUID> likedPostsIds) {
+                   @JsonProperty("posts") List<PostDTO> posts, @JsonProperty("likedPostsIds") List<PostLikeDTO> likedPosts) {
         super(uuid, createdDate);
         this.username = username;
         this.admin = admin;
         this.posts = posts;
-        this.likedPostsIds = likedPostsIds;
+        this.likedPosts = likedPosts;
     }
 
     public String getUsername() {
@@ -50,11 +50,11 @@ public class UserDTO extends BaseDTO {
         this.posts = posts;
     }
 
-    public List<UUID> getLikedPostsIds() {
-        return likedPostsIds;
+    public List<PostLikeDTO> getLikedPosts() {
+        return likedPosts;
     }
 
-    public void setLikedPostsIds(List<UUID> likedPostsIds) {
-        this.likedPostsIds = likedPostsIds;
+    public void setLikedPosts(List<PostLikeDTO> likedPosts) {
+        this.likedPosts = likedPosts;
     }
 }

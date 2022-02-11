@@ -1,21 +1,19 @@
 package com.someapp.backend.mappers;
 
-import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.UserDTO;
 import com.someapp.backend.dto.UserSaveDTO;
-import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.User;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 
 @Component
 public class UserMapper {
 
     private final PostMapper postMapper;
+    private final PostLikeMapper postLikeMapper;
 
-    public UserMapper(PostMapper postMapper) {
+    public UserMapper(PostMapper postMapper, PostLikeMapper postLikeMapper) {
         this.postMapper = postMapper;
+        this.postLikeMapper = postLikeMapper;
     }
 
     public UserDTO mapUserToUserDTO(User user) {
@@ -25,9 +23,7 @@ public class UserMapper {
                 user.getUsername(),
                 user.isAdmin(),
                 postMapper.mapPostsToPostDTOs(user.getPosts()),
-                user.getPostLikes()
-                        .stream().map(PostLike::getPostId)
-                        .collect(ImmutableList.toImmutableList())
+                postLikeMapper.mapPostLikesToPostLikeDTOs(user.getPostLikes())
         );
     }
 

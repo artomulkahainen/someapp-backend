@@ -4,7 +4,9 @@ import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
+import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.services.PostLikeServiceImpl;
+import com.someapp.backend.services.PostService;
 import com.someapp.backend.services.RelationshipServiceImpl;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Before;
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -33,6 +36,8 @@ public class LikePostRequestValidatorTest {
     PostLikeServiceImpl postLikeService;
     @Mock
     RelationshipServiceImpl relationshipService;
+    @Mock
+    PostRepository postRepository;
     @Mock
     JWTTokenUtil jwtTokenUtil;
     @InjectMocks
@@ -61,6 +66,7 @@ public class LikePostRequestValidatorTest {
     @Test
     public void cannotLikePost_ifRelationshipIsNotFound() {
         when(postLikeService.likeAlreadyExists(any(), any())).thenReturn(false);
+        when(postRepository.findById(any())).thenReturn(Optional.empty());
         validator.validate(likePostRequest, errors);
         assertTrue(errors.hasErrors());
         assertThat(errors.getAllErrors().get(0).getCode())
@@ -71,6 +77,7 @@ public class LikePostRequestValidatorTest {
     public void cannotLikePost_ifLikeIsAlreadyFound() {
         when(relationshipService.usersHaveActiveRelationship(any(), any())).thenReturn(true);
         when(postLikeService.likeAlreadyExists(any(), any())).thenReturn(true);
+        when(postRepository.findById(any())).thenReturn(Optional.empty());
         validator.validate(likePostRequest, errors);
         assertTrue(errors.hasErrors());
         assertThat(errors.getAllErrors().get(0).getCode())

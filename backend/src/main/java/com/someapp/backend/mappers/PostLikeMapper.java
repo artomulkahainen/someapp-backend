@@ -1,5 +1,6 @@
 package com.someapp.backend.mappers;
 
+import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.dto.PostLikeDTO;
 import com.someapp.backend.entities.Post;
@@ -13,6 +14,8 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PostLikeMapper {
@@ -28,6 +31,10 @@ public class PostLikeMapper {
         this.postService = postService;
         this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
+    }
+
+    public List<PostLikeDTO> mapPostLikesToPostLikeDTOs(List<PostLike> postLikes) {
+        return postLikes.stream().map(this::mapPostLikeToPostLikeDTO).collect(ImmutableList.toImmutableList());
     }
 
     public PostLikeDTO mapPostLikeToPostLikeDTO(PostLike postLike) {

@@ -121,7 +121,6 @@ public class ExtendedUserDetailsServiceTest {
         ExtendedUserDetailsServiceImpl userService = mock(ExtendedUserDetailsServiceImpl.class);
         User user = new User("delete", "meee");
         user.setUUID(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
         DeleteUserRequest request = new DeleteUserRequest(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
 
         userService.deleteUser(request);
