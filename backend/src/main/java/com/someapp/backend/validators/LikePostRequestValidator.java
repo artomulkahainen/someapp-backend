@@ -47,14 +47,20 @@ public class LikePostRequestValidator implements Validator {
         LikePostRequest likePostRequest = (LikePostRequest) target;
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
-        // IF ACTION USER AND USER WHO MADE THE POST ARE NOT FRIENDS, REJECT
-        // UNLESS LIKING OWN POST
+        /**
+         * REJECT, IF ACTION USER AND POST CREATOR ARE NOT FRIENDS
+         * UNLESS LIKING OWN POST
+         */
+
         if (!isOwnPost(likePostRequest.getPostId(), actionUserId)
                 && !relationshipService.usersHaveActiveRelationship(actionUserId, likePostRequest.getPostUserId())) {
             errors.reject("Action user and post creator user doesn't have active relationship");
         }
 
-        // IF POSTLIKE REPOSITORY ALREADY CONTAINS THE LIKE, REJECT
+        /**
+         * IF POSTLIKE REPOSITORY ALREADY CONTAINS THE LIKE, REJECT
+         */
+
         if (postLikeService.likeAlreadyExists(actionUserId, likePostRequest)) {
             errors.reject("Post is already liked by the action user");
         }
