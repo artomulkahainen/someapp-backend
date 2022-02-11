@@ -1,6 +1,6 @@
 package com.someapp.backend.interfaces.api;
 
-import com.someapp.backend.entities.PostLike;
+import com.someapp.backend.dto.PostLikeDTO;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;
@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 public interface PostLikeApi {
 
     @PostMapping("/likePostByUsingPOST")
-    PostLike likePost(@NotNull HttpServletRequest req, @Valid @RequestBody LikePostRequest likePostRequest,
-                      BindingResult bindingResult) throws BindException;
+    PostLikeDTO likePost(@Valid @RequestBody LikePostRequest likePostRequest,
+                         BindingResult bindingResult) throws BindException;
 
     @PostMapping("/unlikePostByUsingPOST")
     DeleteResponse unlikePost(@NotNull HttpServletRequest req,

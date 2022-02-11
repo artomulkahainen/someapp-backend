@@ -1,8 +1,10 @@
 package com.someapp.backend.entities;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -11,18 +13,15 @@ public class PostLike extends AbstractPersistable<UUID> {
     @ManyToOne
     Post post;
 
-    UUID postUUID;
-
     @ManyToOne
     User user;
 
-    UUID userUUID;
+    @CreationTimestamp
+    Timestamp createdDate;
 
     public PostLike(Post post, User user) {
         this.post = post;
         this.user = user;
-        this.postUUID = post.getUUID();
-        this.userUUID = user.getUUID();
     }
 
     public PostLike() {};
@@ -39,19 +38,7 @@ public class PostLike extends AbstractPersistable<UUID> {
         return this.getId();
     }
 
-    public UUID getPostUUID() {
-        return postUUID;
-    }
-
-    public void setPostUUID(UUID postUUID) {
-        this.postUUID = postUUID;
-    }
-
-    public UUID getUserUUID() {
-        return userUUID;
-    }
-
-    public void setUserUUID(UUID userUUID) {
-        this.userUUID = userUUID;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 }

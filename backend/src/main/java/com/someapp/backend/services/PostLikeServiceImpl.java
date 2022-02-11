@@ -1,20 +1,15 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.dto.LikePostRequest;
-import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.entities.User;
 import com.someapp.backend.interfaces.repositories.PostLikeRepository;
-import com.someapp.backend.interfaces.repositories.PostRepository;
-import com.someapp.backend.interfaces.repositories.UserRepository;
-import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import com.someapp.backend.mappers.PostLikeMapper;
 import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,16 +17,10 @@ import java.util.UUID;
 public class PostLikeServiceImpl implements PostLikeService {
 
     @Autowired
-    PostRepository postRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     PostLikeRepository postLikeRepository;
 
     @Autowired
-    JWTTokenUtil jwtTokenUtil;
+    PostLikeMapper postLikeMapper;
 
     @Override
     public boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
@@ -40,12 +29,8 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
 
     @Override
-    public PostLike save(HttpServletRequest req, LikePostRequest likePostRequest) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        Post post = postRepository.findById(likePostRequest.getPostId()).orElseThrow(ResourceNotFoundException::new);
-        User user = userRepository.findById(actionUserId).orElseThrow(ResourceNotFoundException::new);
-
-        return postLikeRepository.save(new PostLike(post, user));
+    public PostLike save(LikePostRequest likePostRequest) {
+        return postLikeRepository.save(postLikeMapper.mapLikePostRequestToPostLike(likePostRequest));
     }
 
     @Override

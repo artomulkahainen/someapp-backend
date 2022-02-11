@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface PostLikeService {
 
-    PostLike save(HttpServletRequest req, LikePostRequest likePostRequest);
+    PostLike save(LikePostRequest likePostRequest);
 
     DeleteResponse delete(UnlikePostRequest unlikePostRequest);
 

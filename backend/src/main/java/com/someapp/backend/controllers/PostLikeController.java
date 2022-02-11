@@ -1,7 +1,8 @@
 package com.someapp.backend.controllers;
 
-import com.someapp.backend.entities.PostLike;
+import com.someapp.backend.dto.PostLikeDTO;
 import com.someapp.backend.interfaces.api.PostLikeApi;
+import com.someapp.backend.mappers.PostLikeMapper;
 import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.dto.UnlikePostRequest;
@@ -22,21 +23,24 @@ public class PostLikeController implements PostLikeApi {
     private PostLikeService postLikeService;
 
     @Autowired
+    private PostLikeMapper postLikeMapper;
+
+    @Autowired
     private LikePostRequestValidator likePostRequestValidator;
 
     @Autowired
     private UnlikePostRequestValidator unlikeValidator;
 
     @Override
-    public PostLike likePost(HttpServletRequest req, LikePostRequest likePostRequest,
-                             BindingResult bindingResult) throws BindException {
+    public PostLikeDTO likePost(LikePostRequest likePostRequest,
+                                BindingResult bindingResult) throws BindException {
         likePostRequestValidator.validate(likePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        return postLikeService.save(req, likePostRequest);
+        return postLikeMapper.mapPostLikeToPostLikeDTO(postLikeService.save(likePostRequest));
     }
 
     @Override
