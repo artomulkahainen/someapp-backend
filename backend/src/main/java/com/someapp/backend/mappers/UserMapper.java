@@ -26,7 +26,7 @@ public class UserMapper {
                 user.isAdmin(),
                 postMapper.mapPostsToPostDTOs(user.getPosts()),
                 user.getPostLikes()
-                        .stream().map(PostLike::getPostUUID)
+                        .stream().map(PostLike::getPostId)
                         .collect(ImmutableList.toImmutableList())
         );
     }

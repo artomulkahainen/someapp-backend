@@ -7,5 +7,4 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, UUID> {
-    Optional<PostLike> findByUserUUIDAndPostUUID(UUID userUUID, UUID postUUID);
 }
