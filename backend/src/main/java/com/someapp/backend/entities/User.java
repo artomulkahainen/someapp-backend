@@ -36,6 +36,9 @@ public class User extends AbstractPersistable<UUID> {
     private List<Post> posts;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })
+    private List<PostComment> postComments;
+
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<PostLike> postLikes;
 
     public User(String username, String password) {
