@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 public class RelationshipMapper {
@@ -26,9 +25,21 @@ public class RelationshipMapper {
     @Autowired
     private HttpServletRequest req;
 
-    public RelationshipMapper(RelationshipService relationshipService, ExtendedUserDetailsService userService) {
+    public RelationshipMapper(RelationshipService relationshipService,
+                              ExtendedUserDetailsService userService,
+                              JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
+
+    public RelationshipDTO mapRelationshipToRelationshipDTO(Relationship relationship) {
+        UUID currentUserId = jwtTokenUtil.getIdFromToken(req);
+        UUID relationshipWithId = relationship.getActionUserId().equals(currentUserId)
+                ? relationship.getNonActionUserId() : relationship.getActionUserId();
+
+        return new RelationshipDTO(relationshipWithId, relationship.getUniqueId(),
+                relationship.getStatus(), Optional.of(relationship.getId()), Optional.of(relationship.getCreatedDate()));
     }
 
     public Relationship mapRelationshipDTOToRelationship(RelationshipDTO relationshipDTO) {

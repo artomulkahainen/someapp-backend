@@ -5,20 +5,35 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
 public class Relationship extends AbstractPersistable<UUID> {
 
+    @NotNull
     @ManyToOne
     private User user;
 
+    @NotNull
     private UUID relationshipWith;
 
+    /**
+     * unique id is in form "771adf31-3ac3-4703-881a-e40ecf6e1134,316d7af3-3f53-40a5-bdbd-8db5b9e301a7" of two uuids separated with comma
+     * first uuid is action user's id, second id belongs to non-action user id
+     * Action user is the one who created the relationship (by sending friend invite)
+     * Non-action user is the one who is responding to friend invite
+     */
+    @NotNull
     private String uniqueId;
 
-    // STATUS CODES: 0 Pending, 1 Accepted, 2 Declined, 3 Blocked
+    // STATUS CODES: 0 Pending, 1 Accepted, 2 Blocked
+    @Min(0)
+    @Max(2)
     private int status;
 
     @CreationTimestamp

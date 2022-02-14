@@ -2,7 +2,6 @@ package com.someapp.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 import com.someapp.backend.dto.abstractDTOs.OptionalBaseDTO;
 
 import javax.validation.constraints.Max;
@@ -20,7 +19,7 @@ public class RelationshipDTO extends OptionalBaseDTO {
     private String uniqueId;
     @NotNull
     @Min(0)
-    @Max(3)
+    @Max(2)
     private int status;
 
     @JsonCreator
@@ -57,5 +56,13 @@ public class RelationshipDTO extends OptionalBaseDTO {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public UUID getActionUserId() {
+        return UUID.fromString(uniqueId.split(",")[0]);
+    }
+
+    public UUID getNonActionUserId() {
+        return UUID.fromString(uniqueId.split(",")[1]);
     }
 }

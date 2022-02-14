@@ -47,7 +47,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         String uniqueId = relationshipDTO.getUniqueId();
 
         // If save is not block request
-        if (relationshipDTO.getStatus() != 3) {
+        if (relationshipDTO.getStatus() != 2) {
             /**
              *   Saving relationship is splitted into two different actions, if status is either 0 or 1
              */

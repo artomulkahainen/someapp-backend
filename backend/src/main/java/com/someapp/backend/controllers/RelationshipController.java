@@ -33,42 +33,14 @@ public class RelationshipController implements RelationshipApi {
     private JWTTokenUtil jwtTokenUtil;
 
     @Override
-    public List<RelationshipDTO> getUserRelationships() {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        List<Relationship> relationships = relationshipService.getRelationships(req);
-
-        return relationships
-                .stream()
-                .map(relationship -> relationshipMapper.mapRelationshipToRelationshipDTO(relationship, actionUserId))
-                .collect(ImmutableList.toImmutableList());
-    }
-
-    @Override
-    public RelationshipDTO saveNewRelationship(NewRelationshipRequest relationshipRequest,
-                                               BindingResult bindingResult) throws BindException {
-        // If validation errors, throw an error
+    public RelationshipDTO save(RelationshipDTO relationshipDTO, BindingResult bindingResult) throws BindException {
+        /**
+         * add custom validator here
+         */
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        Relationship relationship = relationshipService.save(req, relationshipRequest);
-
-        return relationshipMapper.mapRelationshipToRelationshipDTO(relationship, actionUserId);
-    }
-
-    @Override
-    public RelationshipDTO updateRelationship(ModifyRelationshipRequest modifyRelationshipRequest,
-                                              BindingResult bindingResult) throws BindException {
-
-        // If validation errors, throw an error
-        if (bindingResult.hasErrors()) {
-            throw new BindException(bindingResult);
-        }
-
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        Relationship relationship = relationshipService.update(req, modifyRelationshipRequest);
-
-        return relationshipMapper.mapRelationshipToRelationshipDTO(relationship, actionUserId);
+        return relationshipMapper.mapRelationshipToRelationshipDTO(relationshipService.save(relationshipDTO));
     }
 }
