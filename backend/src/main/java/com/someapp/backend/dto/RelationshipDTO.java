@@ -3,40 +3,36 @@ package com.someapp.backend.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.someapp.backend.dto.abstractDTOs.BaseDTO;
+import com.someapp.backend.dto.abstractDTOs.OptionalBaseDTO;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.UUID;
 
-public class RelationshipDTO extends BaseDTO {
+public class RelationshipDTO extends OptionalBaseDTO {
 
-    private UUID friendUuid;
-    private UUID actionUserUuid;
+    @NotNull
+    private UUID relationshipWithId;
+    @NotNull
+    private String uniqueId;
+    @NotNull
+    @Min(0)
+    @Max(3)
     private int status;
 
     @JsonCreator
-    public RelationshipDTO(@JsonProperty("uuid") UUID uuid, @JsonProperty("createdDate") Timestamp createdDate,
-                           @JsonProperty("friendUuid") UUID friendUuid,
-                           @JsonProperty("actionUserUuid") UUID actionUserUuid, @JsonProperty("status") int status) {
-        super(uuid, createdDate);
-        this.friendUuid = friendUuid;
-        this.actionUserUuid = actionUserUuid;
+    public RelationshipDTO(@JsonProperty("relationshipWithId") UUID relationshipWithId,
+                           @JsonProperty("uniqueId") String uniqueId,
+                           @JsonProperty("status") int status,
+                           @JsonProperty("relationshipId") Optional<UUID> relationshipId,
+                           @JsonProperty("createdDate") Optional<Timestamp> createdDate) {
+        super(relationshipId, createdDate);
+        this.relationshipWithId = relationshipWithId;
+        this.uniqueId = uniqueId;
         this.status = status;
-    }
-
-    public UUID getFriendUuid() {
-        return friendUuid;
-    }
-
-    public void setFriendUuid(UUID friendUuid) {
-        this.friendUuid = friendUuid;
-    }
-
-    public UUID getActionUserUuid() {
-        return actionUserUuid;
-    }
-
-    public void setActionUserUuid(UUID actionUserUuid) {
-        this.actionUserUuid = actionUserUuid;
     }
 
     public int getStatus() {
@@ -45,5 +41,21 @@ public class RelationshipDTO extends BaseDTO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public UUID getRelationshipWithId() {
+        return relationshipWithId;
+    }
+
+    public void setRelationshipWithId(UUID relationshipWithId) {
+        this.relationshipWithId = relationshipWithId;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }

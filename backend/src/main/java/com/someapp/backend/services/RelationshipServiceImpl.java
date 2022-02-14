@@ -1,18 +1,23 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.DeleteResponse;
+import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
-import com.someapp.backend.utils.customExceptions.ResourceNotFoundException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.ModifyRelationshipRequest;
 import com.someapp.backend.utils.requests.NewRelationshipRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,104 +32,70 @@ public class RelationshipServiceImpl implements RelationshipService {
     private RelationshipRepository relationshipRepository;
 
     @Autowired
-    JWTTokenUtil jwtTokenUtil;
+    private RelationshipMapper relationshipMapper;
+
+    @Autowired
+    private JWTTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private HttpServletRequest req;
 
     @Override
-    public List<Relationship> getRelationships(HttpServletRequest req) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
+    @Transactional
+    public Relationship save(RelationshipDTO relationshipDTO) {
+        boolean isActionUser = isActionUser(relationshipDTO);
+        String uniqueId = relationshipDTO.getUniqueId();
 
-        return relationshipRepository
-                .findAll()
-                .stream()
-                .filter(relationship -> relationship.getUser1().equals(actionUserId) || relationship.getUser2().equals(actionUserId))
-                .collect(Collectors.toList());
-    }
+        // If save is not block request
+        if (relationshipDTO.getStatus() != 3) {
+            /**
+             *   Saving relationship is splitted into two different actions, if status is either 0 or 1
+             */
 
-    @Override
-    public Relationship save(HttpServletRequest req, NewRelationshipRequest relationshipRequest) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-
-        // If relationship is already created, throw an exception
-        if (relationshipAlreadyExists(actionUserId, relationshipRequest)) {
-            throw new BadArgumentException("Relationship is already created.");
-
-            // If either user id is not found, throw an exception
-        } else if (!usersFound(actionUserId, relationshipRequest.getAddedUserId())) {
-            throw new ResourceNotFoundException("Either/both user id was not found");
-
-            // If both user ids are found, create new pending relationship
-        } else {
-            return relationshipRepository.save(new Relationship(
-                    userRepository.getById(actionUserId),
-                    userRepository.getById(relationshipRequest.getAddedUserId()),
-                    actionUserId, 0));
+            // First save the other user's relationship
+            Relationship otherUsersRelationship = relationshipMapper
+                    .mapOtherUsersRelationshipDTOToRelationship(
+                            relationshipDTO,
+                            isActionUser ? getNonActionUserIdFromUniqueId(uniqueId) : getActionUserIdFromUniqueId(uniqueId),
+                            isActionUser);
+            relationshipRepository.save(otherUsersRelationship);
         }
+
+        return relationshipRepository.save(
+                relationshipMapper.mapRelationshipDTOToRelationship(relationshipDTO));
     }
 
     @Override
-    public Relationship update(HttpServletRequest req, ModifyRelationshipRequest modifyRelationshipRequest) {
-        UUID modifyingUserId = jwtTokenUtil.getIdFromToken(req);
-        Optional<Relationship> relationship = relationshipRepository
-                .findById(modifyRelationshipRequest.getRelationshipId());
-
-        // If relationship is not found, throw an exception
-        if (!relationship.isPresent()) {
-            throw new ResourceNotFoundException("Relationship not found with given uuid.");
-
-            // If relationship is found, try to modify it
-        } else {
-            // Confirm that relationship actionUserId != modifying userId
-            // Check also that modifying user belongs to relationship
-            if (userIsValidToModify(modifyingUserId, relationship)) {
-
-                // Finally modify the new status for the relationship and save it
-                relationship.get().setStatus(modifyRelationshipRequest.getStatus());
-                return relationshipRepository.save(relationship.get());
-
-                // Or throw an error
-            } else {
-                throw new BadArgumentException("Modifying user has no permits to modify the relationship.");
-            }
-        }
+    @Transactional
+    public DeleteResponse declineRelationshipRequest(String uniqueId) {
+        return new DeleteResponse("");
     }
 
     @Override
-    public boolean usersHaveActiveRelationship(UUID userId, UUID userId2) {
-        List<Relationship> matches = relationshipRepository
-                .findAll()
-                .stream()
-                .filter(relationship ->
-                        (relationship.getUser1().getUUID().equals(userId) && relationship.getUser2().getUUID().equals(userId2)) ||
-                                (relationship.getUser2().getUUID().equals(userId) && relationship.getUser1().getUUID().equals(userId2)))
-                .collect(Collectors.toList());
-        return !matches.isEmpty() && matches.get(0).getStatus() == 1;
+    public List<Relationship> findRelationshipsByUniqueId(String uniqueId) {
+        return relationshipRepository.findRelationshipsByUniqueId(uniqueId);
     }
 
-    private boolean relationshipAlreadyExists(UUID actionUserId, NewRelationshipRequest relationshipRequest) {
-        return !relationshipRepository
-                .findAll()
-                .stream()
-                .anyMatch(relationship -> {
-                    if (relationship.getUser1().getId().equals(actionUserId)
-                            && relationship.getUser2().getId().equals(relationshipRequest.getAddedUserId())) {
-                        return true;
-                    } else if (relationship.getUser1().getId().equals(relationshipRequest.getAddedUserId())
-                            && relationship.getUser2().getId().equals(actionUserId)) {
-                        return true;
-                    }
-
-                    return false;
-                });
+    @Override
+    public Optional<Relationship> findRelationshipById(UUID uuid) {
+        return uuid != null ? relationshipRepository.findById(uuid) : Optional.empty();
     }
 
-    private boolean usersFound(UUID user, UUID user2) {
-        return userRepository.findById(user).isPresent()
-                && userRepository.findById(user2).isPresent();
+    @Override
+    public boolean usersHaveActiveRelationship(String uniqueId) {
+        List<Relationship> matches = findRelationshipsByUniqueId(uniqueId);
+        return matches.size() == 2 && matches.get(0).getStatus() == 1 && matches.get(1).getStatus() == 1;
     }
 
-    private boolean userIsValidToModify(UUID modifyingUserId, Optional<Relationship> relationship) {
-        return !relationship.get().getActionUserId().equals(modifyingUserId) &&
-                (modifyingUserId.equals(relationship.get().getUser1().getId())
-                        || modifyingUserId.equals(relationship.get().getUser2().getId()));
+    private boolean isActionUser(RelationshipDTO relationshipDTO) {
+        return Objects.equals(getActionUserIdFromUniqueId(relationshipDTO.getUniqueId()), jwtTokenUtil.getIdFromToken(req));
+    }
+
+    private UUID getActionUserIdFromUniqueId(String uniqueId) {
+        return UUID.fromString(uniqueId.split(",")[0]);
+    }
+
+    private UUID getNonActionUserIdFromUniqueId(String uniqueId) {
+        return UUID.fromString(uniqueId.split(",")[1]);
     }
 }

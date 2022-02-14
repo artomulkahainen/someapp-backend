@@ -1,20 +1,25 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.DeleteResponse;
+import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.utils.requests.ModifyRelationshipRequest;
 import com.someapp.backend.utils.requests.NewRelationshipRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface RelationshipService {
 
-    List<Relationship> getRelationships(HttpServletRequest req);
+    Relationship save(RelationshipDTO relationshipDTO);
 
-    Relationship save(HttpServletRequest req, NewRelationshipRequest relationshipRequest);
+    boolean usersHaveActiveRelationship(String uniqueId);
 
-    Relationship update(HttpServletRequest req, ModifyRelationshipRequest modifyRelationshipRequest);
+    Optional<Relationship> findRelationshipById(UUID uuid);
 
-    boolean usersHaveActiveRelationship(UUID userId, UUID userId2);
+    List<Relationship> findRelationshipsByUniqueId(String uniqueId);
+
+    DeleteResponse declineRelationshipRequest(String uniqueId);
 }

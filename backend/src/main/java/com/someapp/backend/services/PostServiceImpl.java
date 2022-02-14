@@ -10,7 +10,6 @@ import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.dto.DeleteResponse;
-import com.someapp.backend.validators.RelationshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

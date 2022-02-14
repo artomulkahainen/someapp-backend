@@ -12,12 +12,11 @@ import java.util.UUID;
 public class Relationship extends AbstractPersistable<UUID> {
 
     @ManyToOne
-    private User user1;
+    private User user;
 
-    @ManyToOne
-    private User user2;
+    private UUID relationshipWith;
 
-    private UUID actionUserId;
+    private String uniqueId;
 
     // STATUS CODES: 0 Pending, 1 Accepted, 2 Declined, 3 Blocked
     private int status;
@@ -25,18 +24,14 @@ public class Relationship extends AbstractPersistable<UUID> {
     @CreationTimestamp
     private Timestamp createdDate;
 
-    public Relationship(User user1, User user2, UUID actionUserId, int status) {
-        this.user1 = user1;
-        this.user2 = user2;
-        this.actionUserId = actionUserId;
+    public Relationship(User user, UUID relationshipWith, String uniqueId, int status) {
+        this.user = user;
+        this.relationshipWith = relationshipWith;
+        this.uniqueId = uniqueId;
         this.status = status;
     }
 
     public Relationship() {}
-
-    public UUID getActionUserId() {
-        return actionUserId;
-    }
 
     public int getStatus() {
         return status;
@@ -50,12 +45,50 @@ public class Relationship extends AbstractPersistable<UUID> {
         return createdDate;
     }
 
-    public User getUser1() { return user1; }
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
 
-    public User getUser2() { return user2; }
+    public User getUser() { return user; }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public UUID getUUID() {
         return this.getId();
+    }
+
+    public UUID getRelationshipWith() {
+        return relationshipWith;
+    }
+
+    public void setRelationshipWith(UUID relationshipWith) {
+        this.relationshipWith = relationshipWith;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    /**
+     * Action user is the one who created the relationship (by sending friend invite)
+     * @return
+     */
+    public UUID getActionUserId() {
+        return UUID.fromString(uniqueId.split(",")[0]);
+    }
+
+    /**
+     * Non-action user is the one who is responding to friend invite
+     * @return
+     */
+    public UUID getNonActionUserId() {
+        return UUID.fromString(uniqueId.split(",")[1]);
     }
 
 }

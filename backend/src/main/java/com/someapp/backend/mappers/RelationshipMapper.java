@@ -2,21 +2,66 @@ package com.someapp.backend.mappers;
 
 import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
+import com.someapp.backend.entities.User;
+import com.someapp.backend.services.ExtendedUserDetailsService;
+import com.someapp.backend.services.RelationshipService;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class RelationshipMapper {
 
-    public RelationshipDTO mapRelationshipToRelationshipDTO(Relationship relationship, UUID userId) {
-        return new RelationshipDTO(
-                relationship.getUUID(),
-                relationship.getCreatedDate(),
-                relationship.getUser1().getUUID() == userId
-                        ? relationship.getUser1().getUUID() : relationship.getUser2().getUUID(),
-                relationship.getActionUserId(),
-                relationship.getStatus()
-        );
+    private RelationshipService relationshipService;
+    private ExtendedUserDetailsService userService;
+    private JWTTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private HttpServletRequest req;
+
+    public RelationshipMapper(RelationshipService relationshipService, ExtendedUserDetailsService userService) {
+        this.relationshipService = relationshipService;
+        this.userService = userService;
     }
+
+    public Relationship mapRelationshipDTOToRelationship(RelationshipDTO relationshipDTO) {
+        Relationship relationship = relationshipService.findRelationshipById(relationshipDTO.getUuid().orElse(null))
+                .orElse(new Relationship());
+
+        if (!relationshipDTO.getUuid().isPresent()) {
+            User user = userService.findUserById(jwtTokenUtil.getIdFromToken(req))
+                    .orElseThrow(ResourceNotFoundException::new);
+            relationship.setUser(user);
+            relationship.setRelationshipWith(relationshipDTO.getRelationshipWithId());
+            relationship.setUniqueId(relationshipDTO.getUniqueId());
+        }
+        relationship.setStatus(relationshipDTO.getStatus());
+        return relationship;
+    }
+
+    public Relationship mapOtherUsersRelationshipDTOToRelationship(RelationshipDTO relationshipDTO, UUID otherUserId, boolean isActionUser) {
+        List<Relationship> relationshipsByUniqueId = relationshipService.findRelationshipsByUniqueId(relationshipDTO.getUniqueId());
+        Relationship relationship = relationshipsByUniqueId
+                .stream()
+                .filter(rs -> isActionUser ? rs.getNonActionUserId().equals(otherUserId) : rs.getActionUserId().equals(otherUserId))
+                .findFirst().orElse(new Relationship());
+
+        if (relationshipsByUniqueId.isEmpty()) {
+            User user = userService.findUserById(otherUserId)
+                    .orElseThrow(ResourceNotFoundException::new);
+            relationship.setUser(user);
+            relationship.setRelationshipWith(relationshipDTO.getRelationshipWithId());
+            relationship.setUniqueId(relationshipDTO.getUniqueId());
+        }
+        relationship.setStatus(relationshipDTO.getStatus());
+        return relationship;
+    }
+
 }
