@@ -1,4 +1,4 @@
-package com.someapp.backend.validators;
+/*package com.someapp.backend.validators;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -87,4 +87,4 @@ public class PostCommentSaveDTOValidatorTest {
         validator.validate(postCommentSaveDTO, errors);
         assertFalse(errors.hasErrors());
     }
-}
+}*/

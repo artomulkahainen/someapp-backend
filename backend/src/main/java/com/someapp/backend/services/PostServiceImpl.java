@@ -1,5 +1,6 @@
 package com.someapp.backend.services;
 
+import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.DeletePostRequest;
 import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.entities.Post;
@@ -34,9 +35,6 @@ public class PostServiceImpl implements PostService {
     private RelationshipRepository relationshipRepository;
 
     @Autowired
-    private RelationshipValidator relationshipValidator;
-
-    @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
     @Autowired
@@ -66,7 +64,7 @@ public class PostServiceImpl implements PostService {
         UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
         // Change this to use BooleanBuilder and QPost querys
-        Set<UUID> friendIds = relationshipRepository
+        /*Set<UUID> friendIds = relationshipRepository
                 .findAll()
                 .stream()
                 .filter(relationship -> isUserInActiveRelationship(actionUserId, relationship))
@@ -74,20 +72,20 @@ public class PostServiceImpl implements PostService {
                         relationship.getUser2().getUUID() : relationship.getUser1().getUUID())
                 .collect(Collectors.toSet());
 
-        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
+        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();*/
 
-        return postRepository
+        return ImmutableList.of()/*postRepository
                 .findAll()
                 .stream()
                 .filter(post -> friendIds
                         .stream()
                         .anyMatch(friendId -> friendId.equals(post.getUserId())))
                 .sorted(byCreatedDate).limit(10)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())*/;
     }
 
     private boolean isUserInActiveRelationship(UUID actionUserId, Relationship relationship) {
-        return (relationship.getUser1().getUUID().equals(actionUserId) || relationship.getUser2().getUUID().equals(actionUserId))
-                && relationship.getStatus() == 1;
+        return true/*(relationship.getUser1().getUUID().equals(actionUserId) || relationship.getUser2().getUUID().equals(actionUserId))
+                && relationship.getStatus() == 1*/;
     }
 }

@@ -51,7 +51,7 @@ public class PostCommentSaveDTOValidator implements Validator {
     }
 
     private void isActiveRelationship(UUID actionUserId, UUID postCreatorId, Errors errors) {
-        if (!relationshipService.usersHaveActiveRelationship(actionUserId, postCreatorId)) {
+        if (/*!relationshipService.usersHaveActiveRelationship(actionUserId, postCreatorId)*/true) {
             errors.reject("Active relationship with post creator is needed to write a comment");
         }
     }

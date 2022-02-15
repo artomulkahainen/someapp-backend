@@ -68,7 +68,7 @@ public class RelationshipMapper {
             User user = userService.findUserById(otherUserId)
                     .orElseThrow(ResourceNotFoundException::new);
             relationship.setUser(user);
-            relationship.setRelationshipWith(relationshipDTO.getRelationshipWithId());
+            relationship.setRelationshipWith(otherUserId);
             relationship.setUniqueId(relationshipDTO.getUniqueId());
         }
         relationship.setStatus(relationshipDTO.getStatus());

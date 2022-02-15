@@ -53,7 +53,7 @@ public class LikePostRequestValidator implements Validator {
          */
 
         if (!isOwnPost(likePostRequest.getPostId(), actionUserId)
-                && !relationshipService.usersHaveActiveRelationship(actionUserId, likePostRequest.getPostUserId())) {
+                && /*!relationshipService.usersHaveActiveRelationship(actionUserId, likePostRequest.getPostUserId())*/true) {
             errors.reject("Action user and post creator user doesn't have active relationship");
         }
 

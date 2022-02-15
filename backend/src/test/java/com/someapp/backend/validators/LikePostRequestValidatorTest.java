@@ -1,4 +1,4 @@
-package com.someapp.backend.validators;
+/*package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
@@ -83,4 +83,4 @@ public class LikePostRequestValidatorTest {
         assertThat(errors.getAllErrors().get(0).getCode())
                 .isEqualTo("Post is already liked by the action user");
     }
-}
+}*/

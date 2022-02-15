@@ -1,4 +1,4 @@
-package com.someapp.backend.testUtility;
+/*package com.someapp.backend.testUtility;
 
 import com.someapp.backend.entities.*;
 import com.someapp.backend.interfaces.repositories.*;
@@ -81,11 +81,11 @@ public class TestData {
                                PostLikeRepository postLikeRepository,
                                RelationshipRepository relationshipRepository) throws Exception {
 
-        /*createUsers(userRepository);
+        createUsers(userRepository);
         createRelationships(userRepository, relationshipRepository);
         createPost(postRepository, userRepository);
         createPostLike(postRepository, userRepository, postLikeRepository);
-        createPostComments(postRepository, postCommentRepository, userRepository);*/
+        createPostComments(postRepository, postCommentRepository, userRepository);
 
         // If repositories are empty, create totally new data for every repo
         if (userRepository.findAll().isEmpty()
@@ -209,4 +209,4 @@ public class TestData {
     public UUID getRelationshipId() { return relationshipId; }
 
     public UUID getRelationshipId2() { return relationshipId2; }
-}
+}*/

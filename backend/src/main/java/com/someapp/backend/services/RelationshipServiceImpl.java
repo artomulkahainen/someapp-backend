@@ -45,9 +45,11 @@ public class RelationshipServiceImpl implements RelationshipService {
     public Relationship save(RelationshipDTO relationshipDTO) {
         boolean isActionUser = isActionUser(relationshipDTO);
         String uniqueId = relationshipDTO.getUniqueId();
+        boolean existingBlockedRelationship = relationshipRepository.findRelationshipsByUniqueId(uniqueId).size() > 0
+                && relationshipRepository.findRelationshipsByUniqueId(uniqueId).get(0).getStatus() == 2;
 
-        // If save is not block request
-        if (relationshipDTO.getStatus() != 2) {
+        // If save is not block request or if other user haven't blocked invite sender already
+        if (relationshipDTO.getStatus() != 2 && !existingBlockedRelationship) {
             /**
              *   Saving relationship is splitted into two different actions, if status is either 0 or 1
              */
@@ -56,7 +58,8 @@ public class RelationshipServiceImpl implements RelationshipService {
             Relationship otherUsersRelationship = relationshipMapper
                     .mapOtherUsersRelationshipDTOToRelationship(
                             relationshipDTO,
-                            isActionUser ? getNonActionUserIdFromUniqueId(uniqueId) : getActionUserIdFromUniqueId(uniqueId),
+                            relationshipDTO.getActionUserId().equals(jwtTokenUtil.getIdFromToken(req))
+                                    ? getNonActionUserIdFromUniqueId(uniqueId) : getActionUserIdFromUniqueId(uniqueId),
                             isActionUser);
             relationshipRepository.save(otherUsersRelationship);
         }
