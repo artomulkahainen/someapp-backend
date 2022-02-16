@@ -1,17 +1,13 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.dto.DeleteResponse;
-import com.someapp.backend.dto.RelationshipDTO;
+import com.someapp.backend.dto.SaveRelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.mappers.RelationshipMapper;
-import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.ModifyRelationshipRequest;
-import com.someapp.backend.utils.requests.NewRelationshipRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +16,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class RelationshipServiceImpl implements RelationshipService {
@@ -42,30 +37,25 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     @Transactional
-    public Relationship save(RelationshipDTO relationshipDTO) {
-        boolean isActionUser = isActionUser(relationshipDTO);
-        String uniqueId = relationshipDTO.getUniqueId();
+    public Relationship save(SaveRelationshipDTO saveRelationshipDTO) {
+        String uniqueId = saveRelationshipDTO.getUniqueId();
         boolean existingBlockedRelationship = relationshipRepository.findRelationshipsByUniqueId(uniqueId).size() > 0
                 && relationshipRepository.findRelationshipsByUniqueId(uniqueId).get(0).getStatus() == 2;
 
         // If save is not block request or if other user haven't blocked invite sender already
-        if (relationshipDTO.getStatus() != 2 && !existingBlockedRelationship) {
+        if (saveRelationshipDTO.getStatus() != 2 && !existingBlockedRelationship) {
             /**
              *   Saving relationship is splitted into two different actions, if status is either 0 or 1
              */
 
-            // First save the other user's relationship
+            // First save the relationshipWith user's relationship
             Relationship otherUsersRelationship = relationshipMapper
-                    .mapOtherUsersRelationshipDTOToRelationship(
-                            relationshipDTO,
-                            relationshipDTO.getActionUserId().equals(jwtTokenUtil.getIdFromToken(req))
-                                    ? getNonActionUserIdFromUniqueId(uniqueId) : getActionUserIdFromUniqueId(uniqueId),
-                            isActionUser);
+                    .mapOtherUsersRelationshipDTOToRelationship(saveRelationshipDTO);
             relationshipRepository.save(otherUsersRelationship);
         }
 
         return relationshipRepository.save(
-                relationshipMapper.mapRelationshipDTOToRelationship(relationshipDTO));
+                relationshipMapper.mapSaveRelationshipDTOToRelationship(saveRelationshipDTO));
     }
 
     @Override
@@ -90,8 +80,8 @@ public class RelationshipServiceImpl implements RelationshipService {
         return matches.size() == 2 && matches.get(0).getStatus() == 1 && matches.get(1).getStatus() == 1;
     }
 
-    private boolean isActionUser(RelationshipDTO relationshipDTO) {
-        return Objects.equals(getActionUserIdFromUniqueId(relationshipDTO.getUniqueId()), jwtTokenUtil.getIdFromToken(req));
+    private boolean isActionUser(SaveRelationshipDTO saveRelationshipDTO) {
+        return Objects.equals(getActionUserIdFromUniqueId(saveRelationshipDTO.getUniqueId()), jwtTokenUtil.getIdFromToken(req));
     }
 
     private UUID getActionUserIdFromUniqueId(String uniqueId) {

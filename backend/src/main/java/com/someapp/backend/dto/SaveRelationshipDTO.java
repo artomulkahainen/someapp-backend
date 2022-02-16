@@ -2,16 +2,13 @@ package com.someapp.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.someapp.backend.dto.abstractDTOs.OptionalBaseDTO;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.util.Optional;
 import java.util.UUID;
 
-public class RelationshipDTO extends OptionalBaseDTO {
+public class SaveRelationshipDTO {
 
     @NotNull
     private UUID relationshipWithId;
@@ -23,12 +20,9 @@ public class RelationshipDTO extends OptionalBaseDTO {
     private int status;
 
     @JsonCreator
-    public RelationshipDTO(@JsonProperty("relationshipWithId") UUID relationshipWithId,
-                           @JsonProperty("uniqueId") String uniqueId,
-                           @JsonProperty("status") int status,
-                           @JsonProperty("relationshipId") Optional<UUID> relationshipId,
-                           @JsonProperty("createdDate") Optional<Timestamp> createdDate) {
-        super(relationshipId, createdDate);
+    public SaveRelationshipDTO(@JsonProperty("relationshipWithId") UUID relationshipWithId,
+                               @JsonProperty("uniqueId") String uniqueId,
+                               @JsonProperty("status") int status) {
         this.relationshipWithId = relationshipWithId;
         this.uniqueId = uniqueId;
         this.status = status;

@@ -1,7 +1,7 @@
 package com.someapp.backend.validators;
 
 import com.google.common.collect.ImmutableList;
-import com.someapp.backend.dto.RelationshipDTO;
+import com.someapp.backend.dto.SaveRelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
@@ -30,12 +30,17 @@ public class RelationshipDTOValidator implements Validator {
     }
 
     public boolean supports(Class<?> clazz) {
-        return RelationshipDTO.class.isAssignableFrom(clazz);
+        return SaveRelationshipDTO.class.isAssignableFrom(clazz);
     }
 
     public void validate(Object target, Errors errors) {
-        RelationshipDTO dto = (RelationshipDTO) target;
-        Optional<Relationship> existingRelationship = relationshipService.findRelationshipById(dto.getUuid().orElse(null));
+        SaveRelationshipDTO dto = (SaveRelationshipDTO) target;
+        Optional<Relationship> existingRelationship = relationshipService
+                .findRelationshipsByUniqueId(dto.getUniqueId())
+                .stream()
+                .filter(rs -> rs.getUser().getUUID().equals(jwtTokenUtil.getIdFromToken(req)))
+                .findFirst();
+
         UUID currentUserId = jwtTokenUtil.getIdFromToken(req);
 
         if (dto.getStatus() == 0) {
@@ -47,7 +52,7 @@ public class RelationshipDTOValidator implements Validator {
             validateStatusZero(dto, errors, currentUserId);
         } else if (dto.getStatus() == 1) {
             /**
-             * Non-action user can only accept request
+             * Non-action user can only accept request.
              * If relationship with given uniqueId is not found, prevent saving.
              */
             validateStatusOne(dto, errors, currentUserId, existingRelationship);
@@ -63,19 +68,19 @@ public class RelationshipDTOValidator implements Validator {
 
     }
 
-    private boolean relationshipExists(RelationshipDTO relationshipDTO) {
-        String reversedId = relationshipDTO.getNonActionUserId() + "," + relationshipDTO.getActionUserId();
-        List<Relationship> relationships = relationshipService.findRelationshipsByUniqueId(relationshipDTO.getUniqueId());
+    private boolean relationshipExists(SaveRelationshipDTO saveRelationshipDTO) {
+        String reversedId = saveRelationshipDTO.getNonActionUserId() + "," + saveRelationshipDTO.getActionUserId();
+        List<Relationship> relationships = relationshipService.findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
         List<Relationship> rs = relationshipService.findRelationshipsByUniqueId(reversedId);
 
         return !relationships.isEmpty() || !rs.isEmpty();
     }
 
-    private boolean exactRelationshipExists(RelationshipDTO dto) {
+    private boolean exactRelationshipExists(SaveRelationshipDTO dto) {
         return relationshipService.findRelationshipsByUniqueId(dto.getUniqueId()).size() > 1;
     }
 
-    private void validateStatusZero(RelationshipDTO dto, Errors errors, UUID currentUserId) {
+    private void validateStatusZero(SaveRelationshipDTO dto, Errors errors, UUID currentUserId) {
         if (!relationshipExists(dto) && dto.getStatus() != 0) {
             errors.reject("Only pending status is allowed for new relationship");
         }
@@ -90,26 +95,22 @@ public class RelationshipDTOValidator implements Validator {
         }
     }
 
-    private void validateStatusOne(RelationshipDTO dto, Errors errors, UUID currentUserId, Optional<Relationship> existing) {
+    private void validateStatusOne(SaveRelationshipDTO dto, Errors errors, UUID currentUserId, Optional<Relationship> existing) {
         if (!exactRelationshipExists(dto)) {
             errors.reject("Cannot accept relationship that doesn't exist");
-        }
-        if (existing.isPresent() && ImmutableList.of(1, 2).contains(existing.get().getStatus())) {
+        } else if (existing.isPresent() && ImmutableList.of(1, 2).contains(existing.get().getStatus())) {
             errors.reject("Already accepted or blocked request cannot be changed to accepted");
-        }
-        if (!dto.getNonActionUserId().equals(currentUserId)) {
+        } else if (!dto.getNonActionUserId().equals(currentUserId)) {
             errors.reject("Invite recipient can only accept requests or block users");
         }
     }
 
-    private void validateStatusTwo(RelationshipDTO dto, Errors errors, UUID currentUserId, Optional<Relationship> existing) {
+    private void validateStatusTwo(SaveRelationshipDTO dto, Errors errors, UUID currentUserId, Optional<Relationship> existing) {
         if (!exactRelationshipExists(dto)) {
             errors.reject("Cannot block relationship that doesn't exist");
-        }
-        if (!dto.getNonActionUserId().equals(currentUserId)) {
+        } else if (!dto.getNonActionUserId().equals(currentUserId)) {
             errors.reject("Invite recipient can only accept requests or block users");
-        }
-        if (existing.isPresent() && existing.get().getStatus() == 1) {
+        } else if (existing.isPresent() && existing.get().getStatus() == 1) {
             errors.reject("Accepted relationship cannot be changed to blocked");
         }
     }

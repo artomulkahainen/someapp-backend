@@ -1,6 +1,7 @@
 package com.someapp.backend.controllers;
 
-import com.someapp.backend.dto.RelationshipDTO;
+import com.someapp.backend.dto.SaveRelationshipDTO;
+import com.someapp.backend.dto.abstractDTOs.RelationshipDTO;
 import com.someapp.backend.interfaces.api.RelationshipApi;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.services.RelationshipService;
@@ -31,13 +32,13 @@ public class RelationshipController implements RelationshipApi {
     private JWTTokenUtil jwtTokenUtil;
 
     @Override
-    public RelationshipDTO save(RelationshipDTO relationshipDTO, BindingResult bindingResult) throws BindException {
-        saveValidator.validate(relationshipDTO, bindingResult);
+    public RelationshipDTO save(SaveRelationshipDTO saveRelationshipDTO, BindingResult bindingResult) throws BindException {
+        saveValidator.validate(saveRelationshipDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        return relationshipMapper.mapRelationshipToRelationshipDTO(relationshipService.save(relationshipDTO));
+        return relationshipMapper.mapRelationshipToRelationshipDTO(relationshipService.save(saveRelationshipDTO));
     }
 }
