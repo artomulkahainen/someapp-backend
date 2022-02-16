@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class RelationshipDTOValidator implements Validator {
+public class SaveRelationshipDTOValidator implements Validator {
 
     private RelationshipService relationshipService;
     private JWTTokenUtil jwtTokenUtil;
@@ -24,7 +24,7 @@ public class RelationshipDTOValidator implements Validator {
     @Autowired
     private HttpServletRequest req;
 
-    public RelationshipDTOValidator(RelationshipService relationshipService, JWTTokenUtil jwtTokenUtil) {
+    public SaveRelationshipDTOValidator(RelationshipService relationshipService, JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }

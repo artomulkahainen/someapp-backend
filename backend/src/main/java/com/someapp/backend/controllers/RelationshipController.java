@@ -6,13 +6,11 @@ import com.someapp.backend.interfaces.api.RelationshipApi;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.validators.RelationshipDTOValidator;
+import com.someapp.backend.validators.SaveRelationshipDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class RelationshipController implements RelationshipApi {
@@ -24,10 +22,7 @@ public class RelationshipController implements RelationshipApi {
     private RelationshipMapper relationshipMapper;
 
     @Autowired
-    private RelationshipDTOValidator saveValidator;
-
-    @Autowired
-    private HttpServletRequest req;
+    private SaveRelationshipDTOValidator saveValidator;
 
     private JWTTokenUtil jwtTokenUtil;
 
