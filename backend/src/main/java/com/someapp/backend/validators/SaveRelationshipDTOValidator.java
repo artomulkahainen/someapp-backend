@@ -83,14 +83,10 @@ public class SaveRelationshipDTOValidator implements Validator {
     private void validateStatusZero(SaveRelationshipDTO dto, Errors errors, UUID currentUserId) {
         if (!relationshipExists(dto) && dto.getStatus() != 0) {
             errors.reject("Only pending status is allowed for new relationship");
-        }
-
-        if (relationshipExists(dto)) {
+        } else if (relationshipExists(dto)) {
             errors.reject("Existing relationship cannot be changed to pending " +
                     "or new pending relationship cannot be created if existing is found.");
-        }
-
-        if (!dto.getActionUserId().equals(currentUserId)) {
+        } else if (!dto.getActionUserId().equals(currentUserId)) {
             errors.reject("The one who creates friend invite can only send pending invites");
         }
     }
