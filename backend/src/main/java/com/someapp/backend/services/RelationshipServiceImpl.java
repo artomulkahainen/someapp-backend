@@ -50,12 +50,12 @@ public class RelationshipServiceImpl implements RelationshipService {
 
             // First save the relationshipWith user's relationship
             Relationship otherUsersRelationship = relationshipMapper
-                    .mapOtherUsersRelationshipDTOToRelationship(saveRelationshipDTO);
+                    .mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, false);
             relationshipRepository.save(otherUsersRelationship);
         }
 
         return relationshipRepository.save(
-                relationshipMapper.mapSaveRelationshipDTOToRelationship(saveRelationshipDTO));
+                relationshipMapper.mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, true));
     }
 
     @Override

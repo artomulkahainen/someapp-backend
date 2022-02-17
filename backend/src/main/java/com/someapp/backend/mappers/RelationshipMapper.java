@@ -41,46 +41,28 @@ public class RelationshipMapper {
                 relationship.getId());
     }
 
-    public Relationship mapSaveRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO) {
+    public Relationship mapSaveRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO, boolean isOwnRelationship) {
         List<Relationship> relationshipsByUniqueId = relationshipService.findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
 
-        // find own relationship with given unique id or create new relationship
+        // find relationship with given unique id or create new relationship
         Relationship relationship = relationshipsByUniqueId
                 .stream()
-                .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(rs.getUser().getUUID()))
+                .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(isOwnRelationship
+                        ? rs.getUser().getUUID() : rs.getRelationshipWith()))
                 .findFirst().orElse(new Relationship());
 
         // If relationship is new
         if (relationship.getUUID() == null) {
-            User user = userService.findUserById(jwtTokenUtil.getIdFromToken(req))
+            User user = userService.findUserById(isOwnRelationship
+                            ? jwtTokenUtil.getIdFromToken(req) : saveRelationshipDTO.getRelationshipWithId())
                     .orElseThrow(ResourceNotFoundException::new);
             relationship.setUser(user);
-            relationship.setRelationshipWith(saveRelationshipDTO.getRelationshipWithId());
+            relationship.setRelationshipWith(isOwnRelationship
+                    ? saveRelationshipDTO.getRelationshipWithId() : jwtTokenUtil.getIdFromToken(req));
             relationship.setUniqueId(saveRelationshipDTO.getUniqueId());
         }
+
         relationship.setStatus(saveRelationshipDTO.getStatus());
         return relationship;
     }
-
-    public Relationship mapOtherUsersRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO) {
-        List<Relationship> relationshipsByUniqueId = relationshipService.findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
-
-        // find relationshipWith user's relationship (with same uniqueId) or create new relationship
-        Relationship relationship = relationshipsByUniqueId
-                .stream()
-                .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(rs.getRelationshipWith()))
-                .findFirst().orElse(new Relationship());
-
-        // If relationship is new
-        if (relationship.getUUID() == null) {
-            User user = userService.findUserById(saveRelationshipDTO.getRelationshipWithId())
-                    .orElseThrow(ResourceNotFoundException::new);
-            relationship.setUser(user);
-            relationship.setRelationshipWith(jwtTokenUtil.getIdFromToken(req));
-            relationship.setUniqueId(saveRelationshipDTO.getUniqueId());
-        }
-        relationship.setStatus(saveRelationshipDTO.getStatus());
-        return relationship;
-    }
-
 }
