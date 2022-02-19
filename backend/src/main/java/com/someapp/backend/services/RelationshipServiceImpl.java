@@ -79,16 +79,4 @@ public class RelationshipServiceImpl implements RelationshipService {
         List<Relationship> matches = findRelationshipsByUniqueId(uniqueId);
         return matches.size() == 2 && matches.get(0).getStatus() == 1 && matches.get(1).getStatus() == 1;
     }
-
-    private boolean isActionUser(SaveRelationshipDTO saveRelationshipDTO) {
-        return Objects.equals(getActionUserIdFromUniqueId(saveRelationshipDTO.getUniqueId()), jwtTokenUtil.getIdFromToken(req));
-    }
-
-    private UUID getActionUserIdFromUniqueId(String uniqueId) {
-        return UUID.fromString(uniqueId.split(",")[0]);
-    }
-
-    private UUID getNonActionUserIdFromUniqueId(String uniqueId) {
-        return UUID.fromString(uniqueId.split(",")[1]);
-    }
 }
