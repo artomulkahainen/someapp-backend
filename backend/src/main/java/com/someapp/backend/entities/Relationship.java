@@ -70,6 +70,11 @@ public class Relationship extends AbstractPersistable<UUID> {
         this.user = user;
     }
 
+    // Remove if not needed for repository
+    public UUID getUserId() {
+        return user.getUUID();
+    }
+
     public UUID getUUID() {
         return this.getId();
     }
