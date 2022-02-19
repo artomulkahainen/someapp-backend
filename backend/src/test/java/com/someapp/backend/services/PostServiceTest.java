@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -72,8 +73,12 @@ public class PostServiceTest {
         anotherPost = new Post("hola", anotherUser);
         anotherOtherPost = new Post("momo", anotherOtherUser);
         post.setUUID(UUID.fromString("784cc861-349b-4e13-af64-6e7eb6f6d376"));
+        post.setCreatedDate(new Timestamp(1245346346L));
         anotherPost.setUUID(UUID.fromString("bd5723cc-6880-401f-9f6e-9d1d4f56c6ca"));
+        anotherPost.setCreatedDate(new Timestamp(754745757L));
         anotherOtherPost.setUUID(UUID.fromString("dbb36fda-f60e-4000-a68d-bf4ad5008305"));
+        anotherOtherPost.setCreatedDate(new Timestamp(546457236236L));
+
     }
 
     @Test
@@ -124,19 +129,19 @@ public class PostServiceTest {
         assertFalse(post.isPresent());
     }
 
-    /*@Test
+    @Test
     public void findPostsByRelationshipsIsSuccessful() {
         List<Relationship> relationships = ImmutableList.of(
-                new Relationship(user, anotherUser, user.getUUID(), 1),
-                new Relationship(user, anotherOtherUser, anotherOtherUser.getUUID(), 3));
-        when(relationshipRepository.findAll()).thenReturn(relationships);
+                new Relationship(user, anotherUser.getUUID(), convertUsersToUniqueId(user, anotherUser), 1),
+                new Relationship(user, anotherOtherUser.getUUID(), convertUsersToUniqueId(user, anotherOtherUser), 0));
+        when(relationshipRepository.findRelationshipsByUserId(any())).thenReturn(relationships);
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
         when(postRepository.findAll()).thenReturn(ImmutableList.of(post, anotherPost, anotherOtherPost));
 
         List<Post> posts = postService.findPostsByRelationships();
         assertThat(posts.size()).isEqualTo(1);
         assertTrue(posts.get(0).getPost().equals("hola"));
-    }*/
+    }
 
     @Test
     public void findPostByRelationships_returnsEmptyList_ifNoRelationshipsFound() {
@@ -147,16 +152,20 @@ public class PostServiceTest {
         assertThat(posts.size()).isEqualTo(0);
     }
 
-    /*@Test
+    @Test
     public void findPostByRelationships_returnsEmptyList_ifNoPostsFound() {
         List<Relationship> relationships = ImmutableList.of(
-                new Relationship(user, anotherUser, user.getUUID(), 1),
-                new Relationship(user, anotherOtherUser, anotherOtherUser.getUUID(), 3));
-        when(relationshipRepository.findAll()).thenReturn(relationships);
+                new Relationship(user, anotherUser.getUUID(), convertUsersToUniqueId(user, anotherUser), 1),
+                new Relationship(user, anotherOtherUser.getUUID(), convertUsersToUniqueId(user, anotherOtherUser), 0));
+        when(relationshipRepository.findRelationshipsByUserId(any())).thenReturn(relationships);
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
         when(postRepository.findAll()).thenReturn(ImmutableList.of());
 
         List<Post> posts = postService.findPostsByRelationships();
         assertThat(posts.size()).isEqualTo(0);
-    }*/
+    }
+
+    private String convertUsersToUniqueId(User user1, User user2) {
+        return user1.getUUID().toString() + "," + user2.getUUID().toString();
+    }
 }

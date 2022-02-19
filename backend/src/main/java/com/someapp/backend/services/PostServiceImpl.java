@@ -61,31 +61,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findPostsByRelationships() {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
+        List<UUID> ownActiveRelationships = relationshipRepository
+                .findRelationshipsByUserId(jwtTokenUtil.getIdFromToken(req))
+                .stream()
+                .filter(relationship -> relationship.getStatus() == 1)
+                .map(Relationship::getRelationshipWith)
+                .collect(ImmutableList.toImmutableList());
 
-        // Change this to use BooleanBuilder and QPost querys
-        /*Set<UUID> friendIds = relationshipRepository
+        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
+
+        return postRepository
                 .findAll()
                 .stream()
-                .filter(relationship -> isUserInActiveRelationship(actionUserId, relationship))
-                .map(relationship -> relationship.getUser1().getUUID().equals(actionUserId) ?
-                        relationship.getUser2().getUUID() : relationship.getUser1().getUUID())
-                .collect(Collectors.toSet());
-
-        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();*/
-
-        return ImmutableList.of()/*postRepository
-                .findAll()
-                .stream()
-                .filter(post -> friendIds
-                        .stream()
-                        .anyMatch(friendId -> friendId.equals(post.getUserId())))
+                .filter(post -> ownActiveRelationships.contains(post.getUserId()))
                 .sorted(byCreatedDate).limit(10)
-                .collect(Collectors.toList())*/;
-    }
-
-    private boolean isUserInActiveRelationship(UUID actionUserId, Relationship relationship) {
-        return true/*(relationship.getUser1().getUUID().equals(actionUserId) || relationship.getUser2().getUUID().equals(actionUserId))
-                && relationship.getStatus() == 1*/;
+                .collect(ImmutableList.toImmutableList());
     }
 }
