@@ -56,7 +56,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return body;
     }
 
-    @Override
     protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers,
                                                          HttpStatus status, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();

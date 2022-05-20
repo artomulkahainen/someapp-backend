@@ -4,12 +4,12 @@ import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.dto.UnlikePostRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 

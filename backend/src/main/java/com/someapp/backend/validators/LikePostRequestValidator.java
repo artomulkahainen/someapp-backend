@@ -2,17 +2,16 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
-import com.someapp.backend.interfaces.repositories.PostLikeRepository;
 import com.someapp.backend.interfaces.repositories.PostRepository;
 import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
 

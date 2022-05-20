@@ -5,7 +5,6 @@ import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
 

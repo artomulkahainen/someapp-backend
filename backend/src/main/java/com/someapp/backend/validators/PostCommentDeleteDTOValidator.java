@@ -4,12 +4,12 @@ import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.interfaces.repositories.PostCommentRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
 

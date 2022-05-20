@@ -7,11 +7,11 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Component
@@ -41,23 +41,23 @@ public class RelationshipMapper {
                 relationship.getId());
     }
 
-    public Relationship mapSaveRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO, boolean isOwnRelationship) {
+    public Relationship mapSaveRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO, boolean isRelationshipCreator) {
         List<Relationship> relationshipsByUniqueId = relationshipService.findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
 
         // find relationship with given unique id or create new relationship
         Relationship relationship = relationshipsByUniqueId
                 .stream()
-                .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(isOwnRelationship
+                .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(isRelationshipCreator
                         ? rs.getUser().getUUID() : rs.getRelationshipWith()))
                 .findFirst().orElse(new Relationship());
 
         // If relationship is new
         if (relationship.getUUID() == null) {
-            User user = userService.findUserById(isOwnRelationship
+            User user = userService.findUserById(isRelationshipCreator
                             ? jwtTokenUtil.getIdFromToken(req) : saveRelationshipDTO.getRelationshipWithId())
                     .orElseThrow(ResourceNotFoundException::new);
             relationship.setUser(user);
-            relationship.setRelationshipWith(isOwnRelationship
+            relationship.setRelationshipWith(isRelationshipCreator
                     ? saveRelationshipDTO.getRelationshipWithId() : jwtTokenUtil.getIdFromToken(req));
             relationship.setUniqueId(saveRelationshipDTO.getUniqueId());
         }

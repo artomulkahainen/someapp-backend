@@ -1,9 +1,10 @@
 package com.someapp.backend.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 

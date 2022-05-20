@@ -9,13 +9,12 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.services.PostService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PostLikeMapper {

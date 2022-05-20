@@ -7,13 +7,13 @@ import com.someapp.backend.interfaces.repositories.RelationshipRepository;
 import com.someapp.backend.interfaces.repositories.UserRepository;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,13 +27,17 @@ public class RelationshipServiceImpl implements RelationshipService {
     private RelationshipRepository relationshipRepository;
 
     @Autowired
-    private RelationshipMapper relationshipMapper;
-
-    @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
     @Autowired
     private HttpServletRequest req;
+
+    private RelationshipMapper relationshipMapper;
+
+    @Autowired
+    public RelationshipServiceImpl(@Lazy RelationshipMapper relationshipMapper) {
+        this.relationshipMapper = relationshipMapper;
+    }
 
     @Override
     @Transactional

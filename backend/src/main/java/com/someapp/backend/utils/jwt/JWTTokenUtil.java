@@ -1,20 +1,18 @@
 package com.someapp.backend.utils.jwt;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.function.Function;
-
 import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
-import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.*;
+import java.util.function.Function;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
