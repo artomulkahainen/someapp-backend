@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = { "test" })
+@TestPropertySource(properties = { "env.EXPIRATION_TIME=900000", "env.SECRET=jea" })
 public class RelationshipControllerTest {
 
     @Autowired
@@ -55,8 +57,8 @@ public class RelationshipControllerTest {
                 .build();
     }
 
-    @WithMockUser(value = "yyberi")
     @Test
+    @WithMockUser(username = "yyberi")
     public void sendNewRelationshipRequestIsSuccessful() throws Exception {
         mvc
                 .perform(post("/saveNewRelationshipByUsingPOST")
