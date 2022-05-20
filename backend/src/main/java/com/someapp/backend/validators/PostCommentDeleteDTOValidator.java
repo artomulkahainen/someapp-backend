@@ -2,7 +2,7 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.interfaces.repositories.PostCommentRepository;
+import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.someapp.backend.controllers;
 
 import com.someapp.backend.dto.PostLikeDTO;
-import com.someapp.backend.interfaces.api.PostLikeApi;
+import com.someapp.backend.api.PostLikeApi;
 import com.someapp.backend.mappers.PostLikeMapper;
 import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.dto.LikePostRequest;

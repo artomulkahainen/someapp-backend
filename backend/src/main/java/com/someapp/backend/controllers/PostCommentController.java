@@ -3,7 +3,7 @@ package com.someapp.backend.controllers;
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.interfaces.api.PostCommentApi;
+import com.someapp.backend.api.PostCommentApi;
 import com.someapp.backend.services.PostCommentService;
 import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.validators.PostCommentDeleteDTOValidator;

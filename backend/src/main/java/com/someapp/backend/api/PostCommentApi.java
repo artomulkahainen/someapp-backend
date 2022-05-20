@@ -1,4 +1,4 @@
-package com.someapp.backend.interfaces.api;
+package com.someapp.backend.api;
 
 import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.dto.PostCommentDeleteDTO;

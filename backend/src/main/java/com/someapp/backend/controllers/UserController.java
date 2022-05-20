@@ -1,7 +1,7 @@
 package com.someapp.backend.controllers;
 
 import com.someapp.backend.dto.*;
-import com.someapp.backend.interfaces.api.UserApi;
+import com.someapp.backend.api.UserApi;
 import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;

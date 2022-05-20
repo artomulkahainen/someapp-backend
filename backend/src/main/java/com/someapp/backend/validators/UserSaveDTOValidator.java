@@ -1,7 +1,7 @@
 package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.UserSaveDTO;
-import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

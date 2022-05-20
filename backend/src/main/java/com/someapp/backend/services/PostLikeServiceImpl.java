@@ -2,7 +2,7 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.PostLike;
-import com.someapp.backend.interfaces.repositories.PostLikeRepository;
+import com.someapp.backend.repositories.PostLikeRepository;
 import com.someapp.backend.mappers.PostLikeMapper;
 import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;

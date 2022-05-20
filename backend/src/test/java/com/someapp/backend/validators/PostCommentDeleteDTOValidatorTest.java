@@ -4,7 +4,7 @@ import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.PostCommentRepository;
+import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.junit.Before;
 import org.junit.Test;

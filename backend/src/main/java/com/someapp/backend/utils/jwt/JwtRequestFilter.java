@@ -1,6 +1,6 @@
 package com.someapp.backend.utils.jwt;
 
-import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.utils.ExtendedUserDetails;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

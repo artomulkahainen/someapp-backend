@@ -5,8 +5,8 @@ import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.PostRepository;
-import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.repositories.PostRepository;
+import com.someapp.backend.repositories.UserRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 

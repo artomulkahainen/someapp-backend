@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.*;
 
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.dto.UserNameIdResponse;

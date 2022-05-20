@@ -2,7 +2,7 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.dto.SaveRelationshipDTO;
 import com.someapp.backend.dto.abstractDTOs.RelationshipDTO;
-import com.someapp.backend.interfaces.api.RelationshipApi;
+import com.someapp.backend.api.RelationshipApi;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;

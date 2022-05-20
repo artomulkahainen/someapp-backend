@@ -1,6 +1,6 @@
 package com.someapp.backend.services;
 
-import com.someapp.backend.interfaces.repositories.RelationshipRepository;
+import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.Test;

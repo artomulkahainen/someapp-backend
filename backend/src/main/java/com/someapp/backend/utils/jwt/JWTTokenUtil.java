@@ -1,6 +1,6 @@
 package com.someapp.backend.utils.jwt;
 
-import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.utils.ExtendedUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

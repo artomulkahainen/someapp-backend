@@ -2,7 +2,7 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.interfaces.repositories.PostCommentRepository;
+import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.dto.DeleteResponse;

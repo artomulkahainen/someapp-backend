@@ -3,7 +3,7 @@ package com.someapp.backend.services;
 import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.utils.ExtendedUserDetails;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;

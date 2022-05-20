@@ -3,7 +3,7 @@ package com.someapp.backend.services;
 import com.google.common.collect.ImmutableList;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
-import com.someapp.backend.interfaces.extendedinterfaces.ExtendedUserDetails;
+import com.someapp.backend.utils.ExtendedUserDetails;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.LoginRequest;
 import org.junit.Test;

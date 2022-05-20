@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import jakarta.servlet.http.HttpServletRequest;

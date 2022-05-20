@@ -1,4 +1,4 @@
-package com.someapp.backend.interfaces.repositories;
+package com.someapp.backend.repositories;
 
 import com.someapp.backend.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

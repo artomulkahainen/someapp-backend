@@ -2,7 +2,7 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.entities.Post;
-import com.someapp.backend.interfaces.repositories.PostRepository;
+import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;

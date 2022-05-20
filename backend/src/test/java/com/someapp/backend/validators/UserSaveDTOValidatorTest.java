@@ -2,7 +2,7 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.interfaces.repositories.UserRepository;
+import com.someapp.backend.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
