@@ -62,7 +62,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> findPostsByRelationships() {
         List<UUID> ownActiveRelationships = relationshipRepository
-                .findRelationshipsByUserId(jwtTokenUtil.getIdFromToken(req))
+                .findRelationshipsByuser_id(jwtTokenUtil.getIdFromToken(req))
                 .stream()
                 .filter(relationship -> relationship.getStatus() == 1)
                 .map(Relationship::getRelationshipWith)

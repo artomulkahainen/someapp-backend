@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,9 +23,6 @@ public class SaveRelationshipDTOValidator implements Validator {
     private RelationshipService relationshipService;
     private JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
     public SaveRelationshipDTOValidator(RelationshipService relationshipService, JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -34,6 +33,7 @@ public class SaveRelationshipDTOValidator implements Validator {
     }
 
     public void validate(Object target, Errors errors) {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         SaveRelationshipDTO dto = (SaveRelationshipDTO) target;
         Optional<Relationship> existingRelationship = relationshipService
                 .findRelationshipsByUniqueId(dto.getUniqueId())

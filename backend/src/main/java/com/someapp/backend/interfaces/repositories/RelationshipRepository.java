@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface RelationshipRepository extends JpaRepository<Relationship, UUID> {
     List<Relationship> findRelationshipsByUniqueId(String uniqueId);
-    List<Relationship> findRelationshipsByUserId(UUID uuid);
+    List<Relationship> findRelationshipsByuser_id(UUID uuid);
 }
