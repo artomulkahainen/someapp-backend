@@ -1,0 +1,26 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  security:
+    user:
+      name: artziboi
+      password: jebajee
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  servlet:
+    context-path: /api/v1
+ 
+gimmevibe:
+  app:
+    jwtSecret: s3cr3771
+    jwtExpirationMs:  86400000
+    SECRET: artzinava1n
+    EXPIRATION_TIME: 900000
+    TOKEN_PREFIX: Bearer
+    HEADER_STRING: Authorization
+    LOGIN_URL: /loginByUsingPOST
+    SIGN_UP_URL: /saveNewUserByUsingPOST

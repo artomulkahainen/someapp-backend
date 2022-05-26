@@ -1,14 +1,10 @@
 package com.someapp.backend.IT;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
-
+import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import com.someapp.backend.dto.UserNameIdResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +13,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-@ActiveProfiles("test")
+import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.not;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,7 +33,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Value("${env.HEADER_STRING}")
+    @Value("${gimmevibe.app.HEADER_STRING}")
     String headerString;
 
     @Before
@@ -89,7 +89,7 @@ public class UserControllerTest {
     public void creatingVeryLongUsernameIsNotPossible() throws Exception {
         mockMvc.perform(post("/saveNewUserByUsingPOST")
                 .header("Authorization", "asd")
-                .content(Format.asJsonString(new User("kaarlekaarlekaar", "aaaa")))
+                .content(Format.asJsonString(new User("kaarlekaarlekaaggr", "aaaa")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())

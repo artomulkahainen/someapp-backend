@@ -1,64 +1,76 @@
 package com.someapp.backend.IT;
 
-import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.SaveRelationshipDTO;
-import com.someapp.backend.entities.extendedclasses.ExtendedUser;
+import com.someapp.backend.entities.User;
+import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
-import com.someapp.backend.utils.jwt.JWTTokenUtil;
+import com.someapp.backend.utils.requests.LoginRequest;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(value = { "test" })
-@TestPropertySource(properties = { "env.EXPIRATION_TIME=900000", "env.SECRET=jea" })
+@SpringBootTest
 public class RelationshipControllerTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private JWTTokenUtil jwtTokenUtil;
+    private MockMvc mvc;
 
     private String token;
 
-    private MockMvc mvc;
+    private User loginUser;
+    private User anotherUser;
 
     @Before
-    public void setup() {
-        jwtTokenUtil = new JWTTokenUtil();
-        token = jwtTokenUtil.generateToken(
-                new ExtendedUser(UUID.fromString("6e2867f4-1b59-46a4-b54d-f118e077a52a"),
-                        "arto",
-                        "salasana",
-                        ImmutableList.of(new SimpleGrantedAuthority("USER"))));
-
+    @Transactional
+    public void setup() throws Exception {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+
+        // FILL THE DB WITH USERS
+        loginUser = new User("urpo", bCryptPasswordEncoder.encode("urpoOnTurpo"));
+        anotherUser = new User("kalle", bCryptPasswordEncoder.encode("kalleEiOoTurpo"));
+        userRepository.save(loginUser);
+        userRepository.save(anotherUser);
+
+        // LOGIN FIRST AND STORE THE TOKEN FROM LOGIN
+        MockHttpServletResponse response = mvc
+                .perform(post("/loginByUsingPOST")
+                        .content(Format.asJsonString(new LoginRequest("urpo", "urpoOnTurpo")))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        token = new JSONObject(response.getContentAsString()).getString("token");
     }
 
     @Test
-    @WithMockUser(username = "yyberi")
+    @WithMockUser(username = "urpo")
+    @Transactional
     public void sendNewRelationshipRequestIsSuccessful() throws Exception {
         mvc
                 .perform(post("/saveNewRelationshipByUsingPOST")
@@ -67,8 +79,8 @@ public class RelationshipControllerTest {
                             return request;
                         })
                         .content(Format.asJsonString(new SaveRelationshipDTO(
-                                UUID.fromString("316d7af3-3f53-40a5-bdbd-8db5b9e301a7"),
-                                "6e2867f4-1b59-46a4-b54d-f118e077a52a,316d7af3-3f53-40a5-bdbd-8db5b9e301a7",
+                                anotherUser.getUUID(),
+                                loginUser.getUUID().toString() + "," + anotherUser.getUUID().toString(),
                                 0)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

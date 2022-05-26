@@ -4,27 +4,26 @@ import com.someapp.backend.utils.ExtendedUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
-
-import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
 @Component
 public class JWTTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    @Value("${env.SECRET}")
+    @Value("${gimmevibe.app.SECRET}")
     private String secret;
 
-    @Value("${env.EXPIRATION_TIME}")
+    @Value("${gimmevibe.app.EXPIRATION_TIME}")
     private String expirationTime;
 
     public String getUsernameFromToken(HttpServletRequest req) {
@@ -70,28 +69,6 @@ public class JWTTokenUtil implements Serializable {
     public Boolean validateToken(HttpServletRequest req, ExtendedUserDetails userDetails) {
         final String username = getUsernameFromToken(req);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(getTokenFromRequest(req)));
-    }
-
-    public String verifyAndDecodeToken(String token) throws Exception {
-        SignatureAlgorithm sa = HS256;
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), sa.getJcaName());
-        DefaultJwtSignatureValidator validator = new DefaultJwtSignatureValidator(sa, secretKeySpec);
-        Base64.Decoder decoder = Base64.getDecoder();
-
-        String[] chunks = token.split("\\.");
-        String tokenWithoutSignature = chunks[0] + "." + chunks[1];
-        String signature = chunks[2];
-
-        // Verify integrity of the token
-        if (!validator.isValid(tokenWithoutSignature, signature)) {
-            throw new Exception("Couldn't verify the token!");
-        }
-
-        // decode token
-        String header = new String(decoder.decode(chunks[0]));
-        String payload = new String(decoder.decode(chunks[1]));
-
-        return "Boolean.TRUE;";
     }
 
     private String getTokenFromRequest(HttpServletRequest req) {

@@ -27,7 +27,6 @@ import static com.someapp.backend.utils.config.ConfigUtils.passwordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
     ExtendedUserDetailsService userDetailsService;
 
@@ -37,10 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    @Value("${env.SIGN_UP_URL}")
+    @Value("${gimmevibe.app.SIGN_UP_URL}")
     String signUpUrl;
 
-    @Value("${env.LOGIN_URL}")
+    @Value("${gimmevibe.app.LOGIN_URL}")
     String loginUrl;
 
     @Override
