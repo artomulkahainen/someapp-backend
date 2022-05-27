@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 public class PostCommentDTO extends BaseDTO {
@@ -15,11 +15,11 @@ public class PostCommentDTO extends BaseDTO {
 
     @JsonCreator
     public PostCommentDTO(@JsonProperty("uuid") UUID uuid,
-                          @JsonProperty("timestamp") Timestamp timestamp,
+                          @JsonProperty("createdDate") Date date,
                           @JsonProperty("postComment") String postComment,
                           @JsonProperty("postId") UUID postId,
                           @JsonProperty("userId") UUID userId) {
-        super(uuid, timestamp);
+        super(uuid, date);
         this.postComment = postComment;
         this.postId = postId;
         this.userId = userId;
