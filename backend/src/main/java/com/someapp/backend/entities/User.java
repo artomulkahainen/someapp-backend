@@ -46,7 +46,7 @@ public class User extends AbstractPersistable<UUID> {
         this.postLikes = new ArrayList<>();
     }
 
-    public User() {};
+    public User() {}
 
     public UUID getUUID() {
         return this.getId();

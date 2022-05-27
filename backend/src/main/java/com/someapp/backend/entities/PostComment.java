@@ -31,7 +31,7 @@ public class PostComment extends AbstractPersistable<UUID> {
         this.user = user;
     }
 
-    public PostComment() {};
+    public PostComment() {}
 
     public String getPostComment() { return this.postComment; }
 

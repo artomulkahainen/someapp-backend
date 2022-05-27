@@ -39,7 +39,7 @@ public class Post extends AbstractPersistable<UUID> {
         this.postLikes = new ArrayList<>();
     }
 
-    public Post() {};
+    public Post() {}
 
     public List<PostLike> getPostLikes() { return postLikes; }
 
