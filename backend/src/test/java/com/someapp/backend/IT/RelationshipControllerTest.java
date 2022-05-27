@@ -1,6 +1,7 @@
 package com.someapp.backend.IT;
 
 import com.someapp.backend.dto.SaveRelationshipDTO;
+import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.testUtility.TestData;
@@ -34,14 +35,13 @@ public class RelationshipControllerTest {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private RelationshipRepository relationshipRepository;
     @Autowired
     private WebApplicationContext context;
 
     private MockMvc mvc;
-
     private String token;
-
     private TestData testData;
 
     @Before
@@ -53,8 +53,9 @@ public class RelationshipControllerTest {
                 .build();
 
         // CREATE TEST DATA
-        testData = new TestData(userRepository);
+        testData = new TestData(userRepository, relationshipRepository);
         testData.createUsers();
+        testData.createRelationships();
 
         // LOGIN FIRST AND STORE THE TOKEN FROM LOGIN
         MockHttpServletResponse response = mvc
@@ -82,11 +83,34 @@ public class RelationshipControllerTest {
                                 actionUserId + "," + relationshipWithId,
                                 0)))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("0"))
                 .andExpect(jsonPath("$.uniqueId").value(actionUserId + "," + relationshipWithId))
-                .andExpect(jsonPath("$.createdDate").isNotEmpty())
-                .andDo(print());
+                .andExpect(jsonPath("$.createdDate").isNotEmpty());
+    }
+
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    public void cannotCreateNewRelationshipIfExistingIsFound() throws Exception {
+        String actionUserId = testData.getUserId().toString();
+        String relationshipWithId = testData.getUserId3().toString();
+        mvc
+                .perform(post("/saveNewRelationshipByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(Format.asJsonString(new SaveRelationshipDTO(
+                                UUID.fromString(relationshipWithId),
+                                actionUserId + "," + relationshipWithId,
+                                0)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").isNotEmpty());
+
     }
 
 }

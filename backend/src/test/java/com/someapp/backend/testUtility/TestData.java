@@ -1,6 +1,8 @@
 package com.someapp.backend.testUtility;
 
+import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
+import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,7 @@ public class TestData {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserRepository userRepository;
+    private RelationshipRepository relationshipRepository;
 
     private UUID userId;
     private UUID userId2;
@@ -21,29 +24,36 @@ public class TestData {
     private UUID postComment2Id;
     private UUID postLikeId;
     private UUID postLikeId2;
-    private UUID relationshipId;
-    private UUID relationshipId2;
+    private UUID relationshipOne_first_id;
+    private UUID relationshipOne_second_id;
 
-    public TestData(UserRepository userRepository) {
+    public TestData(UserRepository userRepository, RelationshipRepository relationshipRepository) {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
         this.userRepository = userRepository;
+        this.relationshipRepository = relationshipRepository;
     }
 
     @Transactional
     public void createUsers() {
-        User user = new User("kalleKustaa", bCryptPasswordEncoder.encode("korkki"));
-        User user2 = new User("yyberi", bCryptPasswordEncoder.encode("korkki"));
-        User user3 = new User("Aino", bCryptPasswordEncoder.encode("ainoomaaa"));
-        User user4 = new User("jepulis", bCryptPasswordEncoder.encode("jepsjepsjeps"));
-        this.userRepository.save(user);
-        this.userRepository.save(user2);
-        this.userRepository.save(user3);
-        this.userRepository.save(user4);
+        User user = this.userRepository.save(new User("kalleKustaa", bCryptPasswordEncoder.encode("korkki")));
+        User user2 = this.userRepository.save(new User("yyberi", bCryptPasswordEncoder.encode("korkki")));
+        User user3 = this.userRepository.save(new User("Aino", bCryptPasswordEncoder.encode("ainoomaaa")));
+        User user4 = this.userRepository.save(new User("jepulis", bCryptPasswordEncoder.encode("jepsjepsjeps")));
 
         this.userId = user.getId();
         this.userId2 = user2.getId();
         this.userId3 = user3.getId();
         this.userId4 = user4.getId();
+    }
+
+    @Transactional
+    public void createRelationships() {
+        String uniqueId = this.userId + "," + this.userId3;
+        Relationship relationshipOne_first = relationshipRepository.save(new Relationship(userRepository.getReferenceById(this.userId), this.userId3, uniqueId, 0));
+        Relationship relationshipOne_second = relationshipRepository.save(new Relationship(userRepository.getReferenceById(this.userId3), this.userId, uniqueId, 0));
+
+        this.relationshipOne_first_id = relationshipOne_first.getId();
+        this.relationshipOne_second_id = relationshipOne_second.getId();
     }
 
     /*public void createPost(PostRepository postRepository, UserRepository userRepository) {
@@ -76,16 +86,6 @@ public class TestData {
         postCommentRepository.save(postComment2);
         this.postCommentId = postComment.getId();
         this.postComment2Id = postComment2.getId();
-    }
-
-    public void createRelationships(UserRepository userRepository,
-                                    RelationshipRepository relationshipRepository) {
-        Relationship relationship = relationshipRepository.save(new Relationship(userRepository.getById(userId),
-                userRepository.getById(userId2), userId, 0));
-        Relationship relationship2 = relationshipRepository.save(new Relationship(userRepository.getById(userId),
-                userRepository.getById(userId3), userId, 0));
-        this.relationshipId = relationship.getId();
-        this.relationshipId2 = relationship2.getId();
     }
 
     public void createTestData(UserRepository userRepository,
