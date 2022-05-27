@@ -2,12 +2,11 @@ package com.someapp.backend.entities;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +28,9 @@ public class Post extends AbstractPersistable<UUID> {
     @JoinColumn(name = "POST_ID")
     private List<PostLike> postLikes;
 
-    @CreationTimestamp
-    private Timestamp createdDate;
+    @Column(name = "createdDate", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate = new Date();
 
     public Post(String post, User user) {
         this.post = post;
@@ -75,11 +75,11 @@ public class Post extends AbstractPersistable<UUID> {
         this.postComments = postComments;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 

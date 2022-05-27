@@ -16,8 +16,6 @@ server:
  
 gimmevibe:
   app:
-    jwtSecret: s3cr3771
-    jwtExpirationMs:  86400000
     SECRET: artzinava1n
     EXPIRATION_TIME: 900000
     TOKEN_PREFIX: Bearer

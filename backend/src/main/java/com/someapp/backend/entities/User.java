@@ -2,15 +2,10 @@ package com.someapp.backend.entities;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -27,8 +22,9 @@ public class User extends AbstractPersistable<UUID> {
 
     private boolean admin;
 
-    @CreationTimestamp
-    private Timestamp createdDate;
+    @Column(name = "createdDate", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate = new Date();
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<Post> posts;
@@ -86,7 +82,7 @@ public class User extends AbstractPersistable<UUID> {
         this.admin = status;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 

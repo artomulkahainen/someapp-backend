@@ -1,15 +1,21 @@
-/*package com.someapp.backend.testUtility;
+package com.someapp.backend.testUtility;
 
-import com.someapp.backend.entities.*;
-import com.someapp.backend.interfaces.repositories.*;
+import com.someapp.backend.entities.User;
+import com.someapp.backend.repositories.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 public class TestData {
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserRepository userRepository;
+
     private UUID userId;
     private UUID userId2;
     private UUID userId3;
+    private UUID userId4;
     private UUID postId;
     private UUID postCommentId;
     private UUID postComment2Id;
@@ -18,22 +24,29 @@ public class TestData {
     private UUID relationshipId;
     private UUID relationshipId2;
 
-    public TestData() {};
+    public TestData(UserRepository userRepository) {
+        this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        this.userRepository = userRepository;
+    }
 
-    public void createUsers(UserRepository userRepository) {
-        User user = new User("kalleKustaa", "korkki");
-        User user2 = new User("yyberi", "korkki");
-        User user3 = new User("Aino", "ainoomaaa");
-        userRepository.save(user);
-        userRepository.save(user2);
-        userRepository.save(user3);
+    @Transactional
+    public void createUsers() {
+        User user = new User("kalleKustaa", bCryptPasswordEncoder.encode("korkki"));
+        User user2 = new User("yyberi", bCryptPasswordEncoder.encode("korkki"));
+        User user3 = new User("Aino", bCryptPasswordEncoder.encode("ainoomaaa"));
+        User user4 = new User("jepulis", bCryptPasswordEncoder.encode("jepsjepsjeps"));
+        this.userRepository.save(user);
+        this.userRepository.save(user2);
+        this.userRepository.save(user3);
+        this.userRepository.save(user4);
 
         this.userId = user.getId();
         this.userId2 = user2.getId();
         this.userId3 = user3.getId();
+        this.userId4 = user4.getId();
     }
 
-    public void createPost(PostRepository postRepository, UserRepository userRepository) {
+    /*public void createPost(PostRepository postRepository, UserRepository userRepository) {
         Post post = new Post("Oh yeah", userRepository.getById(userId));
         postRepository.save(post);
         this.postId = post.getId();
@@ -184,7 +197,7 @@ public class TestData {
                     .get(0)
                     .getId();
         }
-    }
+    }*/
 
     public UUID getUserId() {
         return userId;
@@ -194,7 +207,9 @@ public class TestData {
 
     public UUID getUserId3() { return userId3; }
 
-    public UUID getPostId() {
+    public UUID getUserId4() { return userId4; }
+
+    /*public UUID getPostId() {
         return postId;
     }
 
@@ -208,5 +223,5 @@ public class TestData {
 
     public UUID getRelationshipId() { return relationshipId; }
 
-    public UUID getRelationshipId2() { return relationshipId2; }
-}*/
+    public UUID getRelationshipId2() { return relationshipId2; }*/
+}

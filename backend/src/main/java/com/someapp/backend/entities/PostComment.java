@@ -1,12 +1,11 @@
 package com.someapp.backend.entities;
 
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import jakarta.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -22,8 +21,9 @@ public class PostComment extends AbstractPersistable<UUID> {
     @ManyToOne
     private User user;
 
-    @CreationTimestamp
-    private Timestamp createdDate;
+    @Column(name = "createdDate", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate = new Date();
 
     public PostComment(String postComment, Post post, User user) {
         this.postComment = postComment;
@@ -43,7 +43,7 @@ public class PostComment extends AbstractPersistable<UUID> {
         return this.user.getId();
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 

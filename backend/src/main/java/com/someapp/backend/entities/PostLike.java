@@ -1,31 +1,30 @@
 package com.someapp.backend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
 public class PostLike extends AbstractPersistable<UUID> {
 
     @ManyToOne
-    Post post;
+    private Post post;
 
     @ManyToOne
-    User user;
+    private User user;
 
-    @CreationTimestamp
-    Timestamp createdDate;
+    @Column(name = "createdDate", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate = new Date();
 
     public PostLike(Post post, User user) {
         this.post = post;
         this.user = user;
     }
 
-    public PostLike() {};
+    public PostLike() {}
 
     public UUID getPostId() {
         return post.getId();
@@ -39,7 +38,7 @@ public class PostLike extends AbstractPersistable<UUID> {
         return this.getId();
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 }

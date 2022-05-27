@@ -1,14 +1,12 @@
 package com.someapp.backend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -35,8 +33,9 @@ public class Relationship extends AbstractPersistable<UUID> {
     @Max(2)
     private int status;
 
-    @CreationTimestamp
-    private Timestamp createdDate;
+    @Column(name = "createdDate", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate = new Date();
 
     public Relationship(User user, UUID relationshipWith, String uniqueId, int status) {
         this.user = user;
@@ -55,11 +54,11 @@ public class Relationship extends AbstractPersistable<UUID> {
         this.status = status;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 

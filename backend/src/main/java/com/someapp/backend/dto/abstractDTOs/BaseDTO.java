@@ -1,22 +1,22 @@
 package com.someapp.backend.dto.abstractDTOs;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 public abstract class BaseDTO extends UuidDTO {
 
-    private Timestamp createdDate;
+    private Date createdDate;
 
-    public BaseDTO(UUID uuid, Timestamp createdDate) {
+    public BaseDTO(UUID uuid, Date createdDate) {
         super(uuid);
         this.createdDate = createdDate;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 }
