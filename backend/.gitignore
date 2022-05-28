@@ -35,6 +35,7 @@ build/
 
 ### App properties ###
 src/main/resources/application-development.yml
+src/main/resources/application-production.yml
 src/main/resources/application-devWithH2.yml
 
 ### env
