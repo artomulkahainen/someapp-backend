@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/gimmevibe-test
+    username: postgres
+    password: postgres
+  security:
+    user:
+      name: testaccount
+      password: testMeSoHard123
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+server:
+  servlet:
+    context-path: /api/v1
+ 
+gimmevibe:
+  app:
+    SECRET: testkey
+    EXPIRATION_TIME: 900000
+    TOKEN_PREFIX: Bearer
+    HEADER_STRING: Authorization
+    LOGIN_URL: /loginByUsingPOST
+    SIGN_UP_URL: /saveNewUserByUsingPOST

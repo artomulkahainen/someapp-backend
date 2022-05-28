@@ -40,6 +40,5 @@ src/main/resources/application-development.properties
 src/main/resources/application-devWithH2.yml
 src/main/resources/application.yml
 
-
 ### env
 .env
