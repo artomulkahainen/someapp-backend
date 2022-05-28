@@ -103,7 +103,7 @@ public class RelationshipControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                /*.andExpect(jsonPath("$.errors").isNotEmpty())*/;
+                .andExpect(jsonPath("$.errors").isNotEmpty());
 
     }
 
