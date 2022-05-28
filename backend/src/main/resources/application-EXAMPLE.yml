@@ -1,15 +1,18 @@
 spring:
+  h2:
+    console:
+      enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5433/gimmevibe
+    url: jdbc:postgresql://localhost:5432/gimmevibe-dev
     username: postgres
     password: postgres
   security:
     user:
-      name: testaccount
-      password: testMeSoHard123
+      name:
+      password:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -20,10 +23,10 @@ spring:
 server:
   servlet:
     context-path: /api/v1
- 
+
 gimmevibe:
   app:
-    SECRET: testkey
+    SECRET:
     EXPIRATION_TIME: 900000
     TOKEN_PREFIX: Bearer
     HEADER_STRING: Authorization

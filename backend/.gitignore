@@ -34,11 +34,8 @@ build/
 .vscode/
 
 ### App properties ###
-a
-src/main/resources/application-production.properties
-src/main/resources/application-development.properties
+src/main/resources/application-development.yml
 src/main/resources/application-devWithH2.yml
-src/main/resources/application.yml
 
 ### env
 .env
