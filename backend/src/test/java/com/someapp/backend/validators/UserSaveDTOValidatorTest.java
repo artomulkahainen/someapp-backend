@@ -57,4 +57,16 @@ public class UserSaveDTOValidatorTest {
         validator.validate(userSaveDTO, errors);
         assertFalse(errors.hasErrors());
     }
+
+    @Test
+    public void tooShortUsernameCannotBeCreated() {
+        validator.validate(new UserSaveDTO("y", "kkkk"), errors);
+        assertThat(errors.getAllErrors().get(0).getCode()).isEqualTo("Username must be at least three characters long.");
+    }
+
+    @Test
+    public void tooShortPasswordCannotBeCreated() {
+        validator.validate(new UserSaveDTO("ygggg", "kk"), errors);
+        assertThat(errors.getAllErrors().get(0).getCode()).isEqualTo("Password must be at least three characters long.");
+    }
 }

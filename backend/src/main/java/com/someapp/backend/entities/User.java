@@ -1,7 +1,7 @@
 package com.someapp.backend.entities;
 
-import com.sun.istack.NotNull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.validation.constraints.Size;
@@ -17,7 +17,6 @@ public class User extends AbstractPersistable<UUID> {
     private String username;
 
     @NotNull
-    @Size(min = 3, message = "Password must be longer or equal to 3")
     private String password;
 
     private boolean admin;

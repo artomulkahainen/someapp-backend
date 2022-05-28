@@ -103,7 +103,10 @@ public class RelationshipControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").isNotEmpty());
+                .andExpect(jsonPath("$.errors").isNotEmpty())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Existing relationship cannot be changed to pending " +
+                                "or new pending relationship cannot be created if existing is found."));
 
     }
 
