@@ -45,21 +45,19 @@ public class RelationshipServiceImpl implements RelationshipService {
         String uniqueId = saveRelationshipDTO.getUniqueId();
         boolean existingBlockedRelationship = relationshipRepository.findRelationshipsByUniqueId(uniqueId).size() > 0
                 && relationshipRepository.findRelationshipsByUniqueId(uniqueId).get(0).getStatus() == 2;
+        int status = saveRelationshipDTO.getStatus();
 
         // If save is not block request or if other user haven't blocked invite sender already
-        if (saveRelationshipDTO.getStatus() != 2 && !existingBlockedRelationship) {
-            /**
-             *   Saving relationship is splitted into two different actions, if status is either 0 or 1
-             */
-
+        if (status != 2 && !existingBlockedRelationship) {
             // First save the relationshipWith user's relationship
             Relationship otherUsersRelationship = relationshipMapper
-                    .mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, false);
+                    .mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, status == 1);
             relationshipRepository.save(otherUsersRelationship);
         }
 
         return relationshipRepository.save(
-                relationshipMapper.mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, true));
+                relationshipMapper.mapSaveRelationshipDTOToRelationship(saveRelationshipDTO,
+                        status == 0));
     }
 
     @Override
