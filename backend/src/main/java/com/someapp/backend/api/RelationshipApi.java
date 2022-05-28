@@ -1,7 +1,6 @@
 package com.someapp.backend.api;
 
-import com.someapp.backend.dto.SaveRelationshipDTO;
-import com.someapp.backend.dto.abstractDTOs.RelationshipDTO;
+import com.someapp.backend.dto.*;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +14,7 @@ public interface RelationshipApi {
     RelationshipDTO save(@Valid @RequestBody SaveRelationshipDTO saveRelationshipDTO,
                          BindingResult bindingResult) throws BindException;
 
-    /*@PostMapping("/declineRelationshipByUsingPOST")
-    DeleteResponse decline()*/
+    @PostMapping("/declineRelationshipByUsingPOST")
+    StatusResponse decline(@Valid @RequestBody DeclineRelationshipRequest declineRelationshipRequest,
+                           BindingResult bindingResult) throws BindException;
 }

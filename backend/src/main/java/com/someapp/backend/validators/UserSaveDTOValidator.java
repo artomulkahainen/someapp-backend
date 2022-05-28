@@ -30,11 +30,12 @@ public class UserSaveDTOValidator implements Validator {
         }
 
         // USERNAME IS AT LEAST THREE CHARACTERS LONG
-        if (userSaveDTO.getUsername().length() < 3) {
+        if (userSaveDTO.getUsername() == null || userSaveDTO.getUsername().length() < 3) {
             errors.reject("Username must be at least three characters long.");
         }
 
-        if (userSaveDTO.getPassword().length() < 3) {
+        // PASSWORD IS AT LEAST THREE CHARACTERS LONG
+        if (userSaveDTO.getPassword() == null || userSaveDTO.getPassword().length() < 3) {
             errors.reject("Password must be at least three characters long.");
         }
     }

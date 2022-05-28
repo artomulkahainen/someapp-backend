@@ -1,11 +1,11 @@
 package com.someapp.backend.services;
 
-import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.dto.SaveRelationshipDTO;
+import com.someapp.backend.dto.StatusResponse;
 import com.someapp.backend.entities.Relationship;
+import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.repositories.UserRepository;
-import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +64,8 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     @Transactional
-    public DeleteResponse declineRelationshipRequest(String uniqueId) {
-        return new DeleteResponse("");
+    public StatusResponse declineRelationshipRequest(String uniqueId) {
+        return new StatusResponse(200);
     }
 
     @Override

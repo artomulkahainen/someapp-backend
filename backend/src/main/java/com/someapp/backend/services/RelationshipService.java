@@ -1,7 +1,7 @@
 package com.someapp.backend.services;
 
-import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.dto.SaveRelationshipDTO;
+import com.someapp.backend.dto.StatusResponse;
 import com.someapp.backend.entities.Relationship;
 
 import java.util.List;
@@ -18,5 +18,5 @@ public interface RelationshipService {
 
     List<Relationship> findRelationshipsByUniqueId(String uniqueId);
 
-    DeleteResponse declineRelationshipRequest(String uniqueId);
+    StatusResponse declineRelationshipRequest(String uniqueId);
 }

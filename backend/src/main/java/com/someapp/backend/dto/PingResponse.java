@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class PingResponse {
 
-    HttpStatus httpStatus;
-    Date date;
+    private HttpStatus httpStatus;
+    private Date date;
 
     public PingResponse(HttpStatus httpStatus, Date date) {
         this.httpStatus = httpStatus;

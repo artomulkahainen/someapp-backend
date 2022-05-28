@@ -1,7 +1,7 @@
 package com.someapp.backend.mappers;
 
 import com.someapp.backend.dto.SaveRelationshipDTO;
-import com.someapp.backend.dto.abstractDTOs.RelationshipDTO;
+import com.someapp.backend.dto.RelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.services.ExtendedUserDetailsService;

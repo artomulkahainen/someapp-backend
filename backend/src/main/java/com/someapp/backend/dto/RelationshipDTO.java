@@ -1,4 +1,6 @@
-package com.someapp.backend.dto.abstractDTOs;
+package com.someapp.backend.dto;
+
+import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 
 import java.util.Date;
 import java.util.UUID;

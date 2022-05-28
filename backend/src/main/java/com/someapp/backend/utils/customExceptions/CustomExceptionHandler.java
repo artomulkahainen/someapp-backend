@@ -1,5 +1,7 @@
 package com.someapp.backend.utils.customExceptions;
 
+import com.google.common.collect.ImmutableList;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -13,14 +15,30 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(value = { BindException.class })
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage bindException(BindException ex) {
-        ErrorMessage message = new ErrorMessage(
+        return new ErrorMessage(
                 400,
                 new Date(),
                 ex.getAllErrors().stream().map(ObjectError::getCode).collect(Collectors.toList()));
+    }
 
-        return message;
+    @ExceptionHandler(BadArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage badArgumentException(BadArgumentException ex) {
+        return new ErrorMessage(400, new Date(), ImmutableList.of(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex) {
+        return new ErrorMessage(404, new Date(), ImmutableList.of(ex.getMessage()));
+    }
+
+    @ExceptionHandler(JwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorMessage signatureException(JwtException ex) {
+        return new ErrorMessage(401, new Date(), ImmutableList.of(ex.getMessage()));
     }
 }

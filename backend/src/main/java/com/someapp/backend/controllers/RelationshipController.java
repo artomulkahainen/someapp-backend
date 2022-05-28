@@ -1,7 +1,6 @@
 package com.someapp.backend.controllers;
 
-import com.someapp.backend.dto.SaveRelationshipDTO;
-import com.someapp.backend.dto.abstractDTOs.RelationshipDTO;
+import com.someapp.backend.dto.*;
 import com.someapp.backend.api.RelationshipApi;
 import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.services.RelationshipService;
@@ -35,5 +34,17 @@ public class RelationshipController implements RelationshipApi {
         }
 
         return relationshipMapper.mapRelationshipToRelationshipDTO(relationshipService.save(saveRelationshipDTO));
+    }
+
+    @Override
+    public StatusResponse decline(DeclineRelationshipRequest declineRelationshipRequest, BindingResult bindingResult)
+            throws BindException {
+        // validate
+
+        if (bindingResult.hasErrors()) {
+            throw new BindException(bindingResult);
+        }
+
+        return relationshipService.declineRelationshipRequest(declineRelationshipRequest.relationshipUniqueId());
     }
 }
