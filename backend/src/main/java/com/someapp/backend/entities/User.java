@@ -43,6 +43,7 @@ public class User extends AbstractPersistable<UUID> {
         this.admin = false;
         this.posts = new ArrayList<>();
         this.postLikes = new ArrayList<>();
+        this.relationships = new ArrayList<>();
     }
 
     public User() {}

@@ -28,4 +28,16 @@ VALUES ('dd145e46-3f7c-4120-89fb-aeb3bd180838', NOW(),
 '508081af-5ba5-4318-b678-983e103a78f3', 0,
 '508081af-5ba5-4318-b678-983e103a78f3,12bffa51-9899-497b-b41a-2b71d8c42629' , '12bffa51-9899-497b-b41a-2b71d8c42629');
 
+INSERT INTO relationship(id, created_date, relationship_with, status, unique_id, user_id)
+VALUES ('5c19d5f0-9008-4a71-84ca-f5a407f33258', NOW(),
+'30d868a1-e7c9-48da-881f-c6348598b0fd', 1,
+'609b08a3-356d-40d8-9a87-b4e1d47abf4d,30d868a1-e7c9-48da-881f-c6348598b0fd' , '609b08a3-356d-40d8-9a87-b4e1d47abf4d');
+
+INSERT INTO relationship(id, created_date, relationship_with, status, unique_id, user_id)
+VALUES ('1a76aeea-da63-451b-bd6e-9f0ee9a19f51', NOW(),
+'609b08a3-356d-40d8-9a87-b4e1d47abf4d', 1,
+'609b08a3-356d-40d8-9a87-b4e1d47abf4d,30d868a1-e7c9-48da-881f-c6348598b0fd' , '30d868a1-e7c9-48da-881f-c6348598b0fd');
+
+
+
 

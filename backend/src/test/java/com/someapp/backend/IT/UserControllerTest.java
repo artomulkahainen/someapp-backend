@@ -1,6 +1,7 @@
 package com.someapp.backend.IT;
 
 import com.someapp.backend.dto.UserNameIdResponse;
+import com.someapp.backend.dto.UserSaveDTO;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.utils.requests.LoginRequest;
@@ -18,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.someapp.backend.testUtility.Format.asJsonString;
@@ -60,6 +62,7 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "kalleKustaa")
+    @Transactional
     @Sql("/db/users.sql")
     public void findUsersIsSuccessful() throws Exception {
         mvc.perform(post("/findUsersByNameByUsingPOST")
@@ -74,7 +77,8 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "kalleKustaa")
-    @Sql(value = {"/db/users.sql", "/db/relationships.sql"})
+    @Transactional
+    @Sql(value = {"/db/users.sql", "/db/relationships.sql", "/db/posts.sql", "/db/postlikes.sql"})
     public void findOwnUserDetailsIsSuccessful() throws Exception {
         mvc.perform(get("/findOwnUserDetailsByUsingGET")
                         .with(request -> {
@@ -85,22 +89,26 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.uuid").value("609b08a3-356d-40d8-9a87-b4e1d47abf4d"))
                 .andExpect(jsonPath("$.username").value("kalleKustaa"))
-                .andExpect(jsonPath("$.posts").isEmpty())
+                .andExpect(jsonPath("$.posts[0].post").value("Nice stuff"))
                 .andExpect(jsonPath("$.relationships[0].uniqueId")
-                        .value("508081af-5ba5-4318-b678-983e103a78f3,609b08a3-356d-40d8-9a87-b4e1d47abf4d"));
+                        .value("508081af-5ba5-4318-b678-983e103a78f3,609b08a3-356d-40d8-9a87-b4e1d47abf4d"))
+                .andExpect(jsonPath("$.likedPostsIds[0].postId")
+                        .value("434811ee-f31f-4929-beec-194f237cf417"));
     }
 
-    /*@Test
+    @Test
+    @Transactional
+    @Sql("/db/users.sql")
     public void creatingUserIsSuccessful() throws Exception {
-        mockMvc.perform(post("/saveNewUserByUsingPOST")
-                .content(Format.asJsonString(new User("kusti", "kustipojke")))
+        mvc.perform(post("/saveNewUserByUsingPOST")
+                .content(Format.asJsonString(new UserSaveDTO("kusti", "kustipojke")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("kusti"));
     }
 
-    @Test
+    /*@Test
     public void creatingVeryShortUsernameIsNotPossible() throws Exception {
         mockMvc.perform(post("/saveNewUserByUsingPOST")
                 .content(Format.asJsonString(new User("k", "aaaa")))
