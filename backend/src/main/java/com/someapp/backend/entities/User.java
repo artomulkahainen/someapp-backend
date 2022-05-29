@@ -89,4 +89,8 @@ public class User extends AbstractPersistable<UUID> {
         Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
         return posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList());
     }
+
+    public List<Relationship> getRelationships() {
+        return relationships;
+    }
 }

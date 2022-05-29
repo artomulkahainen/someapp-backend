@@ -28,16 +28,16 @@ import java.util.stream.Collectors;
 public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    JWTTokenUtil jwtTokenUtil;
+    private JWTTokenUtil jwtTokenUtil;
 
     @Autowired
-    HttpServletRequest req;
+    private HttpServletRequest req;
 
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public ExtendedUserDetails loadUserByUsername(String username) {

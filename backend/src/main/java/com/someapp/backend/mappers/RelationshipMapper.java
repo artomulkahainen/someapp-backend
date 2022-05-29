@@ -1,7 +1,8 @@
 package com.someapp.backend.mappers;
 
-import com.someapp.backend.dto.SaveRelationshipDTO;
+import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.RelationshipDTO;
+import com.someapp.backend.dto.SaveRelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.services.ExtendedUserDetailsService;
@@ -39,6 +40,12 @@ public class RelationshipMapper {
                 relationship.getStatus(),
                 relationship.getCreatedDate(),
                 relationship.getId());
+    }
+
+    public List<RelationshipDTO> mapRelationshipsToRelationshipDTOs(List<Relationship> relationships) {
+        return relationships.stream()
+                .map(relationship -> mapRelationshipToRelationshipDTO(relationship))
+                .collect(ImmutableList.toImmutableList());
     }
 
     public Relationship mapSaveRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO, boolean isRelationshipCreator) {

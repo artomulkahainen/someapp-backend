@@ -24,6 +24,7 @@ import static com.someapp.backend.testUtility.Format.asJsonString;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -71,16 +72,23 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.[1].username").value("kyyberi"));
     }
 
-    /*@Test
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Sql(value = {"/db/users.sql", "/db/relationships.sql"})
     public void findOwnUserDetailsIsSuccessful() throws Exception {
-
-        when(tokenMock.getUsernameFromToken(anyString())).thenReturn("urpo");
-        when(userRepoMock.findByUsername(anyString())).thenReturn(new User("korppi", "kotka"));
-
-        mockMvc.perform(get("/findOwnUserDetailsByUsingGET"))
+        mvc.perform(get("/findOwnUserDetailsByUsingGET")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        }))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", not(emptyCollectionOf(User.class))));
-    }*/
+                .andExpect(jsonPath("$.uuid").value("609b08a3-356d-40d8-9a87-b4e1d47abf4d"))
+                .andExpect(jsonPath("$.username").value("kalleKustaa"))
+                .andExpect(jsonPath("$.posts").isEmpty())
+                .andExpect(jsonPath("$.relationships[0].uniqueId")
+                        .value("508081af-5ba5-4318-b678-983e103a78f3,609b08a3-356d-40d8-9a87-b4e1d47abf4d"));
+    }
 
     /*@Test
     public void creatingUserIsSuccessful() throws Exception {
