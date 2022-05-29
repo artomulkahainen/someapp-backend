@@ -16,5 +16,5 @@ public interface RelationshipApi {
 
     @PostMapping("/declineRelationshipByUsingPOST")
     StatusResponse decline(@Valid @RequestBody DeclineRelationshipRequest declineRelationshipRequest,
-                           BindingResult bindingResult) throws BindException;
+                           BindingResult bindingResult) throws Exception;
 }

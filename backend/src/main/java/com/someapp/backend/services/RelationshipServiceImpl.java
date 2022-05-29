@@ -63,6 +63,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     @Override
     @Transactional
     public StatusResponse declineRelationshipRequest(String uniqueId) {
+        relationshipRepository.deleteRelationshipByUniqueId(uniqueId);
         return new StatusResponse(200);
     }
 
