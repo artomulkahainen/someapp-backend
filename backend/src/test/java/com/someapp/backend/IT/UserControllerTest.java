@@ -1,56 +1,74 @@
 package com.someapp.backend.IT;
 
 import com.someapp.backend.dto.UserNameIdResponse;
-import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.utils.requests.LoginRequest;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
+import static com.someapp.backend.testUtility.Format.asJsonString;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class UserControllerTest {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Value("${gimmevibe.app.HEADER_STRING}")
-    String headerString;
+    private WebApplicationContext context;
+    private MockMvc mvc;
+    private String token;
 
     @Before
-    public void setup() {
-        if (userRepository.findAll().isEmpty()) {
-            userRepository.save(new User("urpo", "urpoOnTurpo"));
-            userRepository.save(new User("kalle", "kalleEiOoTurpo"));
-        }
+    public void setup() throws Exception {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+
+        // LOGIN FIRST AND STORE THE TOKEN FROM LOGIN
+        MockHttpServletResponse response = mvc
+                .perform(post("/loginByUsingPOST")
+                        .content(asJsonString(new LoginRequest("kalleKustaa", "korkki")))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andReturn().getResponse();
+        token = new JSONObject(response.getContentAsString()).getString("token");
+
     }
 
     @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Sql("/db/users.sql")
     public void findUsersIsSuccessful() throws Exception {
-        mockMvc.perform(post("/findUsersByNameByUsingPOST")
-                .content(Format.asJsonString(new FindUserByNameRequest("kal")))
+        mvc.perform(post("/findUsersByNameByUsingPOST")
+                .content(Format.asJsonString(new FindUserByNameRequest("yybe")))
                 .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", not(emptyCollectionOf(UserNameIdResponse.class))));
+                .andExpect(jsonPath("$", not(emptyCollectionOf(UserNameIdResponse.class))))
+                .andExpect(jsonPath("$.[0].username").value("yyberi"))
+                .andExpect(jsonPath("$.[1].username").value("kyyberi"));
     }
 
     /*@Test
@@ -64,7 +82,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$", not(emptyCollectionOf(User.class))));
     }*/
 
-    @Test
+    /*@Test
     public void creatingUserIsSuccessful() throws Exception {
         mockMvc.perform(post("/saveNewUserByUsingPOST")
                 .content(Format.asJsonString(new User("kusti", "kustipojke")))
@@ -114,6 +132,6 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-    }
+    }*/
 
 }
