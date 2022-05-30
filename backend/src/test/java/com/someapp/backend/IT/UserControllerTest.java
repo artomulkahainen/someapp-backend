@@ -2,6 +2,7 @@ package com.someapp.backend.IT;
 
 import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.dto.UserSaveDTO;
+import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.utils.requests.LoginRequest;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,6 +41,8 @@ public class UserControllerTest {
 
     @Autowired
     private WebApplicationContext context;
+    @Autowired
+    private UserRepository repository;
     private MockMvc mvc;
     private String token;
 
@@ -104,50 +108,24 @@ public class UserControllerTest {
                 .content(Format.asJsonString(new UserSaveDTO("kusti", "kustipojke")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("kusti"));
-    }
 
-    /*@Test
-    public void creatingVeryShortUsernameIsNotPossible() throws Exception {
-        mockMvc.perform(post("/saveNewUserByUsingPOST")
-                .content(Format.asJsonString(new User("k", "aaaa")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("Username length must be between 3-15 letters"));
+        assertTrue(repository.findByUsername("kusti").isPresent());
     }
 
     @Test
-    public void creatingVeryLongUsernameIsNotPossible() throws Exception {
-        mockMvc.perform(post("/saveNewUserByUsingPOST")
-                .header("Authorization", "asd")
-                .content(Format.asJsonString(new User("kaarlekaarlekaaggr", "aaaa")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+    @Transactional
+    @Sql("/db/users.sql")
+    public void cannotCreateUserWithExistingUsername() throws Exception {
+        mvc.perform(post("/saveNewUserByUsingPOST")
+                        .content(Format.asJsonString(new UserSaveDTO("yyberi", "kustipojke")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("Username length must be between 3-15 letters"));
+                .andExpect(jsonPath("$.errors[0]").value("Username is already in use"));
     }
-
-    @Test
-    public void creatingVeryShortPasswordIsNotPossible() throws Exception {
-        mockMvc.perform(post("/saveNewUserByUsingPOST")
-                .content(Format.asJsonString(new User("kaija", "ko")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors[0]")
-                        .value("Password must be longer or equal to 3"));
-    }
-    @Test
-    public void notPossibleToCreateUserWithExistingUsername() throws Exception {
-        mockMvc.perform(post("/saveNewUserByUsingPOST")
-                .content(Format.asJsonString(new User("urpo", "urpoOnTurpo")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }*/
 
 }

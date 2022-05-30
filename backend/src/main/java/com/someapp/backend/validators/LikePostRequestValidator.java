@@ -7,10 +7,11 @@ import com.someapp.backend.services.PostLikeService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -22,9 +23,6 @@ public class LikePostRequestValidator implements Validator {
     private final PostRepository postRepository;
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
-
-    @Autowired
-    HttpServletRequest req;
 
     public LikePostRequestValidator(PostLikeService postLikeService,
                                     PostRepository postRepository,
@@ -43,7 +41,9 @@ public class LikePostRequestValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        LikePostRequest likePostRequest = (LikePostRequest) target;
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+        final LikePostRequest likePostRequest = (LikePostRequest) target;
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
         /**
@@ -52,7 +52,8 @@ public class LikePostRequestValidator implements Validator {
          */
 
         if (!isOwnPost(likePostRequest.getPostId(), actionUserId)
-                && /*!relationshipService.usersHaveActiveRelationship(actionUserId, likePostRequest.getPostUserId())*/true) {
+                && !relationshipService.usersHaveActiveRelationship(
+                        actionUserId.toString() + "," + likePostRequest.getPostUserId())) {
             errors.reject("Action user and post creator user doesn't have active relationship");
         }
 

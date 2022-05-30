@@ -13,3 +13,7 @@ VALUES ('434811ee-f31f-4929-beec-194f237cf417', NOW(),
 INSERT INTO post(id, created_date, post, user_id)
 VALUES ('f09823e5-6de1-4042-8ab1-9a273f283ef9', NOW(),
 'Suomii finlaand', 'a4b35fdd-441e-4691-9a03-cb0b2a4822a2');
+
+INSERT INTO post(id, created_date, post, user_id)
+VALUES ('323fe607-9bdc-42fe-92cd-e7ab9cf08cac', NOW(),
+'We are the champions', '30d868a1-e7c9-48da-881f-c6348598b0fd');

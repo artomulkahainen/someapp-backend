@@ -69,7 +69,13 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     public List<Relationship> findRelationshipsByUniqueId(String uniqueId) {
-        return relationshipRepository.findRelationshipsByUniqueId(uniqueId);
+        String reversedUniqueId = uniqueId.split(",")[1] + "," + uniqueId.split(",")[0];
+        List<Relationship> relationships = relationshipRepository.findRelationshipsByUniqueId(uniqueId);
+
+        if (!relationships.isEmpty()) {
+            return relationships;
+        }
+        return relationshipRepository.findRelationshipsByUniqueId(reversedUniqueId);
     }
 
     @Override
