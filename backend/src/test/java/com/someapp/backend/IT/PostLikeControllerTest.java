@@ -1,6 +1,7 @@
 package com.someapp.backend.IT;
 
 import com.someapp.backend.dto.LikePostRequest;
+import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.repositories.PostLikeRepository;
 import com.someapp.backend.utils.requests.LoginRequest;
 import org.json.JSONObject;
@@ -23,9 +24,11 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.UUID;
 
 import static com.someapp.backend.testUtility.Format.asJsonString;
+import static org.junit.Assert.assertFalse;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.Assert.assertTrue;
 
@@ -83,34 +86,45 @@ public class PostLikeControllerTest {
         assertTrue(repository.findById(newPostLike).isPresent());
     }
 
-    /*@Test
-    public void likingUnexistingPostIsNotPossible() throws Exception {
-        mockMvc.perform(post("/posts/likes")
-                .content(Format.asJsonString(
-                        new LikePostRequest(testData.getUserId(),
-                                UUID.fromString("a52fbdae-b373-4398-ab59-acee35e4414a"))))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    @Sql(value = {"/db/users.sql", "/db/posts.sql", "/db/postlikes.sql", "/db/relationships.sql"})
+    public void unlikingIsPossible() throws Exception {
+        mvc
+                .perform(post("/unlikePostByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new UnlikePostRequest(
+                                UUID.fromString("d2985a64-a139-4eb0-a5fb-f356e0fafb66"))))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertFalse(repository.findById(UUID.fromString("d2985a64-a139-4eb0-a5fb-f356e0fafb66")).isPresent());
     }
 
     @Test
-    public void likingPostWithUnexistingUserIsNotPossible() throws Exception {
-        mockMvc.perform(post("/posts/likes")
-                .content(Format.asJsonString(
-                        new LikePostRequest(UUID.fromString("a52fbdae-b373-4398-ab59-acee35e4414a"),
-                                testData.getPostId())))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    @Sql(value = {"/db/users.sql", "/db/posts.sql", "/db/postlikes.sql", "/db/relationships.sql"})
+    public void likingPostFromUserWithNoActiveRelationship_IsNotPossible() throws Exception {
+        mvc
+                .perform(post("/likePostByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new LikePostRequest(
+                                UUID.fromString("a4b35fdd-441e-4691-9a03-cb0b2a4822a2"),
+                                UUID.fromString("f09823e5-6de1-4042-8ab1-9a273f283ef9"))))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("Action user and post creator user doesn't have active relationship"));
     }
-
-    @Test
-    public void unLikingisPossible() throws Exception {
-        MvcResult res = mockMvc.perform(delete("/posts/likes/{postLikeId}", testData.getPostLikeId2()))
-                .andExpect(status().isOk()).andReturn();
-
-        assertEquals(true, res.getResponse().getContentAsString().contains(testData.getPostLikeId2().toString()));
-        assertEquals(true, userRepository.findById(testData.getUserId()).isPresent());
-        assertEquals(true, postRepository.findById(testData.getPostId()).isPresent());
-    }*/
 
 }
