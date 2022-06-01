@@ -24,9 +24,9 @@ import static org.mockito.Mockito.when;
 public class DeleteUserRequestValidatorTest {
 
     @Mock
-    JWTTokenUtil jwtTokenUtil;
+    private JWTTokenUtil jwtTokenUtil;
     @InjectMocks
-    DeleteUserRequestValidator validator;
+    private DeleteUserRequestValidator validator;
 
     @Test
     public void userCannotDeleteOtherUsersAccounts() {

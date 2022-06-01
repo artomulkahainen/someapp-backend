@@ -28,11 +28,11 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PostCommentMapperTest {
 
-    PostRepository postRepository = mock(PostRepository.class);
-    UserRepository userRepository = mock(UserRepository.class);
+    private PostRepository postRepository = mock(PostRepository.class);
+    private UserRepository userRepository = mock(UserRepository.class);
 
     @Spy
-    PostCommentMapper postCommentMapper = new PostCommentMapper(postRepository, userRepository);
+    private PostCommentMapper postCommentMapper = new PostCommentMapper(postRepository, userRepository);
 
     private User user;
     private User commentUser;

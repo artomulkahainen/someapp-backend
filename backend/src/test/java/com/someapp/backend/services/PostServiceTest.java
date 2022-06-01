@@ -128,20 +128,6 @@ public class PostServiceTest {
         assertFalse(post.isPresent());
     }
 
-    /*@Test
-    public void findPostsByRelationshipsIsSuccessful() {
-        List<Relationship> relationships = ImmutableList.of(
-                new Relationship(user, anotherUser.getUUID(), convertUsersToUniqueId(user, anotherUser), 1),
-                new Relationship(user, anotherOtherUser.getUUID(), convertUsersToUniqueId(user, anotherOtherUser), 0));
-        when(relationshipRepository.findRelationshipsByUserId(any())).thenReturn(relationships);
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
-        when(postRepository.findAll()).thenReturn(ImmutableList.of(post, anotherPost, anotherOtherPost));
-
-        List<Post> posts = postService.findPostsByRelationships();
-        assertThat(posts.size()).isEqualTo(1);
-        assertTrue(posts.get(0).getPost().equals("hola"));
-    }*/
-
     @Test
     public void findPostByRelationships_returnsEmptyList_ifNoRelationshipsFound() {
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
@@ -149,22 +135,5 @@ public class PostServiceTest {
 
         List<Post> posts = postService.findPostsByRelationships();
         assertThat(posts.size()).isEqualTo(0);
-    }
-
-    /*@Test
-    public void findPostByRelationships_returnsEmptyList_ifNoPostsFound() {
-        List<Relationship> relationships = ImmutableList.of(
-                new Relationship(user, anotherUser.getUUID(), convertUsersToUniqueId(user, anotherUser), 1),
-                new Relationship(user, anotherOtherUser.getUUID(), convertUsersToUniqueId(user, anotherOtherUser), 0));
-        when(relationshipRepository.findRelationshipsByUserId(any())).thenReturn(relationships);
-        when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user.getUUID());
-        when(postRepository.findAll()).thenReturn(ImmutableList.of());
-
-        List<Post> posts = postService.findPostsByRelationships();
-        assertThat(posts.size()).isEqualTo(0);
-    }*/
-
-    private String convertUsersToUniqueId(User user1, User user2) {
-        return user1.getUUID().toString() + "," + user2.getUUID().toString();
     }
 }

@@ -28,19 +28,19 @@ import static org.mockito.Mockito.when;
 public class LoginServiceTest {
 
     @Mock
-    JWTTokenUtil jwtTokenUtil;
+    private JWTTokenUtil jwtTokenUtil;
     @Mock
-    ExtendedUser extendedUser;
+    private ExtendedUser extendedUser;
     @Mock
-    User user;
+    private User user;
     @Mock
-    ExtendedUserDetails userDetails;
+    private ExtendedUserDetails userDetails;
     @Mock
-    ExtendedUserDetailsService extendedUserDetailsService;
+    private ExtendedUserDetailsService extendedUserDetailsService;
     @Mock
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @InjectMocks
-    LoginServiceImpl loginService;
+    private LoginServiceImpl loginService;
 
     @Test
     public void loginIsSuccessful() throws Exception {
