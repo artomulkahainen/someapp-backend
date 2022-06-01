@@ -2,6 +2,7 @@ package com.someapp.backend.IT;
 
 import com.someapp.backend.dto.DeclineRelationshipRequest;
 import com.someapp.backend.dto.SaveRelationshipDTO;
+import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.utils.requests.LoginRequest;
 import org.json.JSONObject;
@@ -21,7 +22,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.someapp.backend.testUtility.Format.asJsonString;
 import static org.junit.Assert.assertFalse;
@@ -69,6 +72,7 @@ public class RelationshipControllerTest {
     public void sendNewRelationshipRequestIsSuccessful() throws Exception {
         String actionUserId = "609b08a3-356d-40d8-9a87-b4e1d47abf4d";
         String relationshipWithId = "12bffa51-9899-497b-b41a-2b71d8c42629";
+        String uniqueId = actionUserId + "," + relationshipWithId;
 
         mvc
                 .perform(post("/saveNewRelationshipByUsingPOST")
@@ -78,7 +82,7 @@ public class RelationshipControllerTest {
                         })
                         .content(asJsonString(new SaveRelationshipDTO(
                                 UUID.fromString(relationshipWithId),
-                                actionUserId + "," + relationshipWithId,
+                                uniqueId,
                                 0)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -86,6 +90,10 @@ public class RelationshipControllerTest {
                 .andExpect(jsonPath("$.status").value("0"))
                 .andExpect(jsonPath("$.uniqueId").value(actionUserId + "," + relationshipWithId))
                 .andExpect(jsonPath("$.createdDate").isNotEmpty());
+
+        List<Relationship> relationships = repository.findRelationshipsByUniqueId(uniqueId);
+        assertTrue(relationships.size() == 2);
+        assertFalse(relationships.stream().anyMatch(relationship -> relationship.getStatus() == 1));
     }
 
     @Test
@@ -142,10 +150,10 @@ public class RelationshipControllerTest {
                 .andExpect(jsonPath("$.uniqueId")
                         .value(uniqueId));
 
-        assertTrue(repository.findRelationshipsByUniqueId(uniqueId)
-                .stream().anyMatch(relationship -> relationship.getStatus() == 1));
-        assertFalse(repository.findRelationshipsByUniqueId(uniqueId)
-                .stream().anyMatch(relationship -> relationship.getStatus() == 0));
+        List<Relationship> relationships = repository.findRelationshipsByUniqueId(uniqueId);
+        assertTrue(relationships.size() == 2);
+        assertTrue(relationships.stream().anyMatch(relationship -> relationship.getStatus() == 1));
+        assertFalse(relationships.stream().anyMatch(relationship -> relationship.getStatus() == 0));
     }
 
     @Test
@@ -215,6 +223,132 @@ public class RelationshipControllerTest {
                 .andExpect(jsonPath("$.errors").isNotEmpty())
                 .andExpect(jsonPath("$.errors[0]")
                         .value("Only own relationships can be declined."));
+    }
+
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    @Sql(value = { "/db/users.sql", "/db/relationships.sql"})
+    public void blockingUserUpdatesOnlyOneRelationship() throws Exception {
+        String relationshipWithId = "a4b35fdd-441e-4691-9a03-cb0b2a4822a2";
+        String uniqueId = "a4b35fdd-441e-4691-9a03-cb0b2a4822a2,609b08a3-356d-40d8-9a87-b4e1d47abf4d";
+
+        mvc
+                .perform(post("/saveNewRelationshipByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new SaveRelationshipDTO(
+                                UUID.fromString(relationshipWithId),
+                                uniqueId,
+                                2)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("2"))
+                .andExpect(jsonPath("$.uniqueId").value(uniqueId))
+                .andExpect(jsonPath("$.createdDate").isNotEmpty());
+
+        List<Relationship> relationships = repository.findRelationshipsByUniqueId(uniqueId);
+        List<Integer> statuses = relationships.stream().map(Relationship::getStatus).collect(Collectors.toList());
+        assertTrue(relationships.size() == 2);
+        assertTrue(statuses.contains(0));
+        assertTrue(statuses.contains(2));
+    }
+
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    @Sql(value = {"/db/users.sql", "/db/relationships.sql"})
+    public void decliningBlockedRelationshipRequestDeletesOnlyPendingRelationship_ifDeclinerIsBlockedUser()
+            throws Exception {
+        String uniqueId = "609b08a3-356d-40d8-9a87-b4e1d47abf4d,5b351688-23a7-40f0-b01a-54fe80a2bce1";
+
+        mvc
+                .perform(post("/declineRelationshipByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new DeclineRelationshipRequest(uniqueId)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(200));
+
+        List<Relationship> relationships = repository.findRelationshipsByUniqueId(uniqueId);
+        assertTrue(relationships.size() == 1);
+        assertTrue(relationships.get(0).getStatus() == 2);
+    }
+
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    @Sql(value = {"/db/users.sql", "/db/relationships.sql"})
+    public void decliningBlockedRelationshipDeletesBothRelationships_ifDeclinerIsBlockingUser()
+            throws Exception {
+        String uniqueId = "12aea45a-442c-4646-8ccf-5f1cf62f3129,609b08a3-356d-40d8-9a87-b4e1d47abf4d";
+
+        mvc
+                .perform(post("/declineRelationshipByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new DeclineRelationshipRequest(uniqueId)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(200));
+
+        assertTrue(repository.findRelationshipsByUniqueId(uniqueId).isEmpty());
+    }
+
+    @Test
+    @WithMockUser(username = "kalleKustaa")
+    @Transactional
+    @Sql(value = {"/db/users.sql", "/db/relationships.sql"})
+    public void cannotDeleteBlockerUsersRelationship_ByDecliningPreviousAndCreatingNewOne()
+            throws Exception {
+        String relationshipWithId = "5b351688-23a7-40f0-b01a-54fe80a2bce1";
+        String uniqueId = "609b08a3-356d-40d8-9a87-b4e1d47abf4d,5b351688-23a7-40f0-b01a-54fe80a2bce1";
+
+        mvc
+                .perform(post("/declineRelationshipByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new DeclineRelationshipRequest(uniqueId)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(200));
+
+        List<Relationship> relationships = repository.findRelationshipsByUniqueId(uniqueId);
+        assertTrue(relationships.size() == 1);
+        assertTrue(relationships.get(0).getStatus() == 2);
+
+        mvc
+                .perform(post("/saveNewRelationshipByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(asJsonString(new SaveRelationshipDTO(
+                                UUID.fromString(relationshipWithId),
+                                uniqueId,
+                                0)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        relationships = repository.findRelationshipsByUniqueId(uniqueId);
+        List<Integer> statuses = relationships.stream().map(Relationship::getStatus).collect(Collectors.toList());
+        assertTrue(relationships.size() == 2);
+        assertTrue(statuses.contains(0));
+        assertTrue(statuses.contains(2));
     }
 
 }

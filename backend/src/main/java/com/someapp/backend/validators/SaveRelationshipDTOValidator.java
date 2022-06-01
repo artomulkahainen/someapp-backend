@@ -75,14 +75,26 @@ public class SaveRelationshipDTOValidator implements Validator {
         return !relationships.isEmpty() || !rs.isEmpty();
     }
 
+    private boolean relationshipIsBlocked(SaveRelationshipDTO dto) {
+        String reversedId = dto.getNonActionUserId() + "," + dto.getActionUserId();
+        List<Relationship> relationships = relationshipService.findRelationshipsByUniqueId(dto.getUniqueId());
+        List<Relationship> rs = relationshipService.findRelationshipsByUniqueId(reversedId);
+
+        return relationshipExists(dto)
+                && (relationships.stream().anyMatch(r -> r.getStatus() == 2)
+                || rs.stream().anyMatch(r -> r.getStatus() == 2));
+    }
+
     private boolean exactRelationshipExists(SaveRelationshipDTO dto) {
         return relationshipService.findRelationshipsByUniqueId(dto.getUniqueId()).size() > 1;
     }
 
     private void validateStatusZero(SaveRelationshipDTO dto, Errors errors, UUID currentUserId) {
-        if (!relationshipExists(dto) && dto.getStatus() != 0) {
-            errors.reject("Only pending status is allowed for new relationship");
-        } else if (relationshipExists(dto)) {
+        // IF OTHER USER HAVE BLOCKED ACTION USER AND ACTION USER HAVE ALREADY ONE PENDING RELATIONSHIP
+        if (exactRelationshipExists(dto)) {
+            errors.reject("Existing relationship cannot be changed to pending " +
+                    "or new pending relationship cannot be created if existing is found.");
+        } else if (relationshipExists(dto) && !relationshipIsBlocked(dto)) {
             errors.reject("Existing relationship cannot be changed to pending " +
                     "or new pending relationship cannot be created if existing is found.");
         } else if (!dto.getActionUserId().equals(currentUserId)) {

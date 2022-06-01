@@ -51,19 +51,37 @@ public class RelationshipServiceImpl implements RelationshipService {
         if (status != 2 && !existingBlockedRelationship) {
             // First save the relationshipWith user's relationship
             Relationship otherUsersRelationship = relationshipMapper
-                    .mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, status == 1);
+                    .mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, true);
             relationshipRepository.save(otherUsersRelationship);
         }
 
         return relationshipRepository.save(
                 relationshipMapper.mapSaveRelationshipDTOToRelationship(saveRelationshipDTO,
-                        status == 0));
+                        false));
     }
 
     @Override
     @Transactional
-    public StatusResponse declineRelationshipRequest(String uniqueId) {
-        relationshipRepository.deleteRelationshipByUniqueId(uniqueId);
+    public StatusResponse declineRelationshipRequest(String uniqueId, UUID declinerUUID) {
+        List<Relationship> relationships = relationshipRepository.findRelationshipsByUniqueId(uniqueId);
+        boolean declinerIsNotBlockerUser = !uniqueId.split(",")[1].equals(declinerUUID.toString());
+        boolean relationshipIsBlocked = relationships.stream().anyMatch(r -> r.getStatus() == 2);
+
+        /**
+         * IF RELATIONSHIP IS BLOCKED AND DECLINER IS NOT BLOCKER USER,
+         * DELETE ONLY BLOCKED USER'S PENDING RELATIONSHIP
+         ***/
+
+        if (relationshipIsBlocked && declinerIsNotBlockerUser) {
+            Relationship rsToDelete = relationships.stream()
+                    .filter(r -> r.getStatus() == 0).findFirst().get();
+            relationshipRepository.delete(rsToDelete);
+
+        // OTHERWISE DELETE RELATIONSHIPS WITH GIVEN UNIQUEID
+        } else {
+            relationshipRepository.deleteRelationshipByUniqueId(uniqueId);
+        }
+
         return new StatusResponse(200);
     }
 
