@@ -4,7 +4,7 @@
 
 * [About the Project](#about-the-project)
     * [Built With](#built-with)
-* [Link to Heroku](#heroku-link)
+* [How to run dev environment](#how-to-run-dev-environment)
 
 ## About The Project
 
@@ -15,9 +15,9 @@ I'm building this social media app for mobile devices. The purpose of this proje
 
 * Spring Boot 3 (Java)
 * PostgreSQL 14
+* Docker
 
-## Link to Heroku
-I'm going to upload the backend to heroku somewhere in the future.
+## How to run dev environment
 
 To run development mode, you can use Docker to create db.
 Otherwise you can install postgres v14 on local machine and use db-name gimmevibe and set username and password to postgres.
