@@ -8,6 +8,7 @@ import com.someapp.backend.utils.requests.FindUserByNameRequest;
 import com.someapp.backend.validators.DeleteUserRequestValidator;
 import com.someapp.backend.validators.UserSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,16 +53,13 @@ public class UserController implements UserApi {
     }
 
     @Override
+    @Transactional
     public DeleteResponse deleteUser(DeleteUserRequest request, BindingResult bindingResult) throws BindException {
         deleteValidator.validate(request, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-
-        /**
-         * Add transactional annotation and make sure to delete user's relationships
-         */
 
         return extendedUserDetailsService.deleteUser(request);
     }

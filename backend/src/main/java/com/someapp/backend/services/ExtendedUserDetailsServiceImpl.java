@@ -3,6 +3,7 @@ package com.someapp.backend.services;
 import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.entities.User;
+import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
@@ -17,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +31,9 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RelationshipRepository relationshipRepository;
 
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
@@ -86,8 +91,14 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
         }
     }
 
+    @Transactional
     public DeleteResponse deleteUser(DeleteUserRequest request) {
         User user = userRepository.findById(request.getUuid()).orElseThrow(ResourceNotFoundException::new);
+
+        // Delete all relationships with deleted user
+        relationshipRepository.deleteAll(relationshipRepository.findRelationshipsByRelationshipWith(user.getUUID()));
+
+        // Delete user
         userRepository.delete(user);
         return new DeleteResponse(request.getUuid(), "Successfully deleted user");
     }

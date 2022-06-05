@@ -1,7 +1,11 @@
 package com.someapp.backend.IT;
 
+import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.dto.UserSaveDTO;
+import com.someapp.backend.repositories.PostLikeRepository;
+import com.someapp.backend.repositories.PostRepository;
+import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.testUtility.Format;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
@@ -23,9 +27,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.UUID;
+
 import static com.someapp.backend.testUtility.Format.asJsonString;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertFalse;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +50,12 @@ public class UserControllerTest {
     private WebApplicationContext context;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private RelationshipRepository relationshipRepository;
+    @Autowired
+    private PostLikeRepository postLikeRepository;
+    @Autowired
+    private PostRepository postRepository;
     private MockMvc mvc;
     private String token;
 
@@ -126,6 +139,52 @@ public class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors[0]").value("Username is already in use"));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "kalleKustaa")
+    @Sql(value = { "/db/users.sql", "/db/relationships.sql", "/db/posts.sql", "/db/postlikes.sql"})
+    public void deletingOwnUserIsSuccessful() throws Exception {
+        UUID userId = UUID.fromString("609b08a3-356d-40d8-9a87-b4e1d47abf4d");
+        mvc.perform(post("/deleteUserByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(Format.asJsonString(new DeleteUserRequest(
+                                userId)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertFalse(repository.findByUsername("kalleKustaa").isPresent());
+        assertFalse(postRepository.findAll().stream().anyMatch(post -> post.getUserId().equals(userId)));
+        assertTrue(relationshipRepository.findRelationshipsByuser_id(userId).isEmpty());
+        assertFalse(postLikeRepository.findById(UUID.fromString("724df059-7e0c-43b2-a2a4-3375605d4098")).isPresent());
+        assertFalse(relationshipRepository.findAll().stream().anyMatch(rs -> rs.getRelationshipWith().equals(userId)));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "kalleKustaa")
+    @Sql("/db/users.sql")
+    public void cannotDeleteOtherUser() throws Exception {
+        UUID userId = UUID.fromString("12bffa51-9899-497b-b41a-2b71d8c42629");
+        mvc.perform(post("/deleteUserByUsingPOST")
+                        .with(request -> {
+                            request.addHeader("Authorization", "Bearer " + token);
+                            return request;
+                        })
+                        .content(Format.asJsonString(new DeleteUserRequest(
+                                userId)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors[0]")
+                        .value("User can only delete their own user account"));
     }
 
 }

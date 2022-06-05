@@ -10,4 +10,5 @@ public interface RelationshipRepository extends JpaRepository<Relationship, UUID
     List<Relationship> findRelationshipsByUniqueId(String uniqueId);
     List<Relationship> findRelationshipsByuser_id(UUID uuid);
     void deleteRelationshipByUniqueId(String uniqueId);
+    List<Relationship> findRelationshipsByRelationshipWith(UUID uuid);
 }
