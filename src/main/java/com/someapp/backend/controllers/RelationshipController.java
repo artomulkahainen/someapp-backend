@@ -63,6 +63,6 @@ public class RelationshipController implements RelationshipApi {
         final UUID declinerUUID = jwtTokenUtil.getIdFromToken(req);
 
         return relationshipService.declineRelationshipRequest(
-                declineRelationshipRequest.relationshipUniqueId(), declinerUUID);
+                declineRelationshipRequest.getRelationshipUniqueId(), declinerUUID);
     }
 }
