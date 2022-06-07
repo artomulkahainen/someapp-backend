@@ -5,10 +5,11 @@ import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,10 +20,8 @@ public class PostCommentDeleteDTOValidator implements Validator {
     private final PostCommentRepository postCommentRepository;
     private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
-    public PostCommentDeleteDTOValidator(PostCommentRepository postCommentRepository, JWTTokenUtil jwtTokenUtil) {
+    public PostCommentDeleteDTOValidator(final PostCommentRepository postCommentRepository,
+                                         final JWTTokenUtil jwtTokenUtil) {
         this.postCommentRepository = postCommentRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -33,11 +32,13 @@ public class PostCommentDeleteDTOValidator implements Validator {
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(final Object target, final Errors errors) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         final PostCommentDeleteDTO postCommentDeleteDTO = (PostCommentDeleteDTO) target;
 
-        Optional<PostComment> postComment = postCommentRepository.findById(postCommentDeleteDTO.getUuid());
+        final Optional<PostComment> postComment = postCommentRepository.findById(postCommentDeleteDTO.getUuid());
 
         if (postComment.isPresent() && postComment.get().getUserId() != actionUserId) {
             errors.reject("User can delete only their own post comments");

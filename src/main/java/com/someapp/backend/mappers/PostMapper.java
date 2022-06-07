@@ -15,10 +15,11 @@ import java.util.UUID;
 @Component
 public class PostMapper {
 
-    private ExtendedUserDetailsService userDetailsService;
-    private PostCommentMapper postCommentMapper;
+    private final ExtendedUserDetailsService userDetailsService;
+    private final PostCommentMapper postCommentMapper;
 
-    public PostMapper(ExtendedUserDetailsService userDetailsService, PostCommentMapper postCommentMapper) {
+    public PostMapper(final ExtendedUserDetailsService userDetailsService,
+                      final PostCommentMapper postCommentMapper) {
         this.userDetailsService = userDetailsService;
         this.postCommentMapper = postCommentMapper;
     }
@@ -48,7 +49,8 @@ public class PostMapper {
     }
 
     public Post mapSendPostRequestToPost(UUID actionUserId, SendPostRequest sendPostRequest) {
-        User user = userDetailsService.findUserById(actionUserId).orElseThrow(ResourceNotFoundException::new);
+        final User user = userDetailsService.findUserById(actionUserId)
+                .orElseThrow(ResourceNotFoundException::new);
         return new Post(sendPostRequest.getPost(), user);
     }
 }

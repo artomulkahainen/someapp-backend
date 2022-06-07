@@ -22,7 +22,8 @@ public class SaveRelationshipDTOValidator implements Validator {
     private RelationshipService relationshipService;
     private JWTTokenUtil jwtTokenUtil;
 
-    public SaveRelationshipDTOValidator(RelationshipService relationshipService, JWTTokenUtil jwtTokenUtil) {
+    public SaveRelationshipDTOValidator(final RelationshipService relationshipService,
+                                        final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -31,16 +32,17 @@ public class SaveRelationshipDTOValidator implements Validator {
         return SaveRelationshipDTO.class.isAssignableFrom(clazz);
     }
 
-    public void validate(Object target, Errors errors) {
-        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        SaveRelationshipDTO dto = (SaveRelationshipDTO) target;
-        Optional<Relationship> existingRelationship = relationshipService
+    public void validate(final Object target, final Errors errors) {
+        final HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+        final SaveRelationshipDTO dto = (SaveRelationshipDTO) target;
+        final Optional<Relationship> existingRelationship = relationshipService
                 .findRelationshipsByUniqueId(dto.getUniqueId())
                 .stream()
                 .filter(rs -> rs.getUser().getUUID().equals(jwtTokenUtil.getIdFromToken(req)))
                 .findFirst();
 
-        UUID currentUserId = jwtTokenUtil.getIdFromToken(req);
+        final UUID currentUserId = jwtTokenUtil.getIdFromToken(req);
 
         if (dto.getStatus() == 0) {
             /**
@@ -67,29 +69,31 @@ public class SaveRelationshipDTOValidator implements Validator {
 
     }
 
-    private boolean relationshipExists(SaveRelationshipDTO saveRelationshipDTO) {
-        String reversedId = saveRelationshipDTO.getNonActionUserId() + "," + saveRelationshipDTO.getActionUserId();
-        List<Relationship> relationships = relationshipService.findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
-        List<Relationship> rs = relationshipService.findRelationshipsByUniqueId(reversedId);
+    private boolean relationshipExists(final SaveRelationshipDTO saveRelationshipDTO) {
+        final String reversedId = saveRelationshipDTO.getNonActionUserId() + ","
+                + saveRelationshipDTO.getActionUserId();
+        final List<Relationship> relationships = relationshipService
+                .findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
+        final List<Relationship> rs = relationshipService.findRelationshipsByUniqueId(reversedId);
 
         return !relationships.isEmpty() || !rs.isEmpty();
     }
 
-    private boolean relationshipIsBlocked(SaveRelationshipDTO dto) {
-        String reversedId = dto.getNonActionUserId() + "," + dto.getActionUserId();
-        List<Relationship> relationships = relationshipService.findRelationshipsByUniqueId(dto.getUniqueId());
-        List<Relationship> rs = relationshipService.findRelationshipsByUniqueId(reversedId);
+    private boolean relationshipIsBlocked(final SaveRelationshipDTO dto) {
+        final String reversedId = dto.getNonActionUserId() + "," + dto.getActionUserId();
+        final List<Relationship> relationships = relationshipService.findRelationshipsByUniqueId(dto.getUniqueId());
+        final List<Relationship> rs = relationshipService.findRelationshipsByUniqueId(reversedId);
 
         return relationshipExists(dto)
                 && (relationships.stream().anyMatch(r -> r.getStatus() == 2)
                 || rs.stream().anyMatch(r -> r.getStatus() == 2));
     }
 
-    private boolean exactRelationshipExists(SaveRelationshipDTO dto) {
+    private boolean exactRelationshipExists(final SaveRelationshipDTO dto) {
         return relationshipService.findRelationshipsByUniqueId(dto.getUniqueId()).size() > 1;
     }
 
-    private void validateStatusZero(SaveRelationshipDTO dto, Errors errors, UUID currentUserId) {
+    private void validateStatusZero(final SaveRelationshipDTO dto, final Errors errors, final UUID currentUserId) {
         // IF OTHER USER HAVE BLOCKED ACTION USER AND ACTION USER HAVE ALREADY ONE PENDING RELATIONSHIP
         if (exactRelationshipExists(dto)) {
             errors.reject("Existing relationship cannot be changed to pending " +
@@ -102,7 +106,10 @@ public class SaveRelationshipDTOValidator implements Validator {
         }
     }
 
-    private void validateStatusOne(SaveRelationshipDTO dto, Errors errors, UUID currentUserId, Optional<Relationship> existing) {
+    private void validateStatusOne(final SaveRelationshipDTO dto,
+                                   final Errors errors,
+                                   final UUID currentUserId,
+                                   final Optional<Relationship> existing) {
         if (!exactRelationshipExists(dto)) {
             errors.reject("Cannot accept relationship that doesn't exist");
         } else if (existing.isPresent() && ImmutableList.of(1, 2).contains(existing.get().getStatus())) {
@@ -112,7 +119,10 @@ public class SaveRelationshipDTOValidator implements Validator {
         }
     }
 
-    private void validateStatusTwo(SaveRelationshipDTO dto, Errors errors, UUID currentUserId, Optional<Relationship> existing) {
+    private void validateStatusTwo(final SaveRelationshipDTO dto,
+                                   final Errors errors,
+                                   final UUID currentUserId,
+                                   final Optional<Relationship> existing) {
         if (!exactRelationshipExists(dto)) {
             errors.reject("Cannot block relationship that doesn't exist");
         } else if (!dto.getNonActionUserId().equals(currentUserId)) {

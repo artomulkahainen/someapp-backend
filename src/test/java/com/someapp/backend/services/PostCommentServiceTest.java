@@ -4,12 +4,11 @@ import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.entities.User;
+import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.repositories.PostRepository;
 import com.someapp.backend.repositories.UserRepository;
-import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -19,6 +18,9 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,8 +38,6 @@ public class PostCommentServiceTest {
     private PostCommentRepository postCommentRepository;
     @Mock
     private JWTTokenUtil jwtTokenUtil;
-    @Mock
-    private HttpServletRequest req;
     @InjectMocks
     private PostCommentServiceImpl postCommentService;
 
@@ -48,6 +48,9 @@ public class PostCommentServiceTest {
 
     @Test
     public void saveIsSuccessful() {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(req));
+
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         when(postRepository.findById(any())).thenReturn(Optional.of(new Post()));
         when(userRepository.findById(any())).thenReturn(Optional.of(new User()));

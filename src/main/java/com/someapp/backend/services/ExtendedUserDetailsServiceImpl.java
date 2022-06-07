@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,15 +41,12 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     private JWTTokenUtil jwtTokenUtil;
 
     @Autowired
-    private HttpServletRequest req;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public ExtendedUserDetails loadUserByUsername(String username) {
+    public ExtendedUserDetails loadUserByUsername(final String username) {
 
-        Optional<User> user = userRepository.findByUsername(username);
+        final Optional<User> user = userRepository.findByUsername(username);
 
         if (!user.isPresent()) {
             throw new UsernameNotFoundException("No such user: " + username);
@@ -61,16 +60,20 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
                 true,
                 true,
                 true,
-                Arrays.asList(user.get().isAdmin() ? new SimpleGrantedAuthority("ADMIN") : new SimpleGrantedAuthority("USER"))
+                Arrays.asList(user.get().isAdmin() ? new SimpleGrantedAuthority("ADMIN")
+                        : new SimpleGrantedAuthority("USER"))
         );
     }
 
     public User findOwnUserDetails() {
-        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req);
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
+        final String usernameFromToken = jwtTokenUtil.getUsernameFromToken(req);
         return userRepository.findByUsername(usernameFromToken).orElseThrow(RuntimeException::new);
     }
 
-    public List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest) {
+    public List<UserNameIdResponse> findUsersByName(final FindUserByNameRequest findUserByNameRequest) {
         return userRepository.findAll().stream()
                 .filter(user -> user.getUsername().contains(findUserByNameRequest.getUsername()))
                 .map(user -> new UserNameIdResponse(user.getId(), user.getUsername()))
@@ -78,11 +81,11 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
                 .collect(Collectors.toList());
     }
 
-    public Optional<User> findUserById(UUID uuid) {
+    public Optional<User> findUserById(final UUID uuid) {
         return userRepository.findById(uuid);
     }
 
-    public User save(User user) {
+    public User save(final User user) {
         try {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
@@ -92,8 +95,9 @@ public class ExtendedUserDetailsServiceImpl implements ExtendedUserDetailsServic
     }
 
     @Transactional
-    public DeleteResponse deleteUser(DeleteUserRequest request) {
-        User user = userRepository.findById(request.getUuid()).orElseThrow(ResourceNotFoundException::new);
+    public DeleteResponse deleteUser(final DeleteUserRequest request) {
+        final User user = userRepository.findById(request.getUuid())
+                .orElseThrow(ResourceNotFoundException::new);
 
         // Delete all relationships with deleted user
         relationshipRepository.deleteAll(relationshipRepository.findRelationshipsByRelationshipWith(user.getUUID()));

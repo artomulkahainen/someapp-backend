@@ -5,10 +5,11 @@ import com.someapp.backend.entities.Post;
 import com.someapp.backend.services.PostService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,10 +20,8 @@ public class DeletePostRequestValidator implements Validator {
     private final PostService postService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    HttpServletRequest req;
-
-    public DeletePostRequestValidator(PostService postService, JWTTokenUtil jwtTokenUtil) {
+    public DeletePostRequestValidator(final PostService postService,
+                                      final JWTTokenUtil jwtTokenUtil) {
         this.postService = postService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -33,9 +32,12 @@ public class DeletePostRequestValidator implements Validator {
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
-        DeletePostRequest request = (DeletePostRequest) target;
-        Optional<Post> postToDelete = postService.findPostById(request.getUuid());
+    public void validate(final Object target, final Errors errors) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
+        final DeletePostRequest request = (DeletePostRequest) target;
+        final Optional<Post> postToDelete = postService.findPostById(request.getUuid());
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
         if (postToDelete.isPresent() && !postToDelete.get().getUserId().equals(actionUserId)) {

@@ -9,31 +9,29 @@ import com.someapp.backend.services.ExtendedUserDetailsService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 
 @Component
 public class RelationshipMapper {
 
-    private RelationshipService relationshipService;
-    private ExtendedUserDetailsService userService;
-    private JWTTokenUtil jwtTokenUtil;
+    private final RelationshipService relationshipService;
+    private final ExtendedUserDetailsService userService;
+    private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
-    public RelationshipMapper(RelationshipService relationshipService,
-                              ExtendedUserDetailsService userService,
-                              JWTTokenUtil jwtTokenUtil) {
+    public RelationshipMapper(final RelationshipService relationshipService,
+                              final ExtendedUserDetailsService userService,
+                              final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public RelationshipDTO mapRelationshipToRelationshipDTO(Relationship relationship) {
+    public RelationshipDTO mapRelationshipToRelationshipDTO(final Relationship relationship) {
         return new RelationshipDTO(relationship.getUser().getUUID(),
                 relationship.getRelationshipWith(),
                 relationship.getUniqueId(),
@@ -42,17 +40,21 @@ public class RelationshipMapper {
                 relationship.getId());
     }
 
-    public List<RelationshipDTO> mapRelationshipsToRelationshipDTOs(List<Relationship> relationships) {
+    public List<RelationshipDTO> mapRelationshipsToRelationshipDTOs(final List<Relationship> relationships) {
         return relationships.stream()
                 .map(relationship -> mapRelationshipToRelationshipDTO(relationship))
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public Relationship mapSaveRelationshipDTOToRelationship(SaveRelationshipDTO saveRelationshipDTO, boolean saveOther) {
-        List<Relationship> relationshipsByUniqueId = relationshipService.findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
+    public Relationship mapSaveRelationshipDTOToRelationship(final SaveRelationshipDTO saveRelationshipDTO,
+                                                             final boolean saveOther) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+        final List<Relationship> relationshipsByUniqueId = relationshipService
+                .findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
 
         // find relationship with given unique id or create new relationship
-        Relationship relationship = relationshipsByUniqueId
+        final Relationship relationship = relationshipsByUniqueId
                 .stream()
                 .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(saveOther
                         ? rs.getRelationshipWith() : rs.getUser().getUUID()))
@@ -60,7 +62,7 @@ public class RelationshipMapper {
 
         // If relationship is new
         if (relationship.getUUID() == null) {
-            User user = userService.findUserById(saveOther
+            final User user = userService.findUserById(saveOther
                             ? saveRelationshipDTO.getRelationshipWithId() : jwtTokenUtil.getIdFromToken(req))
                     .orElseThrow(ResourceNotFoundException::new);
             relationship.setUser(user);

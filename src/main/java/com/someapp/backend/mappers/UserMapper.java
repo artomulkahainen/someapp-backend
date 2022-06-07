@@ -12,13 +12,15 @@ public class UserMapper {
     private final PostLikeMapper postLikeMapper;
     private final RelationshipMapper relationshipMapper;
 
-    public UserMapper(PostMapper postMapper, PostLikeMapper postLikeMapper, RelationshipMapper relationshipMapper) {
+    public UserMapper(final PostMapper postMapper,
+                      final PostLikeMapper postLikeMapper,
+                      final RelationshipMapper relationshipMapper) {
         this.postMapper = postMapper;
         this.postLikeMapper = postLikeMapper;
         this.relationshipMapper = relationshipMapper;
     }
 
-    public UserDTO mapUserToUserDTO(User user) {
+    public UserDTO mapUserToUserDTO(final User user) {
         return new UserDTO(
                 user.getUUID(),
                 user.getCreatedDate(),
@@ -30,7 +32,7 @@ public class UserMapper {
         );
     }
 
-    public User mapUserSaveDTOToUser(UserSaveDTO userSaveDTO) {
+    public User mapUserSaveDTOToUser(final UserSaveDTO userSaveDTO) {
         return new User(userSaveDTO.getUsername(), userSaveDTO.getPassword());
     }
 }

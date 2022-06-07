@@ -24,12 +24,12 @@ public class PostLikeServiceImpl implements PostLikeService {
     PostLikeMapper postLikeMapper;
 
     @Override
-    public PostLike save(LikePostRequest likePostRequest) {
+    public PostLike save(final LikePostRequest likePostRequest) {
         return postLikeRepository.save(postLikeMapper.mapLikePostRequestToPostLike(likePostRequest));
     }
 
     @Override
-    public DeleteResponse delete(UnlikePostRequest unlikePostRequest) {
+    public DeleteResponse delete(final UnlikePostRequest unlikePostRequest) {
         postLikeRepository.findById(unlikePostRequest.getUuid())
                 .orElseThrow(ResourceNotFoundException::new);
         postLikeRepository.deleteById(unlikePostRequest.getUuid());
@@ -37,19 +37,19 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
 
     @Override
-    public Optional<PostLike> findPostLikeById(UUID uuid) {
+    public Optional<PostLike> findPostLikeById(final UUID uuid) {
         return postLikeRepository.findById(uuid);
     }
 
     @Override
-    public boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest) {
+    public boolean likeAlreadyExists(final UUID actionUserId, final LikePostRequest likePostRequest) {
         return postLikeRepository
                 .findAll()
                 .stream()
                 .anyMatch(like -> likeMatches(actionUserId, likePostRequest.getPostId(), like));
     }
 
-    private boolean likeMatches(UUID actionUserId, UUID postId, PostLike like) {
+    private boolean likeMatches(final UUID actionUserId, final UUID postId, final PostLike like) {
         return Objects.equals(postId, like.getPostId()) && Objects.equals(actionUserId, like.getUserId());
     }
 }

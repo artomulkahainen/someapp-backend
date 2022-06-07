@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 
@@ -36,38 +38,41 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
     @Override
-    public Post save(SendPostRequest sendPostRequest) {
-        UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
+    public Post save(final SendPostRequest sendPostRequest) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
+        final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         return postRepository.save(postMapper.mapSendPostRequestToPost(actionUserId, sendPostRequest));
     }
 
     @Override
-    public DeleteResponse delete(DeletePostRequest deletePostRequest) {
-        Post postToDelete = postRepository.findById(deletePostRequest.getUuid())
+    public DeleteResponse delete(final DeletePostRequest deletePostRequest) {
+        final Post postToDelete = postRepository.findById(deletePostRequest.getUuid())
                 .orElseThrow(ResourceNotFoundException::new);
         postRepository.delete(postToDelete);
         return new DeleteResponse(deletePostRequest.getUuid(), "Successfully deleted post");
     }
 
     @Override
-    public Optional<Post> findPostById(UUID uuid) {
+    public Optional<Post> findPostById(final UUID uuid) {
         return postRepository.findById(uuid);
     }
 
     @Override
     public List<Post> findPostsByRelationships() {
-        List<UUID> ownActiveRelationships = relationshipRepository
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
+        final List<UUID> ownActiveRelationships = relationshipRepository
                 .findRelationshipsByuser_id(jwtTokenUtil.getIdFromToken(req))
                 .stream()
                 .filter(relationship -> relationship.getStatus() == 1)
                 .map(Relationship::getRelationshipWith)
                 .collect(ImmutableList.toImmutableList());
 
-        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
+        final Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
 
         return postRepository
                 .findAll()

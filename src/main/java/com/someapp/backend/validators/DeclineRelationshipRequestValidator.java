@@ -21,7 +21,8 @@ public class DeclineRelationshipRequestValidator implements Validator {
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public DeclineRelationshipRequestValidator(RelationshipService relationshipService, JWTTokenUtil jwtTokenUtil) {
+    public DeclineRelationshipRequestValidator(final RelationshipService relationshipService,
+                                               final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }

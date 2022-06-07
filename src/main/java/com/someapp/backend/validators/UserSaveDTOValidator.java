@@ -11,7 +11,7 @@ public class UserSaveDTOValidator implements Validator {
 
     private final UserRepository userRepository;
 
-    public UserSaveDTOValidator(UserRepository userRepository) {
+    public UserSaveDTOValidator(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -21,7 +21,7 @@ public class UserSaveDTOValidator implements Validator {
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(final Object target, final Errors errors) {
         final UserSaveDTO userSaveDTO = (UserSaveDTO) target;
 
         // USERNAME IS UNIQUE

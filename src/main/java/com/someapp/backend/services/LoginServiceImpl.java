@@ -26,7 +26,8 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private ExtendedUserDetailsService extendedUserDetailsService;
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(final String username,
+                              final String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
@@ -37,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public ResponseEntity<?> login(LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<?> login(final LoginRequest loginRequest) throws Exception {
         authenticate(loginRequest.getUsername(), loginRequest.getPassword());
 
         final ExtendedUserDetails userDetails = extendedUserDetailsService

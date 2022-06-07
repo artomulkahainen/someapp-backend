@@ -15,15 +15,16 @@ import java.util.UUID;
 @Component
 public class PostCommentMapper {
 
-    private PostRepository postRepository;
-    private UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostCommentMapper(PostRepository postRepository, UserRepository userRepository) {
+    public PostCommentMapper(final PostRepository postRepository,
+                             final UserRepository userRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
 
-    public PostCommentDTO mapPostCommentToPostCommentDTO(PostComment postComment) {
+    public PostCommentDTO mapPostCommentToPostCommentDTO(final PostComment postComment) {
         return new PostCommentDTO(
                 postComment.getUUID(),
                 postComment.getCreatedDate(),
@@ -33,7 +34,8 @@ public class PostCommentMapper {
         );
     }
 
-    public PostComment mapPostCommentSaveDTOToPostComment(UUID actionUserId, PostCommentSaveDTO postCommentSaveDTO) {
+    public PostComment mapPostCommentSaveDTOToPostComment(final UUID actionUserId,
+                                                          final PostCommentSaveDTO postCommentSaveDTO) {
         Post post = postRepository.findById(postCommentSaveDTO.getPostId())
                 .orElseThrow(ResourceNotFoundException::new);
         User user = userRepository.findById(actionUserId).orElseThrow(ResourceNotFoundException::new);
