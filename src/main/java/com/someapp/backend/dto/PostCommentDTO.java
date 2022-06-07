@@ -9,16 +9,16 @@ import java.util.UUID;
 
 public class PostCommentDTO extends BaseDTO {
 
-    private String postComment;
-    private UUID postId;
-    private UUID userId;
+    private final String postComment;
+    private final UUID postId;
+    private final UUID userId;
 
     @JsonCreator
-    public PostCommentDTO(@JsonProperty("uuid") UUID uuid,
-                          @JsonProperty("createdDate") Date date,
-                          @JsonProperty("postComment") String postComment,
-                          @JsonProperty("postId") UUID postId,
-                          @JsonProperty("userId") UUID userId) {
+    public PostCommentDTO(@JsonProperty("uuid") final UUID uuid,
+                          @JsonProperty("createdDate") final Date date,
+                          @JsonProperty("postComment") final String postComment,
+                          @JsonProperty("postId") final UUID postId,
+                          @JsonProperty("userId") final UUID userId) {
         super(uuid, date);
         this.postComment = postComment;
         this.postId = postId;
@@ -29,23 +29,11 @@ public class PostCommentDTO extends BaseDTO {
         return postComment;
     }
 
-    public void setPostComment(String postComment) {
-        this.postComment = postComment;
-    }
-
     public UUID getPostId() {
         return postId;
     }
 
-    public void setPostId(UUID postId) {
-        this.postId = postId;
-    }
-
     public UUID getUserId() {
         return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 }

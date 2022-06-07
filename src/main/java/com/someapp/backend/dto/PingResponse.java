@@ -6,10 +6,10 @@ import java.util.Date;
 
 public class PingResponse {
 
-    private HttpStatus httpStatus;
-    private Date date;
+    private final HttpStatus httpStatus;
+    private final Date date;
 
-    public PingResponse(HttpStatus httpStatus, Date date) {
+    public PingResponse(final HttpStatus httpStatus, final Date date) {
         this.httpStatus = httpStatus;
         this.date = date;
     }

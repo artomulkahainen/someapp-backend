@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DeclineRelationshipRequest {
 
-    private String relationshipUniqueId;
+    private final String relationshipUniqueId;
 
     @JsonCreator
-    public DeclineRelationshipRequest(@JsonProperty("relationshipUniqueId") String relationshipUniqueId) {
+    public DeclineRelationshipRequest(
+            @JsonProperty("relationshipUniqueId") final String relationshipUniqueId) {
         this.relationshipUniqueId = relationshipUniqueId;
     }
 

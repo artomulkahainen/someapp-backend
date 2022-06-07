@@ -7,13 +7,14 @@ import java.util.UUID;
 
 public class RelationshipDTO extends BaseDTO {
 
-    private UUID userId;
-    private UUID relationshipWithId;
-    private String uniqueId;
-    private int status;
+    private final UUID userId;
+    private final UUID relationshipWithId;
+    private final String uniqueId;
+    private final int status;
 
-    public RelationshipDTO(UUID userId, UUID relationshipWithId,
-                           String uniqueId, int status, Date createdDate, UUID relationshipId) {
+    public RelationshipDTO(final UUID userId, final UUID relationshipWithId,
+                           final String uniqueId, final int status,
+                           final Date createdDate, final UUID relationshipId) {
         super(relationshipId, createdDate);
         this.userId = userId;
         this.relationshipWithId = relationshipWithId;
@@ -25,31 +26,15 @@ public class RelationshipDTO extends BaseDTO {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
     public UUID getRelationshipWithId() {
         return relationshipWithId;
-    }
-
-    public void setRelationshipWithId(UUID relationshipWithId) {
-        this.relationshipWithId = relationshipWithId;
     }
 
     public String getUniqueId() {
         return uniqueId;
     }
 
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
     public int getStatus() {
         return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }

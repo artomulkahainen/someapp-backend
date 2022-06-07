@@ -7,9 +7,9 @@ import java.util.UUID;
 
 public class PostLikeDTO extends BaseDTO {
 
-    private UUID postId;
+    private final UUID postId;
 
-    public PostLikeDTO(UUID uuid, Date createdDate, UUID postId) {
+    public PostLikeDTO(final UUID uuid, final Date createdDate, final UUID postId) {
         super(uuid, createdDate);
         this.postId = postId;
     }

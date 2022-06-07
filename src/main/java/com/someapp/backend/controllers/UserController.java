@@ -36,12 +36,13 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest) {
+    public List<UserNameIdResponse> findUsersByName(final FindUserByNameRequest findUserByNameRequest) {
         return extendedUserDetailsService.findUsersByName(findUserByNameRequest);
     }
 
     @Override
-    public UserDTO saveNewUser(UserSaveDTO userSaveDTO, BindingResult bindingResult) throws BindException {
+    public UserDTO saveNewUser(final UserSaveDTO userSaveDTO,
+                               final BindingResult bindingResult) throws BindException {
         saveValidator.validate(userSaveDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -54,7 +55,8 @@ public class UserController implements UserApi {
 
     @Override
     @Transactional
-    public DeleteResponse deleteUser(DeleteUserRequest request, BindingResult bindingResult) throws BindException {
+    public DeleteResponse deleteUser(final DeleteUserRequest request,
+                                     final BindingResult bindingResult) throws BindException {
         deleteValidator.validate(request, bindingResult);
 
         if (bindingResult.hasErrors()) {

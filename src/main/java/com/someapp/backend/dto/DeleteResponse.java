@@ -4,14 +4,10 @@ import java.util.UUID;
 
 public class DeleteResponse {
 
-    public String message;
-    public UUID id;
+    private final String message;
+    private final UUID id;
 
-    public DeleteResponse(String message) {
-        this.message = message;
-    }
-
-    public DeleteResponse(UUID id, String message) {
+    public DeleteResponse(final UUID id, final String message) {
         this.id = id;
         this.message = message;
     }
@@ -20,15 +16,7 @@ public class DeleteResponse {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

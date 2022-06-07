@@ -9,7 +9,7 @@ import java.util.UUID;
 public class PostCommentDeleteDTO extends UuidDTO {
 
     @JsonCreator
-    public PostCommentDeleteDTO(@JsonProperty("uuid") UUID uuid) {
+    public PostCommentDeleteDTO(@JsonProperty("uuid") final UUID uuid) {
         super(uuid);
     }
 }

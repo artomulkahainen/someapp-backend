@@ -11,18 +11,18 @@ import java.util.UUID;
 public class SaveRelationshipDTO {
 
     @NotNull
-    private UUID relationshipWithId;
+    private final UUID relationshipWithId;
     @NotNull
-    private String uniqueId;
+    private final String uniqueId;
     @NotNull
     @Min(0)
     @Max(2)
-    private int status;
+    private final int status;
 
     @JsonCreator
-    public SaveRelationshipDTO(@JsonProperty("relationshipWithId") UUID relationshipWithId,
-                               @JsonProperty("uniqueId") String uniqueId,
-                               @JsonProperty("status") int status) {
+    public SaveRelationshipDTO(@JsonProperty("relationshipWithId") final UUID relationshipWithId,
+                               @JsonProperty("uniqueId") final String uniqueId,
+                               @JsonProperty("status") final int status) {
         this.relationshipWithId = relationshipWithId;
         this.uniqueId = uniqueId;
         this.status = status;
@@ -32,24 +32,12 @@ public class SaveRelationshipDTO {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public UUID getRelationshipWithId() {
         return relationshipWithId;
     }
 
-    public void setRelationshipWithId(UUID relationshipWithId) {
-        this.relationshipWithId = relationshipWithId;
-    }
-
     public String getUniqueId() {
         return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
     }
 
     public UUID getActionUserId() {

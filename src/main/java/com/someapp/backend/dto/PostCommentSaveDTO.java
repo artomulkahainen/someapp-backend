@@ -13,13 +13,13 @@ public class PostCommentSaveDTO {
     @Size(min = 1, max = 250, message = "Post comments must be between 1-250 characters.")
     @NotNull
     @NotEmpty
-    private String postComment;
+    private final String postComment;
     @NotNull
-    private UUID postId;
+    private final UUID postId;
 
     @JsonCreator
-    public PostCommentSaveDTO(@JsonProperty("postComment") String postComment,
-                              @JsonProperty("postId") UUID postId) {
+    public PostCommentSaveDTO(@JsonProperty("postComment") final String postComment,
+                              @JsonProperty("postId") final UUID postId) {
         this.postComment = postComment;
         this.postId = postId;
     }

@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserSaveDTO {
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
     @JsonCreator
-    public UserSaveDTO(@JsonProperty("username") String username, @JsonProperty("password") String password) {
+    public UserSaveDTO(@JsonProperty("username") final String username,
+                       @JsonProperty("password") final String password) {
         this.username = username;
         this.password = password;
     }

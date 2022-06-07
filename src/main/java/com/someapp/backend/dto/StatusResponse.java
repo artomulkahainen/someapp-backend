@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StatusResponse {
 
-    private Integer status;
+    private final Integer status;
 
     @JsonCreator
-    public StatusResponse(@JsonProperty("status") Integer status) {
+    public StatusResponse(@JsonProperty("status") final Integer status) {
         this.status = status;
     }
 

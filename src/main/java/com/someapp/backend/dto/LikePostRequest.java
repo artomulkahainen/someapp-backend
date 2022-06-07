@@ -9,13 +9,13 @@ import java.util.UUID;
 public class LikePostRequest {
 
     @NotNull
-    private UUID postUserId;
+    private final UUID postUserId;
     @NotNull
-    private UUID postId;
+    private final UUID postId;
 
     @JsonCreator
-    public LikePostRequest(@JsonProperty("postUserId") UUID postUserId,
-                           @JsonProperty("postId") UUID postId) {
+    public LikePostRequest(@JsonProperty("postUserId") final UUID postUserId,
+                           @JsonProperty("postId") final UUID postId) {
         this.postUserId = postUserId;
         this.postId = postId;
     }
@@ -24,16 +24,7 @@ public class LikePostRequest {
         return postUserId;
     }
 
-    public void setUserId(UUID userId) {
-        this.postUserId = userId;
-    }
-
     public UUID getPostId() {
         return postId;
     }
-
-    public void setPostId(UUID postId) {
-        this.postId = postId;
-    }
-
 }
