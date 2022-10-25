@@ -3,22 +3,20 @@ package com.someapp.backend.validators;
 import com.someapp.backend.dto.DeleteUserRequest;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Objects;
 
 @Component
 public class DeleteUserRequestValidator implements Validator {
 
-    private JWTTokenUtil jwtTokenUtil;
+    private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
-    public DeleteUserRequestValidator(JWTTokenUtil jwtTokenUtil) {
+    public DeleteUserRequestValidator(final JWTTokenUtil jwtTokenUtil) {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -26,8 +24,10 @@ public class DeleteUserRequestValidator implements Validator {
         return DeleteUserRequest.class.isAssignableFrom(clazz);
     }
 
-    public void validate(Object target, Errors errors) {
-        DeleteUserRequest request = (DeleteUserRequest) target;
+    public void validate(final Object target, final Errors errors) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+        final DeleteUserRequest request = (DeleteUserRequest) target;
 
         if (!Objects.equals(jwtTokenUtil.getIdFromToken(req), request.getUuid())) {
             errors.reject("User can only delete their own user account");

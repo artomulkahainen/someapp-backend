@@ -1,15 +1,16 @@
 package com.someapp.backend.services;
 
+import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
-import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.mappers.PostCommentMapper;
+import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.dto.DeleteResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.UUID;
 
@@ -20,9 +21,6 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final PostCommentMapper postCommentMapper;
     private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
     public PostCommentServiceImpl(PostCommentRepository postCommentRepository,
                                   PostCommentMapper postCommentMapper,
                                   JWTTokenUtil jwtTokenUtil) {
@@ -32,13 +30,16 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostComment save(PostCommentSaveDTO postCommentSaveDTO) {
+    public PostComment save(final PostCommentSaveDTO postCommentSaveDTO) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
         return postCommentRepository.save(postCommentMapper.mapPostCommentSaveDTOToPostComment(
                 jwtTokenUtil.getIdFromToken(req), postCommentSaveDTO));
     }
 
     @Override
-    public DeleteResponse delete(UUID postCommentId) {
+    public DeleteResponse delete(final UUID postCommentId) {
         PostComment commentToDelete = postCommentRepository.findById(postCommentId)
                 .orElseThrow(ResourceNotFoundException::new);
 

@@ -6,10 +6,11 @@ import com.someapp.backend.services.PostService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -21,12 +22,9 @@ public class PostCommentSaveDTOValidator implements Validator {
     private final PostService postService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
-    public PostCommentSaveDTOValidator(RelationshipService relationshipService,
-                                       PostService postService,
-                                       JWTTokenUtil jwtTokenUtil) {
+    public PostCommentSaveDTOValidator(final RelationshipService relationshipService,
+                                       final PostService postService,
+                                       final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.postService = postService;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -38,7 +36,10 @@ public class PostCommentSaveDTOValidator implements Validator {
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(final Object target, final Errors errors) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         final PostCommentSaveDTO postCommentSaveDTO = (PostCommentSaveDTO) target;
         final Optional<Post> post = postService.findPostById(postCommentSaveDTO.getPostId());

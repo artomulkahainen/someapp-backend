@@ -7,7 +7,6 @@ import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.utils.requests.FindUserByNameRequest;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +39,6 @@ public class ExtendedUserDetailsServiceTest {
     @Mock
     private JWTTokenUtil jwtTokenUtil;
     @Mock
-    private HttpServletRequest req;
-    @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @InjectMocks
     private ExtendedUserDetailsServiceImpl extendedUserDetailsService;
@@ -52,6 +52,9 @@ public class ExtendedUserDetailsServiceTest {
 
     @Test
     public void findOwnUserDetailsSuccessfully() {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(req));
+
         when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn("donald");
         when(userRepository.findByUsername(any())).thenReturn(
                 Optional.of(new User("uncle", "scrooge")));

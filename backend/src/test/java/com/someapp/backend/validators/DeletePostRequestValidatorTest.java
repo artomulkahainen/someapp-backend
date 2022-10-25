@@ -12,8 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +39,9 @@ public class DeletePostRequestValidatorTest {
 
     @Test
     public void cantDeletePost_ifItsNotWrittenByPostCreator() {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(req));
+
         User user = new User("pelle", "peloton");
         user.setUUID(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));
         Post post = new Post("Let's play Rocket League", user);

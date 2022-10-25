@@ -14,8 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -47,6 +50,9 @@ public class PostCommentDeleteDTOValidatorTest {
 
     @Test
     public void cantDeletePostComment_IfItsNotWrittenByLoggedInUser() {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(req));
+
         User user = new User("teppo", "heppu");
         user.setUUID(UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612"));
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));

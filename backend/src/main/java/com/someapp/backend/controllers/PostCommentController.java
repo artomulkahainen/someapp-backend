@@ -26,8 +26,8 @@ public class PostCommentController implements PostCommentApi {
     private PostCommentDeleteDTOValidator deleteValidator;
 
     @Override
-    public PostComment sendNewPostComment(PostCommentSaveDTO postCommentSaveDTO,
-                                          BindingResult bindingResult) throws BindException {
+    public PostComment sendNewPostComment(final PostCommentSaveDTO postCommentSaveDTO,
+                                          final BindingResult bindingResult) throws BindException {
         saveValidator.validate(postCommentSaveDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -38,8 +38,8 @@ public class PostCommentController implements PostCommentApi {
     }
 
     @Override
-    public DeleteResponse deletePostCommentById(PostCommentDeleteDTO postCommentDeleteDTO,
-                                                BindingResult bindingResult) throws BindException {
+    public DeleteResponse deletePostCommentById(final PostCommentDeleteDTO postCommentDeleteDTO,
+                                                final BindingResult bindingResult) throws BindException {
         deleteValidator.validate(postCommentDeleteDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {

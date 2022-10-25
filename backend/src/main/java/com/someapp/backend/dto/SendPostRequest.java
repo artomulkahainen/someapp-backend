@@ -12,16 +12,14 @@ public class SendPostRequest {
     @Size(min = 1, max = 250, message = "Post length must be between 1-250 letters.")
     @NotNull
     @NotEmpty
-    private String post;
+    private final String post;
 
     @JsonCreator
-    public SendPostRequest(@JsonProperty("post") String post) {
+    public SendPostRequest(@JsonProperty("post") final String post) {
         this.post = post;
     }
 
     public String getPost() {
         return post;
     }
-
-
 }

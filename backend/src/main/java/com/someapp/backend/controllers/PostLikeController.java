@@ -30,8 +30,8 @@ public class PostLikeController implements PostLikeApi {
     private UnlikePostRequestValidator unlikeValidator;
 
     @Override
-    public PostLikeDTO likePost(LikePostRequest likePostRequest,
-                                BindingResult bindingResult) throws BindException {
+    public PostLikeDTO likePost(final LikePostRequest likePostRequest,
+                                final BindingResult bindingResult) throws BindException {
         likePostRequestValidator.validate(likePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -42,8 +42,8 @@ public class PostLikeController implements PostLikeApi {
     }
 
     @Override
-    public DeleteResponse unlikePost(UnlikePostRequest unlikePostRequest,
-                                     BindingResult bindingResult) throws BindException {
+    public DeleteResponse unlikePost(final UnlikePostRequest unlikePostRequest,
+                                     final BindingResult bindingResult) throws BindException {
         unlikeValidator.validate(unlikePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {

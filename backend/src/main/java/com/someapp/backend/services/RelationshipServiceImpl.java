@@ -7,7 +7,6 @@ import com.someapp.backend.mappers.RelationshipMapper;
 import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -29,28 +28,25 @@ public class RelationshipServiceImpl implements RelationshipService {
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private HttpServletRequest req;
-
-    private RelationshipMapper relationshipMapper;
+    private final RelationshipMapper relationshipMapper;
 
     @Autowired
-    public RelationshipServiceImpl(@Lazy RelationshipMapper relationshipMapper) {
+    public RelationshipServiceImpl(@Lazy final RelationshipMapper relationshipMapper) {
         this.relationshipMapper = relationshipMapper;
     }
 
     @Override
     @Transactional
-    public Relationship save(SaveRelationshipDTO saveRelationshipDTO) {
-        String uniqueId = saveRelationshipDTO.getUniqueId();
-        boolean existingBlockedRelationship = relationshipRepository.findRelationshipsByUniqueId(uniqueId).size() > 0
+    public Relationship save(final SaveRelationshipDTO saveRelationshipDTO) {
+        final String uniqueId = saveRelationshipDTO.getUniqueId();
+        final boolean existingBlockedRelationship = relationshipRepository.findRelationshipsByUniqueId(uniqueId).size() > 0
                 && relationshipRepository.findRelationshipsByUniqueId(uniqueId).get(0).getStatus() == 2;
-        int status = saveRelationshipDTO.getStatus();
+        final int status = saveRelationshipDTO.getStatus();
 
         // If save is not block request or if other user haven't blocked invite sender already
         if (status != 2 && !existingBlockedRelationship) {
             // First save the relationshipWith user's relationship
-            Relationship otherUsersRelationship = relationshipMapper
+            final Relationship otherUsersRelationship = relationshipMapper
                     .mapSaveRelationshipDTOToRelationship(saveRelationshipDTO, true);
             relationshipRepository.save(otherUsersRelationship);
         }
@@ -62,10 +58,10 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     @Transactional
-    public StatusResponse declineRelationshipRequest(String uniqueId, UUID declinerUUID) {
-        List<Relationship> relationships = relationshipRepository.findRelationshipsByUniqueId(uniqueId);
-        boolean declinerIsNotBlockerUser = !uniqueId.split(",")[1].equals(declinerUUID.toString());
-        boolean relationshipIsBlocked = relationships.stream().anyMatch(r -> r.getStatus() == 2);
+    public StatusResponse declineRelationshipRequest(final String uniqueId, final UUID declinerUUID) {
+        final List<Relationship> relationships = relationshipRepository.findRelationshipsByUniqueId(uniqueId);
+        final boolean declinerIsNotBlockerUser = !uniqueId.split(",")[1].equals(declinerUUID.toString());
+        final boolean relationshipIsBlocked = relationships.stream().anyMatch(r -> r.getStatus() == 2);
 
         /**
          * IF RELATIONSHIP IS BLOCKED AND DECLINER IS NOT BLOCKER USER,
@@ -73,7 +69,7 @@ public class RelationshipServiceImpl implements RelationshipService {
          ***/
 
         if (relationshipIsBlocked && declinerIsNotBlockerUser) {
-            Relationship rsToDelete = relationships.stream()
+            final Relationship rsToDelete = relationships.stream()
                     .filter(r -> r.getStatus() == 0).findFirst().get();
             relationshipRepository.delete(rsToDelete);
 
@@ -86,9 +82,9 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
-    public List<Relationship> findRelationshipsByUniqueId(String uniqueId) {
-        String reversedUniqueId = uniqueId.split(",")[1] + "," + uniqueId.split(",")[0];
-        List<Relationship> relationships = relationshipRepository.findRelationshipsByUniqueId(uniqueId);
+    public List<Relationship> findRelationshipsByUniqueId(final String uniqueId) {
+        final String reversedUniqueId = uniqueId.split(",")[1] + "," + uniqueId.split(",")[0];
+        final List<Relationship> relationships = relationshipRepository.findRelationshipsByUniqueId(uniqueId);
 
         if (!relationships.isEmpty()) {
             return relationships;
@@ -97,13 +93,13 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
-    public Optional<Relationship> findRelationshipById(UUID uuid) {
+    public Optional<Relationship> findRelationshipById(final UUID uuid) {
         return uuid != null ? relationshipRepository.findById(uuid) : Optional.empty();
     }
 
     @Override
-    public boolean usersHaveActiveRelationship(String uniqueId) {
-        List<Relationship> matches = findRelationshipsByUniqueId(uniqueId);
+    public boolean usersHaveActiveRelationship(final String uniqueId) {
+        final List<Relationship> matches = findRelationshipsByUniqueId(uniqueId);
         return matches.size() == 2 && matches.get(0).getStatus() == 1 && matches.get(1).getStatus() == 1;
     }
 }

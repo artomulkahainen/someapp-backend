@@ -9,8 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -30,6 +33,9 @@ public class DeleteUserRequestValidatorTest {
 
     @Test
     public void userCannotDeleteOtherUsersAccounts() {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(req));
+
         DeleteUserRequest request = new DeleteUserRequest(UUID.fromString("9ed27d1a-7c85-4442-8b60-44037f4c91d6"));
         Errors errors = new BeanPropertyBindingResult(request, "deleteUserRequest");
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(UUID.fromString("f4d94673-7ce6-41b2-af50-60154f471118"));

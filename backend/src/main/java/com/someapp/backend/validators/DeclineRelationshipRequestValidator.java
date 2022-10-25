@@ -21,7 +21,8 @@ public class DeclineRelationshipRequestValidator implements Validator {
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public DeclineRelationshipRequestValidator(RelationshipService relationshipService, JWTTokenUtil jwtTokenUtil) {
+    public DeclineRelationshipRequestValidator(final RelationshipService relationshipService,
+                                               final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -38,7 +39,7 @@ public class DeclineRelationshipRequestValidator implements Validator {
         final DeclineRelationshipRequest request = (DeclineRelationshipRequest) target;
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         final List<Relationship> relationships =
-                relationshipService.findRelationshipsByUniqueId(request.relationshipUniqueId());
+                relationshipService.findRelationshipsByUniqueId(request.getRelationshipUniqueId());
 
         // IF RELATIONSHIP IS NOT FOUND, REJECT
         if (relationships.size() < 2) {
@@ -46,7 +47,7 @@ public class DeclineRelationshipRequestValidator implements Validator {
         }
 
         // CAN DECLINE ONLY OWN RELATIONSHIPS
-        if (!request.relationshipUniqueId().contains(actionUserId.toString())) {
+        if (!request.getRelationshipUniqueId().contains(actionUserId.toString())) {
             errors.reject("Only own relationships can be declined.");
         }
     }

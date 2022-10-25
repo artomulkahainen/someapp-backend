@@ -33,8 +33,8 @@ public class PostController implements PostApi {
     }
 
     @Override
-    public PostDTO sendPost(SendPostRequest sendPostRequest,
-                            BindingResult bindingResult) throws BindException {
+    public PostDTO sendPost(final SendPostRequest sendPostRequest,
+                            final BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
@@ -43,8 +43,8 @@ public class PostController implements PostApi {
     }
 
     @Override
-    public DeleteResponse deletePost(DeletePostRequest deletePostRequest,
-                                     BindingResult bindingResult) throws BindException {
+    public DeleteResponse deletePost(final DeletePostRequest deletePostRequest,
+                                     final BindingResult bindingResult) throws BindException {
         validator.validate(deletePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {

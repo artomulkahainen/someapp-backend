@@ -10,17 +10,18 @@ import java.util.UUID;
 
 public class UserDTO extends BaseDTO {
 
-    private String username;
-    private boolean admin;
-    private List<PostDTO> posts;
-    private List<PostLikeDTO> likedPosts;
-    private List<RelationshipDTO> relationships;
+    private final String username;
+    private final boolean admin;
+    private final List<PostDTO> posts;
+    private final List<PostLikeDTO> likedPosts;
+    private final List<RelationshipDTO> relationships;
 
     @JsonCreator
-    public UserDTO(@JsonProperty("uuid") UUID uuid, @JsonProperty("createdDate") Date createdDate,
-                   @JsonProperty("username") String username, @JsonProperty("admin") boolean admin,
-                   @JsonProperty("posts") List<PostDTO> posts, @JsonProperty("likedPostsIds") List<PostLikeDTO> likedPosts,
-                   @JsonProperty("relationships") List<RelationshipDTO> relationships) {
+    public UserDTO(@JsonProperty("uuid") final UUID uuid, @JsonProperty("createdDate") final Date createdDate,
+                   @JsonProperty("username") final String username, @JsonProperty("admin") final boolean admin,
+                   @JsonProperty("posts") final List<PostDTO> posts,
+                   @JsonProperty("likedPostsIds") final List<PostLikeDTO> likedPosts,
+                   @JsonProperty("relationships") final List<RelationshipDTO> relationships) {
         super(uuid, createdDate);
         this.username = username;
         this.admin = admin;
@@ -31,10 +32,6 @@ public class UserDTO extends BaseDTO {
 
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public boolean isAdmin() {

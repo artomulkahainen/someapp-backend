@@ -7,10 +7,11 @@ import java.util.UUID;
 
 public class UserNameIdResponse extends UuidDTO {
 
-    private String username;
+    private final String username;
 
     @JsonCreator
-    public UserNameIdResponse(@JsonProperty("userUuid") UUID userUuid, @JsonProperty("username") String username) {
+    public UserNameIdResponse(@JsonProperty("userUuid") final UUID userUuid,
+                              @JsonProperty("username") final String username) {
         super(userUuid);
         this.username = username;
     }

@@ -3,10 +3,16 @@ package com.someapp.backend.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record StatusResponse(Integer status) {
+public class StatusResponse {
+
+    private final Integer status;
 
     @JsonCreator
-    public StatusResponse(@JsonProperty("status") Integer status) {
+    public StatusResponse(@JsonProperty("status") final Integer status) {
         this.status = status;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 }

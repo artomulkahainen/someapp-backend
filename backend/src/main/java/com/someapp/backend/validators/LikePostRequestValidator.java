@@ -24,10 +24,10 @@ public class LikePostRequestValidator implements Validator {
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public LikePostRequestValidator(PostLikeService postLikeService,
-                                    PostRepository postRepository,
-                                    RelationshipService relationshipService,
-                                    JWTTokenUtil jwtTokenUtil) {
+    public LikePostRequestValidator(final PostLikeService postLikeService,
+                                    final PostRepository postRepository,
+                                    final RelationshipService relationshipService,
+                                    final JWTTokenUtil jwtTokenUtil) {
         this.postLikeService = postLikeService;
         this.postRepository = postRepository;
         this.relationshipService = relationshipService;
@@ -66,8 +66,8 @@ public class LikePostRequestValidator implements Validator {
         }
     }
 
-    private boolean isOwnPost(UUID postId, UUID actionUserId) {
-        Optional<Post> post = postRepository.findById(postId);
+    private boolean isOwnPost(final UUID postId, final UUID actionUserId) {
+        final Optional<Post> post = postRepository.findById(postId);
         return post.isPresent() && post.get().getUserId().equals(actionUserId);
     }
 }

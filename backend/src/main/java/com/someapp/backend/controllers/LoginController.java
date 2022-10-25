@@ -24,7 +24,7 @@ public class LoginController implements LoginApi {
     }
 
     @Override
-    public ResponseEntity<?> login(LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<?> login(final LoginRequest loginRequest) throws Exception {
         return loginService.login(loginRequest);
     }
 }

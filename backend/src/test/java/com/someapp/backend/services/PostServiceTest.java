@@ -5,12 +5,11 @@ import com.someapp.backend.dto.DeletePostRequest;
 import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.User;
-import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.mappers.PostMapper;
+import com.someapp.backend.repositories.PostRepository;
+import com.someapp.backend.repositories.RelationshipRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +20,9 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,8 +42,6 @@ public class PostServiceTest {
 
     @Mock
     private JWTTokenUtil jwtTokenUtil;
-    @Mock
-    private HttpServletRequest req;
     @Mock
     private PostRepository postRepository;
     @Mock
@@ -78,6 +78,8 @@ public class PostServiceTest {
         anotherOtherPost.setUUID(UUID.fromString("dbb36fda-f60e-4000-a68d-bf4ad5008305"));
         anotherOtherPost.setCreatedDate(new Timestamp(546457236236L));
 
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(req));
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.UUID;
 public class DeleteUserRequest extends UuidDTO {
 
     @JsonCreator
-    public DeleteUserRequest(@JsonProperty("uuid") UUID uuid) {
+    public DeleteUserRequest(@JsonProperty("uuid") final UUID uuid) {
         super(uuid);
     }
 }
