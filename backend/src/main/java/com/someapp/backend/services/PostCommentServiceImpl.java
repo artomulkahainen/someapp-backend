@@ -6,12 +6,12 @@ import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Service

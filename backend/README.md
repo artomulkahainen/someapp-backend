@@ -13,7 +13,7 @@ I'm building this social media app for mobile devices. The purpose of this proje
 
 ### Built With
 
-* Spring Boot 3 (Java)
+* Spring Boot 2.7.5 (Java)
 * PostgreSQL 14
 * Docker
 
@@ -27,6 +27,8 @@ docker run -d --name gimmevibe-dev -p 5432:5432 -v ~/apps/postgres:/var/lib/post
 
 Before running application, you have to rename main/resources/application-EXAMPLE.yml to application-development.yml.
 You have to also edit the file by inserting spring security username and password and also app.secret.
+
+## How to run IT tests
 
 To run IT tests, you have to use Docker to create testdb.
 Create it by running command: 

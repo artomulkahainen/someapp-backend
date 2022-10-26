@@ -11,13 +11,13 @@ import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.mappers.PostMapper;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import com.someapp.backend.dto.DeleteResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service

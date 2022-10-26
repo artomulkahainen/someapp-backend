@@ -1,8 +1,8 @@
 package com.someapp.backend.entities;
 
-import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
