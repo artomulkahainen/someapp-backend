@@ -1,4 +1,4 @@
-name: Omasuuntima backend CI
+name: Someapp backend CI
 
 on: [push]
 
