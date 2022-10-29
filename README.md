@@ -23,6 +23,8 @@ Mobile part is found from different repo: https://github.com/artomulkahainen/som
 
 ## How to run dev environment
 
+Install Java v18. Amazon Corretto 18 is okay for example.
+
 To run development mode, you can use Docker to create db.
 Otherwise you can install postgres v14 on local machine and use db-name gimmevibe and set username and password to postgres.
 
