@@ -20,9 +20,12 @@ public class Relationship extends AbstractPersistable<UUID> {
     private UUID relationshipWith;
 
     /**
-     * unique id is in form "771adf31-3ac3-4703-881a-e40ecf6e1134,316d7af3-3f53-40a5-bdbd-8db5b9e301a7" of two uuids separated with comma
+     * unique id is in form
+     * "771adf31-3ac3-4703-881a-e40ecf6e1134,316d7af3-3f53-40a5-bdbd-8db5b9e301a7"
+     * of two uuids separated with comma
      * first uuid is action user's id, second id belongs to non-action user id
-     * Action user is the one who created the relationship (by sending friend invite)
+     * Action user is the one who created the
+     * relationship (by sending friend invite)
      * Non-action user is the one who is responding to friend invite
      */
     @NotNull
@@ -94,7 +97,8 @@ public class Relationship extends AbstractPersistable<UUID> {
     }
 
     /**
-     * Action user is the one who created the relationship (by sending friend invite)
+     * Action user is the one who created the relationship
+     * (by sending friend invite)
      * @return
      */
     public UUID getActionUserId() {

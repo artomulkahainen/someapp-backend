@@ -28,7 +28,8 @@ public class UserMapper {
                 user.isAdmin(),
                 postMapper.mapPostsToPostDTOs(user.getPosts()),
                 postLikeMapper.mapPostLikesToPostLikeDTOs(user.getPostLikes()),
-                relationshipMapper.mapRelationshipsToRelationshipDTOs(user.getRelationships())
+                relationshipMapper.mapRelationshipsToRelationshipDTOs(
+                        user.getRelationships())
         );
     }
 

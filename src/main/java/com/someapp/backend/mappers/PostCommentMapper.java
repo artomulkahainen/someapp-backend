@@ -24,7 +24,8 @@ public class PostCommentMapper {
         this.userRepository = userRepository;
     }
 
-    public PostCommentDTO mapPostCommentToPostCommentDTO(final PostComment postComment) {
+    public PostCommentDTO mapPostCommentToPostCommentDTO(
+            final PostComment postComment) {
         return new PostCommentDTO(
                 postComment.getUUID(),
                 postComment.getCreatedDate(),
@@ -34,11 +35,15 @@ public class PostCommentMapper {
         );
     }
 
-    public PostComment mapPostCommentSaveDTOToPostComment(final UUID actionUserId,
-                                                          final PostCommentSaveDTO postCommentSaveDTO) {
-        Post post = postRepository.findById(postCommentSaveDTO.getPostId())
+    public PostComment mapPostCommentSaveDTOToPostComment(
+            final UUID actionUserId,
+            final PostCommentSaveDTO postCommentSaveDTO) {
+        final Post post = postRepository.findById(
+                postCommentSaveDTO.getPostId())
                 .orElseThrow(ResourceNotFoundException::new);
-        User user = userRepository.findById(actionUserId).orElseThrow(ResourceNotFoundException::new);
-        return new PostComment(postCommentSaveDTO.getPostComment(), post, user);
+        final User user = userRepository.findById(actionUserId)
+                .orElseThrow(ResourceNotFoundException::new);
+        return new PostComment(postCommentSaveDTO.getPostComment(),
+                post, user);
     }
 }

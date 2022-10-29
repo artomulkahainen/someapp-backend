@@ -31,19 +31,22 @@ public class PostLikeController implements PostLikeApi {
 
     @Override
     public PostLikeDTO likePost(final LikePostRequest likePostRequest,
-                                final BindingResult bindingResult) throws BindException {
+                                final BindingResult bindingResult)
+            throws BindException {
         likePostRequestValidator.validate(likePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        return postLikeMapper.mapPostLikeToPostLikeDTO(postLikeService.save(likePostRequest));
+        return postLikeMapper.mapPostLikeToPostLikeDTO(
+                postLikeService.save(likePostRequest));
     }
 
     @Override
     public DeleteResponse unlikePost(final UnlikePostRequest unlikePostRequest,
-                                     final BindingResult bindingResult) throws BindException {
+                                     final BindingResult bindingResult)
+            throws BindException {
         unlikeValidator.validate(unlikePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {

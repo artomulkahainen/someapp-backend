@@ -14,10 +14,12 @@ import javax.validation.Valid;
 public interface PostCommentApi {
 
     @PostMapping("/sendPostCommentByUsingPOST")
-    PostComment sendNewPostComment(@Valid @RequestBody PostCommentSaveDTO postCommentSaveDTO,
-                                   BindingResult bindingResult) throws BindException;
+    PostComment sendNewPostComment(
+            @Valid @RequestBody PostCommentSaveDTO postCommentSaveDTO,
+            BindingResult bindingResult) throws BindException;
 
     @PostMapping("/deletePostCommentByUsingPOST")
-    DeleteResponse deletePostCommentById(@Valid @RequestBody PostCommentDeleteDTO postCommentDeleteDTO,
-                                         BindingResult bindingResult) throws BindException;
+    DeleteResponse deletePostCommentById(
+            @Valid @RequestBody PostCommentDeleteDTO postCommentDeleteDTO,
+            BindingResult bindingResult) throws BindException;
 }

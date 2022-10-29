@@ -180,6 +180,9 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+				<configuration>
+					<configLocation>./src/main/resources/checkstyle.xml</configLocation>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

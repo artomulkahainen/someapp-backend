@@ -32,17 +32,21 @@ public class UserController implements UserApi {
 
     @Override
     public UserDTO findOwnUserDetails() {
-        return userMapper.mapUserToUserDTO(extendedUserDetailsService.findOwnUserDetails());
+        return userMapper.mapUserToUserDTO(
+                extendedUserDetailsService.findOwnUserDetails());
     }
 
     @Override
-    public List<UserNameIdResponse> findUsersByName(final FindUserByNameRequest findUserByNameRequest) {
-        return extendedUserDetailsService.findUsersByName(findUserByNameRequest);
+    public List<UserNameIdResponse> findUsersByName(
+            final FindUserByNameRequest findUserByNameRequest) {
+        return extendedUserDetailsService.findUsersByName(
+                findUserByNameRequest);
     }
 
     @Override
     public UserDTO saveNewUser(final UserSaveDTO userSaveDTO,
-                               final BindingResult bindingResult) throws BindException {
+                               final BindingResult bindingResult)
+            throws BindException {
         saveValidator.validate(userSaveDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -50,13 +54,15 @@ public class UserController implements UserApi {
         }
 
         return userMapper.mapUserToUserDTO(
-                extendedUserDetailsService.save(userMapper.mapUserSaveDTOToUser(userSaveDTO)));
+                extendedUserDetailsService.save(
+                        userMapper.mapUserSaveDTOToUser(userSaveDTO)));
     }
 
     @Override
     @Transactional
     public DeleteResponse deleteUser(final DeleteUserRequest request,
-                                     final BindingResult bindingResult) throws BindException {
+                                     final BindingResult bindingResult)
+            throws BindException {
         deleteValidator.validate(request, bindingResult);
 
         if (bindingResult.hasErrors()) {

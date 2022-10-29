@@ -18,5 +18,6 @@ public interface RelationshipService {
 
     List<Relationship> findRelationshipsByUniqueId(String uniqueId);
 
-    StatusResponse declineRelationshipRequest(String uniqueId, UUID declinerUUID);
+    StatusResponse declineRelationshipRequest(String uniqueId,
+                                              UUID declinerUUID);
 }

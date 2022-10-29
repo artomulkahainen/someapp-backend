@@ -20,14 +20,15 @@ public class PostCommentDeleteDTOValidator implements Validator {
     private final PostCommentRepository postCommentRepository;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public PostCommentDeleteDTOValidator(final PostCommentRepository postCommentRepository,
-                                         final JWTTokenUtil jwtTokenUtil) {
+    public PostCommentDeleteDTOValidator(
+            final PostCommentRepository postCommentRepository,
+            final JWTTokenUtil jwtTokenUtil) {
         this.postCommentRepository = postCommentRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return PostCommentDeleteDTO.class.isAssignableFrom(clazz);
     }
 
@@ -36,12 +37,16 @@ public class PostCommentDeleteDTOValidator implements Validator {
         final HttpServletRequest req = ((ServletRequestAttributes)
                 RequestContextHolder.getRequestAttributes()).getRequest();
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        final PostCommentDeleteDTO postCommentDeleteDTO = (PostCommentDeleteDTO) target;
+        final PostCommentDeleteDTO postCommentDeleteDTO =
+                (PostCommentDeleteDTO) target;
 
-        final Optional<PostComment> postComment = postCommentRepository.findById(postCommentDeleteDTO.getUuid());
+        final Optional<PostComment> postComment =
+                postCommentRepository.findById(postCommentDeleteDTO.getUuid());
 
-        if (postComment.isPresent() && postComment.get().getUserId() != actionUserId) {
-            errors.reject("User can delete only their own post comments");
+        if (postComment.isPresent()
+                && postComment.get().getUserId() != actionUserId) {
+            errors.reject(
+                    "User can delete only their own post comments");
         }
     }
 }

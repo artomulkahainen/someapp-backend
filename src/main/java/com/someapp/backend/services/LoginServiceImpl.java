@@ -29,7 +29,10 @@ public class LoginServiceImpl implements LoginService {
     private void authenticate(final String username,
                               final String password) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
@@ -38,7 +41,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public ResponseEntity<?> login(final LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<?> login(final LoginRequest loginRequest)
+            throws Exception {
         authenticate(loginRequest.getUsername(), loginRequest.getPassword());
 
         final ExtendedUserDetails userDetails = extendedUserDetailsService

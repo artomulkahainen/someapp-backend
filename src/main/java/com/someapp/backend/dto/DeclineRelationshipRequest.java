@@ -9,7 +9,8 @@ public class DeclineRelationshipRequest {
 
     @JsonCreator
     public DeclineRelationshipRequest(
-            @JsonProperty("relationshipUniqueId") final String relationshipUniqueId) {
+            @JsonProperty("relationshipUniqueId")
+            final String relationshipUniqueId) {
         this.relationshipUniqueId = relationshipUniqueId;
     }
 

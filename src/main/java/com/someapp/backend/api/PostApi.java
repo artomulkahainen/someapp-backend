@@ -23,6 +23,7 @@ public interface PostApi {
                      BindingResult bindingResult) throws BindException;
 
     @PostMapping("/deletePostByUsingPOST")
-    DeleteResponse deletePost(@Valid @RequestBody DeletePostRequest deletePostRequest,
-                              BindingResult bindingResult) throws BindException;
+    DeleteResponse deletePost(
+            @Valid @RequestBody DeletePostRequest deletePostRequest,
+            BindingResult bindingResult) throws BindException;
 }

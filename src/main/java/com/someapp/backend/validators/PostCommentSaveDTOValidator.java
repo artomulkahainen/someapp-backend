@@ -22,16 +22,18 @@ public class PostCommentSaveDTOValidator implements Validator {
     private final PostService postService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public PostCommentSaveDTOValidator(final RelationshipService relationshipService,
-                                       final PostService postService,
-                                       final JWTTokenUtil jwtTokenUtil) {
+    public PostCommentSaveDTOValidator(
+            final RelationshipService relationshipService,
+            final PostService postService,
+            final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.postService = postService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
+
         return PostCommentSaveDTO.class.isAssignableFrom(clazz);
     }
 
@@ -41,19 +43,30 @@ public class PostCommentSaveDTOValidator implements Validator {
                 RequestContextHolder.getRequestAttributes()).getRequest();
 
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        final PostCommentSaveDTO postCommentSaveDTO = (PostCommentSaveDTO) target;
-        final Optional<Post> post = postService.findPostById(postCommentSaveDTO.getPostId());
-        final UUID postUserId = post.orElse(null).getUserId();
+        final PostCommentSaveDTO postCommentSaveDTO =
+                (PostCommentSaveDTO) target;
+        final Optional<Post> post =
+                postService.findPostById(postCommentSaveDTO.getPostId());
+        final UUID postUserId =
+                post.orElse(null).getUserId();
 
-        // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP, UNLESS COMMENTING OWN POST EXCEPTION HAVE TO BE ADDED
+        // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP,
+        // UNLESS COMMENTING OWN POST EXCEPTION HAVE TO BE ADDED
         if (post.isPresent() && !actionUserId.equals(postUserId)) {
             isActiveRelationship(actionUserId, postUserId, errors);
         }
     }
 
-    private void isActiveRelationship(UUID actionUserId, UUID postCreatorId, Errors errors) {
-        if (/*!relationshipService.usersHaveActiveRelationship(actionUserId, postCreatorId)*/true) {
-            errors.reject("Active relationship with post creator is needed to write a comment");
+
+
+    // NEED TO FIX
+    private void isActiveRelationship(
+            UUID actionUserId, UUID postCreatorId, Errors errors) {
+        if (/*!relationshipService.usersHaveActiveRelationship(
+        actionUserId, postCreatorId)*/
+                true) {
+            errors.reject("Active relationship " +
+                    "with post creator is needed to write a comment");
         }
     }
 }

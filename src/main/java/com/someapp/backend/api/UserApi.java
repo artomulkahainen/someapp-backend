@@ -17,11 +17,16 @@ public interface UserApi {
     UserDTO findOwnUserDetails();
 
     @PostMapping("/findUsersByNameByUsingPOST")
-    List<UserNameIdResponse> findUsersByName(@RequestBody FindUserByNameRequest findUserByNameRequest);
+    List<UserNameIdResponse> findUsersByName(
+            @RequestBody FindUserByNameRequest findUserByNameRequest);
 
     @PostMapping("/saveNewUserByUsingPOST")
-    UserDTO saveNewUser(@Valid @RequestBody UserSaveDTO userSaveDTO, BindingResult bindingResult) throws BindException;
+    UserDTO saveNewUser(
+            @Valid @RequestBody UserSaveDTO userSaveDTO,
+            BindingResult bindingResult) throws BindException;
 
     @PostMapping("/deleteUserByUsingPOST")
-    DeleteResponse deleteUser(@Valid @RequestBody DeleteUserRequest request, BindingResult bindingResult) throws BindException;
+    DeleteResponse deleteUser(
+            @Valid @RequestBody DeleteUserRequest request,
+            BindingResult bindingResult) throws BindException;
 }

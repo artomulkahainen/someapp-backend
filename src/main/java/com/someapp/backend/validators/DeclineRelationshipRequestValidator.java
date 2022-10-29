@@ -21,34 +21,42 @@ public class DeclineRelationshipRequestValidator implements Validator {
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public DeclineRelationshipRequestValidator(final RelationshipService relationshipService,
-                                               final JWTTokenUtil jwtTokenUtil) {
+    public DeclineRelationshipRequestValidator(
+            final RelationshipService relationshipService,
+            final JWTTokenUtil jwtTokenUtil) {
         this.relationshipService = relationshipService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return DeletePostRequest.class.isAssignableFrom(clazz);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(final Object target,
+                         final Errors errors) {
         final HttpServletRequest req = ((ServletRequestAttributes)
                 RequestContextHolder.getRequestAttributes()).getRequest();
-        final DeclineRelationshipRequest request = (DeclineRelationshipRequest) target;
+        final DeclineRelationshipRequest request =
+                (DeclineRelationshipRequest) target;
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
         final List<Relationship> relationships =
-                relationshipService.findRelationshipsByUniqueId(request.getRelationshipUniqueId());
+                relationshipService.findRelationshipsByUniqueId(
+                        request.getRelationshipUniqueId());
 
         // IF RELATIONSHIP IS NOT FOUND, REJECT
         if (relationships.size() < 2) {
-            errors.reject("Relationship was not found with given uniqueId");
+            errors.reject(
+                    "Relationship was" +
+                            " not found with given uniqueId");
         }
 
         // CAN DECLINE ONLY OWN RELATIONSHIPS
-        if (!request.getRelationshipUniqueId().contains(actionUserId.toString())) {
-            errors.reject("Only own relationships can be declined.");
+        if (!request.getRelationshipUniqueId()
+                .contains(actionUserId.toString())) {
+            errors.reject("Only own relationships" +
+                    " can be declined.");
         }
     }
 

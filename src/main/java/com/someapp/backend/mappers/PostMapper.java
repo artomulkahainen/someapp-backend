@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.someapp.backend.dto.PostDTO;
 import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.entities.Post;
+import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.services.ExtendedUserDetailsService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -24,14 +25,14 @@ public class PostMapper {
         this.postCommentMapper = postCommentMapper;
     }
 
-    public List<PostDTO> mapPostsToPostDTOs(List<Post> posts) {
+    public List<PostDTO> mapPostsToPostDTOs(final List<Post> posts) {
         return posts
                 .stream()
                 .map(this::mapPostToPostDTO)
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public PostDTO mapPostToPostDTO(Post post) {
+    public PostDTO mapPostToPostDTO(final Post post) {
         return new PostDTO(
                 post.getUUID(),
                 post.getCreatedDate(),
@@ -43,12 +44,14 @@ public class PostMapper {
                         .collect(ImmutableList.toImmutableList()),
                 post.getPostLikes()
                         .stream()
-                        .map(like -> like.getUserId())
+                        .map(PostLike::getUserId)
                         .collect(ImmutableList.toImmutableList())
         );
     }
 
-    public Post mapSendPostRequestToPost(UUID actionUserId, SendPostRequest sendPostRequest) {
+    public Post mapSendPostRequestToPost(
+            final UUID actionUserId,
+            final SendPostRequest sendPostRequest) {
         final User user = userDetailsService.findUserById(actionUserId)
                 .orElseThrow(ResourceNotFoundException::new);
         return new Post(sendPostRequest.getPost(), user);

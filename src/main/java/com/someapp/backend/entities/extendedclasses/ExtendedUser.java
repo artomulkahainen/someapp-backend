@@ -11,13 +11,24 @@ public class ExtendedUser extends User implements ExtendedUserDetails {
 
     private UUID id;
 
-    public ExtendedUser(UUID id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public ExtendedUser(UUID id,
+                        String username,
+                        String password,
+                        Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.id = id;
     }
 
-    public ExtendedUser(UUID id, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+    public ExtendedUser(UUID id,
+                        String username,
+                        String password,
+                        boolean enabled,
+                        boolean accountNonExpired,
+                        boolean credentialsNonExpired,
+                        boolean accountNonLocked,
+                        Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, enabled, accountNonExpired,
+                credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
     }
 

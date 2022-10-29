@@ -16,7 +16,8 @@ public interface ExtendedUserDetailsService extends UserDetailsService {
 
     User findOwnUserDetails();
 
-    List<UserNameIdResponse> findUsersByName(FindUserByNameRequest findUserByNameRequest);
+    List<UserNameIdResponse> findUsersByName(
+            FindUserByNameRequest findUserByNameRequest);
 
     User save(User user);
 

@@ -11,10 +11,12 @@ import javax.validation.Valid;
 public interface RelationshipApi {
 
     @PostMapping("/saveNewRelationshipByUsingPOST")
-    RelationshipDTO save(@Valid @RequestBody SaveRelationshipDTO saveRelationshipDTO,
-                         BindingResult bindingResult) throws BindException;
+    RelationshipDTO save(
+            @Valid @RequestBody SaveRelationshipDTO saveRelationshipDTO,
+            BindingResult bindingResult) throws BindException;
 
     @PostMapping("/declineRelationshipByUsingPOST")
-    StatusResponse decline(@Valid @RequestBody DeclineRelationshipRequest declineRelationshipRequest,
-                           BindingResult bindingResult) throws Exception;
+    StatusResponse decline(@Valid @RequestBody
+            DeclineRelationshipRequest declineRelationshipRequest,
+            BindingResult bindingResult) throws Exception;
 }

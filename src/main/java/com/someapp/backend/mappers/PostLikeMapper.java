@@ -32,21 +32,29 @@ public class PostLikeMapper {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public List<PostLikeDTO> mapPostLikesToPostLikeDTOs(List<PostLike> postLikes) {
-        return postLikes.stream().map(this::mapPostLikeToPostLikeDTO).collect(ImmutableList.toImmutableList());
+    public List<PostLikeDTO> mapPostLikesToPostLikeDTOs(
+            final List<PostLike> postLikes) {
+        return postLikes.stream()
+                .map(this::mapPostLikeToPostLikeDTO)
+                .collect(ImmutableList.toImmutableList());
     }
 
-    public PostLikeDTO mapPostLikeToPostLikeDTO(PostLike postLike) {
-        return new PostLikeDTO(postLike.getUUID(), postLike.getCreatedDate(), postLike.getPostId());
+    public PostLikeDTO mapPostLikeToPostLikeDTO(final PostLike postLike) {
+        return new PostLikeDTO(
+                postLike.getUUID(),
+                postLike.getCreatedDate(),
+                postLike.getPostId());
     }
 
-    public PostLike mapLikePostRequestToPostLike(LikePostRequest likePostRequest) {
+    public PostLike mapLikePostRequestToPostLike(
+            final LikePostRequest likePostRequest) {
         final HttpServletRequest req = ((ServletRequestAttributes)
                 RequestContextHolder.getRequestAttributes()).getRequest();
 
         final Post post = postService.findPostById(likePostRequest.getPostId())
                 .orElseThrow(ResourceNotFoundException::new);
-        final User user = userService.findUserById(jwtTokenUtil.getIdFromToken(req))
+        final User user = userService.findUserById(
+                jwtTokenUtil.getIdFromToken(req))
                 .orElseThrow(ResourceNotFoundException::new);
         return new PostLike(post, user);
     }

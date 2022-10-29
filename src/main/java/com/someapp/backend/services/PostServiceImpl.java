@@ -44,15 +44,19 @@ public class PostServiceImpl implements PostService {
                 RequestContextHolder.getRequestAttributes()).getRequest();
 
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
-        return postRepository.save(postMapper.mapSendPostRequestToPost(actionUserId, sendPostRequest));
+        return postRepository.save(
+                postMapper.mapSendPostRequestToPost(
+                        actionUserId, sendPostRequest));
     }
 
     @Override
     public DeleteResponse delete(final DeletePostRequest deletePostRequest) {
-        final Post postToDelete = postRepository.findById(deletePostRequest.getUuid())
+        final Post postToDelete =
+                postRepository.findById(deletePostRequest.getUuid())
                 .orElseThrow(ResourceNotFoundException::new);
         postRepository.delete(postToDelete);
-        return new DeleteResponse(deletePostRequest.getUuid(), "Successfully deleted post");
+        return new DeleteResponse(deletePostRequest.getUuid(),
+                "Successfully deleted post");
     }
 
     @Override
@@ -72,12 +76,14 @@ public class PostServiceImpl implements PostService {
                 .map(Relationship::getRelationshipWith)
                 .collect(ImmutableList.toImmutableList());
 
-        final Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
+        final Comparator<Post> byCreatedDate =
+                Comparator.comparing(Post::getCreatedDate).reversed();
 
         return postRepository
                 .findAll()
                 .stream()
-                .filter(post -> ownActiveRelationships.contains(post.getUserId()))
+                .filter(post ->
+                        ownActiveRelationships.contains(post.getUserId()))
                 .sorted(byCreatedDate).limit(10)
                 .collect(ImmutableList.toImmutableList());
     }

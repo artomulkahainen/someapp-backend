@@ -12,7 +12,8 @@ import java.util.UUID;
 public class PostComment extends AbstractPersistable<UUID> {
 
     @NotNull
-    @Size(min = 1, max = 250, message = "Post comment length must be between 1-250 characters.")
+    @Size(min = 1, max = 250,
+            message = "Post comment length must be between 1-250 characters.")
     private String postComment;
 
     @ManyToOne

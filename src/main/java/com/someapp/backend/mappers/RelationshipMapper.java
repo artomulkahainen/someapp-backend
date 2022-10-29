@@ -31,7 +31,8 @@ public class RelationshipMapper {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public RelationshipDTO mapRelationshipToRelationshipDTO(final Relationship relationship) {
+    public RelationshipDTO mapRelationshipToRelationshipDTO(
+            final Relationship relationship) {
         return new RelationshipDTO(relationship.getUser().getUUID(),
                 relationship.getRelationshipWith(),
                 relationship.getUniqueId(),
@@ -40,34 +41,40 @@ public class RelationshipMapper {
                 relationship.getId());
     }
 
-    public List<RelationshipDTO> mapRelationshipsToRelationshipDTOs(final List<Relationship> relationships) {
+    public List<RelationshipDTO> mapRelationshipsToRelationshipDTOs(
+            final List<Relationship> relationships) {
         return relationships.stream()
-                .map(relationship -> mapRelationshipToRelationshipDTO(relationship))
+                .map(this::mapRelationshipToRelationshipDTO)
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public Relationship mapSaveRelationshipDTOToRelationship(final SaveRelationshipDTO saveRelationshipDTO,
-                                                             final boolean saveOther) {
+    public Relationship mapSaveRelationshipDTOToRelationship(
+            final SaveRelationshipDTO saveRelationshipDTO,
+            final boolean saveOther) {
         final HttpServletRequest req = ((ServletRequestAttributes)
                 RequestContextHolder.getRequestAttributes()).getRequest();
         final List<Relationship> relationshipsByUniqueId = relationshipService
-                .findRelationshipsByUniqueId(saveRelationshipDTO.getUniqueId());
+                .findRelationshipsByUniqueId(
+                        saveRelationshipDTO.getUniqueId());
 
         // find relationship with given unique id or create new relationship
         final Relationship relationship = relationshipsByUniqueId
                 .stream()
-                .filter(rs -> jwtTokenUtil.getIdFromToken(req).equals(saveOther
+                .filter(rs -> jwtTokenUtil.getIdFromToken(req)
+                        .equals(saveOther
                         ? rs.getRelationshipWith() : rs.getUser().getUUID()))
                 .findFirst().orElse(new Relationship());
 
         // If relationship is new
         if (relationship.getUUID() == null) {
             final User user = userService.findUserById(saveOther
-                            ? saveRelationshipDTO.getRelationshipWithId() : jwtTokenUtil.getIdFromToken(req))
+                            ? saveRelationshipDTO.getRelationshipWithId()
+                            : jwtTokenUtil.getIdFromToken(req))
                     .orElseThrow(ResourceNotFoundException::new);
             relationship.setUser(user);
             relationship.setRelationshipWith(saveOther
-                    ? jwtTokenUtil.getIdFromToken(req) : saveRelationshipDTO.getRelationshipWithId());
+                    ? jwtTokenUtil.getIdFromToken(req)
+                    : saveRelationshipDTO.getRelationshipWithId());
             relationship.setUniqueId(saveRelationshipDTO.getUniqueId());
         }
 

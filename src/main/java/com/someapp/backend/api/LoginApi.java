@@ -14,6 +14,7 @@ public interface LoginApi {
     PingResponse pingServerStatus();
 
     @PostMapping("/loginByUsingPOST")
-    ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception;
+    ResponseEntity<?> login(@RequestBody LoginRequest loginRequest)
+            throws Exception;
 
 }

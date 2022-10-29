@@ -40,19 +40,22 @@ public class RelationshipController implements RelationshipApi {
 
     @Override
     public RelationshipDTO save(final SaveRelationshipDTO saveRelationshipDTO,
-                                final BindingResult bindingResult) throws BindException {
+                                final BindingResult bindingResult)
+            throws BindException {
         saveValidator.validate(saveRelationshipDTO, bindingResult);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        return relationshipMapper.mapRelationshipToRelationshipDTO(relationshipService.save(saveRelationshipDTO));
+        return relationshipMapper.mapRelationshipToRelationshipDTO(
+                relationshipService.save(saveRelationshipDTO));
     }
 
     @Override
-    public StatusResponse decline(final DeclineRelationshipRequest declineRelationshipRequest,
-                                  final BindingResult bindingResult) throws BindException {
+    public StatusResponse decline(
+            final DeclineRelationshipRequest declineRelationshipRequest,
+            final BindingResult bindingResult) throws BindException {
         declineValidator.validate(declineRelationshipRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -64,6 +67,7 @@ public class RelationshipController implements RelationshipApi {
         final UUID declinerUUID = jwtTokenUtil.getIdFromToken(req);
 
         return relationshipService.declineRelationshipRequest(
-                declineRelationshipRequest.getRelationshipUniqueId(), declinerUUID);
+                declineRelationshipRequest.getRelationshipUniqueId(),
+                declinerUUID);
     }
 }

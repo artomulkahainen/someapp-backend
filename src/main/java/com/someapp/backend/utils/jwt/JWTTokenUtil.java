@@ -27,12 +27,14 @@ public class JWTTokenUtil implements Serializable {
     private String expirationTime;
 
     public String getUsernameFromToken(HttpServletRequest req) {
-        String subject[] = getClaimFromToken(getTokenFromRequest(req), Claims::getSubject).split(";");
+        String subject[] = getClaimFromToken(getTokenFromRequest(req),
+                Claims::getSubject).split(";");
         return subject[1];
     }
 
     public UUID getIdFromToken(HttpServletRequest req) {
-        String subject[] = getClaimFromToken(getTokenFromRequest(req), Claims::getSubject).split(";");
+        String subject[] = getClaimFromToken(getTokenFromRequest(req),
+                Claims::getSubject).split(";");
         return UUID.fromString(subject[0]);
     }
 
@@ -40,13 +42,15 @@ public class JWTTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    public <T> T getClaimFromToken(String token,
+                                   Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(secret)
+                .parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -56,19 +60,26 @@ public class JWTTokenUtil implements Serializable {
 
     public String generateToken(ExtendedUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), userDetails.getId());
+        return doGenerateToken(claims, userDetails.getUsername(),
+                userDetails.getId());
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject, UUID id) {
+    private String doGenerateToken(Map<String, Object> claims,
+                                   String subject, UUID id) {
 
-        return Jwts.builder().setClaims(claims).setSubject(id.toString() + ';' + subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + Integer.valueOf(expirationTime)))
+        return Jwts.builder().setClaims(claims).setSubject(
+                id.toString() + ';' + subject).setIssuedAt(
+                        new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()
+                                + Integer.parseInt(expirationTime)))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public Boolean validateToken(HttpServletRequest req, ExtendedUserDetails userDetails) {
+    public Boolean validateToken(HttpServletRequest req,
+                                 ExtendedUserDetails userDetails) {
         final String username = getUsernameFromToken(req);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(getTokenFromRequest(req)));
+        return (username.equals(userDetails.getUsername())
+                && !isTokenExpired(getTokenFromRequest(req)));
     }
 
     private String getTokenFromRequest(HttpServletRequest req) {

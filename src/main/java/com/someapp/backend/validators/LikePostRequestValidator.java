@@ -25,10 +25,11 @@ public class LikePostRequestValidator implements Validator {
     private final RelationshipService relationshipService;
     private final JWTTokenUtil jwtTokenUtil;
 
-    public LikePostRequestValidator(final PostLikeService postLikeService,
-                                    final PostRepository postRepository,
-                                    final RelationshipService relationshipService,
-                                    final JWTTokenUtil jwtTokenUtil) {
+    public LikePostRequestValidator(
+            final PostLikeService postLikeService,
+            final PostRepository postRepository,
+            final RelationshipService relationshipService,
+            final JWTTokenUtil jwtTokenUtil) {
         this.postLikeService = postLikeService;
         this.postRepository = postRepository;
         this.relationshipService = relationshipService;
@@ -36,12 +37,12 @@ public class LikePostRequestValidator implements Validator {
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return LikePostRequest.class.isAssignableFrom(clazz);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(final Object target, final Errors errors) {
         final HttpServletRequest req = ((ServletRequestAttributes)
                 RequestContextHolder.getRequestAttributes()).getRequest();
         final LikePostRequest likePostRequest = (LikePostRequest) target;
@@ -54,16 +55,21 @@ public class LikePostRequestValidator implements Validator {
 
         if (!isOwnPost(likePostRequest.getPostId(), actionUserId)
                 && !relationshipService.usersHaveActiveRelationship(
-                        actionUserId.toString() + "," + likePostRequest.getPostUserId())) {
-            errors.reject("Action user and post creator user doesn't have active relationship");
+                        actionUserId.toString()
+                                + "," + likePostRequest.getPostUserId())) {
+            errors.reject(
+                    "Action user and post creator user doesn't " +
+                            "have active relationship");
         }
 
         /**
          * IF POSTLIKE REPOSITORY ALREADY CONTAINS THE LIKE, REJECT
          */
 
-        if (postLikeService.likeAlreadyExists(actionUserId, likePostRequest)) {
-            errors.reject("Post is already liked by the action user");
+        if (postLikeService.likeAlreadyExists(
+                actionUserId, likePostRequest)) {
+            errors.reject("Post is already" +
+                    " liked by the action user");
         }
     }
 

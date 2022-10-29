@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 @Table(name = "users")
 public class User extends AbstractPersistable<UUID> {
 
-    @Size(min = 3, max = 15, message = "Username length must be between 3-15 letters")
+    @Size(min = 3, max = 15,
+            message = "Username length must be between 3-15 letters")
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -87,8 +88,11 @@ public class User extends AbstractPersistable<UUID> {
     }
 
     public List<Post> getPosts() {
-        Comparator<Post> byCreatedDate = Comparator.comparing(Post::getCreatedDate).reversed();
-        return posts.stream().sorted(byCreatedDate).limit(10).collect(Collectors.toList());
+        Comparator<Post> byCreatedDate =
+                Comparator.comparing(Post::getCreatedDate).reversed();
+        return posts.stream()
+                .sorted(byCreatedDate)
+                .limit(10).collect(Collectors.toList());
     }
 
     public List<Relationship> getRelationships() {

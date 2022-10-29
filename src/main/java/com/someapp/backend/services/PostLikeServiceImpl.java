@@ -25,7 +25,8 @@ public class PostLikeServiceImpl implements PostLikeService {
 
     @Override
     public PostLike save(final LikePostRequest likePostRequest) {
-        return postLikeRepository.save(postLikeMapper.mapLikePostRequestToPostLike(likePostRequest));
+        return postLikeRepository.save(postLikeMapper
+                .mapLikePostRequestToPostLike(likePostRequest));
     }
 
     @Override
@@ -33,7 +34,8 @@ public class PostLikeServiceImpl implements PostLikeService {
         postLikeRepository.findById(unlikePostRequest.getUuid())
                 .orElseThrow(ResourceNotFoundException::new);
         postLikeRepository.deleteById(unlikePostRequest.getUuid());
-        return new DeleteResponse(unlikePostRequest.getUuid(), "Successfully unliked");
+        return new DeleteResponse(unlikePostRequest.getUuid(),
+                "Successfully unliked");
     }
 
     @Override
@@ -42,14 +44,21 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
 
     @Override
-    public boolean likeAlreadyExists(final UUID actionUserId, final LikePostRequest likePostRequest) {
+    public boolean likeAlreadyExists(
+            final UUID actionUserId,
+            final LikePostRequest likePostRequest) {
         return postLikeRepository
                 .findAll()
                 .stream()
-                .anyMatch(like -> likeMatches(actionUserId, likePostRequest.getPostId(), like));
+                .anyMatch(like -> likeMatches(
+                        actionUserId, likePostRequest.getPostId(), like));
     }
 
-    private boolean likeMatches(final UUID actionUserId, final UUID postId, final PostLike like) {
-        return Objects.equals(postId, like.getPostId()) && Objects.equals(actionUserId, like.getUserId());
+    private boolean likeMatches(
+            final UUID actionUserId,
+            final UUID postId,
+            final PostLike like) {
+        return Objects.equals(postId, like.getPostId())
+                && Objects.equals(actionUserId, like.getUserId());
     }
 }

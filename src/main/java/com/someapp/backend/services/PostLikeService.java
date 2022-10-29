@@ -14,7 +14,8 @@ public interface PostLikeService {
 
     DeleteResponse delete(UnlikePostRequest unlikePostRequest);
 
-    boolean likeAlreadyExists(UUID actionUserId, LikePostRequest likePostRequest);
+    boolean likeAlreadyExists(UUID actionUserId,
+                              LikePostRequest likePostRequest);
 
     Optional<PostLike> findPostLikeById(UUID uuid);
 }

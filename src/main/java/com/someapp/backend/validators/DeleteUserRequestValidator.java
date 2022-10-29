@@ -20,7 +20,7 @@ public class DeleteUserRequestValidator implements Validator {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return DeleteUserRequest.class.isAssignableFrom(clazz);
     }
 
@@ -29,8 +29,10 @@ public class DeleteUserRequestValidator implements Validator {
                 RequestContextHolder.getRequestAttributes()).getRequest();
         final DeleteUserRequest request = (DeleteUserRequest) target;
 
-        if (!Objects.equals(jwtTokenUtil.getIdFromToken(req), request.getUuid())) {
-            errors.reject("User can only delete their own user account");
+        if (!Objects.equals(
+                jwtTokenUtil.getIdFromToken(req), request.getUuid())) {
+            errors.reject(
+                    "User can only delete their own user account");
         }
     }
 }

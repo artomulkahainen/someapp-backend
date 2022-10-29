@@ -16,7 +16,7 @@ public class UserSaveDTOValidator implements Validator {
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return UserSaveDTO.class.isAssignableFrom(clazz);
     }
 
@@ -25,18 +25,25 @@ public class UserSaveDTOValidator implements Validator {
         final UserSaveDTO userSaveDTO = (UserSaveDTO) target;
 
         // USERNAME IS UNIQUE
-        if (userRepository.findByUsername(userSaveDTO.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(userSaveDTO.getUsername())
+                .isPresent()) {
             errors.reject("Username is already in use");
         }
 
         // USERNAME IS AT LEAST THREE CHARACTERS LONG
-        if (userSaveDTO.getUsername() == null || userSaveDTO.getUsername().length() < 3) {
-            errors.reject("Username must be at least three characters long.");
+        if (userSaveDTO.getUsername() == null
+                || userSaveDTO.getUsername().length() < 3) {
+            errors.reject(
+                    "Username must be at " +
+                            "least three characters long.");
         }
 
         // PASSWORD IS AT LEAST THREE CHARACTERS LONG
-        if (userSaveDTO.getPassword() == null || userSaveDTO.getPassword().length() < 3) {
-            errors.reject("Password must be at least three characters long.");
+        if (userSaveDTO.getPassword() == null
+                || userSaveDTO.getPassword().length() < 3) {
+            errors.reject(
+                    "Password must be at least three" +
+                            " characters long.");
         }
     }
 }

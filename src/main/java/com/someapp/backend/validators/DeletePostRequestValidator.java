@@ -27,7 +27,7 @@ public class DeletePostRequestValidator implements Validator {
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return DeletePostRequest.class.isAssignableFrom(clazz);
     }
 
@@ -37,11 +37,14 @@ public class DeletePostRequestValidator implements Validator {
                 RequestContextHolder.getRequestAttributes()).getRequest();
 
         final DeletePostRequest request = (DeletePostRequest) target;
-        final Optional<Post> postToDelete = postService.findPostById(request.getUuid());
+        final Optional<Post> postToDelete =
+                postService.findPostById(request.getUuid());
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
 
-        if (postToDelete.isPresent() && !postToDelete.get().getUserId().equals(actionUserId)) {
-            errors.reject("Post can be deleted only by post creator.");
+        if (postToDelete.isPresent()
+                && !postToDelete.get().getUserId().equals(actionUserId)) {
+            errors.reject("Post can be deleted only" +
+                    " by post creator.");
         }
     }
 

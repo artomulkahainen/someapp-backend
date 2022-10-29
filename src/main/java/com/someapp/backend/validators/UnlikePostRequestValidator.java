@@ -26,7 +26,7 @@ public class UnlikePostRequestValidator implements Validator {
         this.postLikeService = postLikeService;
     }
 
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return UnlikePostRequest.class.isAssignableFrom(clazz);
     }
 
@@ -35,10 +35,14 @@ public class UnlikePostRequestValidator implements Validator {
                 RequestContextHolder.getRequestAttributes()).getRequest();
 
         final UnlikePostRequest request = (UnlikePostRequest) target;
-        final Optional<PostLike> postLike = postLikeService.findPostLikeById(request.getUuid());
+        final Optional<PostLike> postLike =
+                postLikeService.findPostLikeById(request.getUuid());
 
-        if (postLike.isPresent() && !Objects.equals(jwtTokenUtil.getIdFromToken(req), postLike.get().getUserId())) {
-            errors.reject("Only post like owner can unlike the post");
+        if (postLike.isPresent() && !Objects.equals(
+                jwtTokenUtil.getIdFromToken(req),
+                postLike.get().getUserId())) {
+            errors.reject("Only post " +
+                    "like owner can unlike the post");
         }
     }
 }
