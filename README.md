@@ -17,6 +17,10 @@ I'm building this social media app for mobile devices. The purpose of this proje
 * PostgreSQL 14
 * Docker
 
+### Mobile code
+
+Mobile part is found from different repo: https://github.com/artomulkahainen/someapp-mobile
+
 ## How to run dev environment
 
 To run development mode, you can use Docker to create db.
