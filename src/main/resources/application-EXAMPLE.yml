@@ -20,6 +20,12 @@ spring:
           lob:
             non_contextual_creation: true
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
 server:
   servlet:
     context-path: /api/v1

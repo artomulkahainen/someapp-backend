@@ -2,7 +2,7 @@ package com.someapp.backend.controllers;
 
 import com.someapp.backend.api.LoginApi;
 import com.someapp.backend.services.LoginService;
-import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.dto.LoginRequest;
 import com.someapp.backend.dto.PingResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

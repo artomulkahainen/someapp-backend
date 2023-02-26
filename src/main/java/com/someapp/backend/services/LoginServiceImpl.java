@@ -2,7 +2,7 @@ package com.someapp.backend.services;
 
 import com.someapp.backend.utils.ExtendedUserDetails;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.dto.LoginRequest;
 import com.someapp.backend.dto.JWTResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

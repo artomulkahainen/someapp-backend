@@ -6,7 +6,7 @@ import com.someapp.backend.dto.UserNameIdResponse;
 import com.someapp.backend.entities.User;
 import com.someapp.backend.repositories.UserRepository;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.dto.FindUserByNameRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

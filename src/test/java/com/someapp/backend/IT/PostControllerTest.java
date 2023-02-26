@@ -5,7 +5,7 @@ import com.someapp.backend.dto.SendPostRequest;
 import com.someapp.backend.repositories.PostCommentRepository;
 import com.someapp.backend.repositories.PostLikeRepository;
 import com.someapp.backend.repositories.PostRepository;
-import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.dto.LoginRequest;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

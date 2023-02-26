@@ -3,7 +3,7 @@ package com.someapp.backend.IT;
 import com.someapp.backend.dto.LikePostRequest;
 import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.repositories.PostLikeRepository;
-import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.dto.LoginRequest;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

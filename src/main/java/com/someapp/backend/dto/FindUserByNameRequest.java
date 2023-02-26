@@ -1,7 +1,10 @@
-package com.someapp.backend.utils.requests;
+package com.someapp.backend.dto;
+
+import javax.validation.constraints.NotNull;
 
 public class FindUserByNameRequest {
 
+    @NotNull
     private String username;
 
     public FindUserByNameRequest(String username) {

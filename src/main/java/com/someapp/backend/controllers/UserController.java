@@ -4,7 +4,7 @@ import com.someapp.backend.dto.*;
 import com.someapp.backend.api.UserApi;
 import com.someapp.backend.mappers.UserMapper;
 import com.someapp.backend.services.ExtendedUserDetailsService;
-import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.dto.FindUserByNameRequest;
 import com.someapp.backend.validators.DeleteUserRequestValidator;
 import com.someapp.backend.validators.UserSaveDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
