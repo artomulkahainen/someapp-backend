@@ -2,14 +2,19 @@ package com.someapp.backend.dto;
 
 import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
 public class RelationshipDTO extends BaseDTO {
 
+    @NotNull
     private final UUID userId;
+    @NotNull
     private final UUID relationshipWithId;
+    @NotNull
     private final String uniqueId;
+    @NotNull
     private final int status;
 
     public RelationshipDTO(final UUID userId, final UUID relationshipWithId,

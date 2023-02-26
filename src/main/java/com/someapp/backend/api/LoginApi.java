@@ -1,6 +1,6 @@
 package com.someapp.backend.api;
 
-import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.dto.LoginRequest;
 import com.someapp.backend.dto.PingResponse;
 
 import org.springframework.http.ResponseEntity;

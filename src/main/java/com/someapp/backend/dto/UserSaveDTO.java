@@ -3,9 +3,13 @@ package com.someapp.backend.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+
 public class UserSaveDTO {
 
+    @NotNull
     private final String username;
+    @NotNull
     private final String password;
 
     @JsonCreator

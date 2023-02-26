@@ -1,7 +1,7 @@
 package com.someapp.backend.api;
 
 import com.someapp.backend.dto.*;
-import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.dto.FindUserByNameRequest;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

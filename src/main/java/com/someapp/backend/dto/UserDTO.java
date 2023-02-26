@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.someapp.backend.dto.abstractDTOs.BaseDTO;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class UserDTO extends BaseDTO {
 
+    @NotNull
     private final String username;
+    @NotNull
     private final boolean admin;
     private final List<PostDTO> posts;
     private final List<PostLikeDTO> likedPosts;

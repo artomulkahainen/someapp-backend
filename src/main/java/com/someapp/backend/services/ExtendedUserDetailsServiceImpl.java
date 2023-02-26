@@ -9,7 +9,7 @@ import com.someapp.backend.utils.customExceptions.BadArgumentException;
 import com.someapp.backend.entities.extendedclasses.ExtendedUser;
 import com.someapp.backend.utils.ExtendedUserDetails;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
-import com.someapp.backend.utils.requests.FindUserByNameRequest;
+import com.someapp.backend.dto.FindUserByNameRequest;
 import com.someapp.backend.dto.UserNameIdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -22,7 +22,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

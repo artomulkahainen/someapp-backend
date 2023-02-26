@@ -4,7 +4,7 @@ import com.someapp.backend.dto.DeclineRelationshipRequest;
 import com.someapp.backend.dto.SaveRelationshipDTO;
 import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.repositories.RelationshipRepository;
-import com.someapp.backend.utils.requests.LoginRequest;
+import com.someapp.backend.dto.LoginRequest;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
