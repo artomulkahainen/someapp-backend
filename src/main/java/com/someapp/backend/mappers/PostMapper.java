@@ -38,6 +38,7 @@ public class PostMapper {
                 post.getCreatedDate(),
                 post.getPost(),
                 post.getUserId(),
+                post.getUser().getUsername(),
                 post.getPostComments()
                         .stream()
                         .map(postCommentMapper::mapPostCommentToPostCommentDTO)

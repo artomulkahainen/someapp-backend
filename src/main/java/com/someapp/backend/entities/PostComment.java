@@ -44,6 +44,10 @@ public class PostComment extends AbstractPersistable<UUID> {
         return this.user.getId();
     }
 
+    public String getUsername() {
+        return this.user.getUsername();
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }

@@ -31,7 +31,8 @@ public class PostCommentMapper {
                 postComment.getCreatedDate(),
                 postComment.getPostComment(),
                 postComment.getPostId(),
-                postComment.getUserId()
+                postComment.getUserId(),
+                postComment.getUsername()
         );
     }
 
