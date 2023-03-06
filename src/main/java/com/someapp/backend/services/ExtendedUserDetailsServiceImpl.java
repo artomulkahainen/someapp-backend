@@ -115,6 +115,7 @@ public class ExtendedUserDetailsServiceImpl
         // Delete user
         userRepository.delete(user);
         return new DeleteResponse(request.getUuid(),
+                user.getUUID(),
                 "Successfully deleted user");
     }
 

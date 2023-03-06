@@ -46,7 +46,7 @@ public class PostLikeController implements PostLikeApi {
     @Override
     public DeleteResponse unlikePost(final UnlikePostRequest unlikePostRequest,
                                      final BindingResult bindingResult)
-            throws BindException {
+            throws Exception {
         unlikeValidator.validate(unlikePostRequest, bindingResult);
 
         if (bindingResult.hasErrors()) {

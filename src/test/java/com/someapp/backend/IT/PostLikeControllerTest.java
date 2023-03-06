@@ -74,7 +74,6 @@ public class PostLikeControllerTest {
                             return request;
                         })
                         .content(asJsonString(new LikePostRequest(
-                                UUID.fromString("30d868a1-e7c9-48da-881f-c6348598b0fd"),
                                 UUID.fromString("323fe607-9bdc-42fe-92cd-e7ab9cf08cac"))))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -91,6 +90,7 @@ public class PostLikeControllerTest {
     @Transactional
     @Sql(value = {"/db/users.sql", "/db/posts.sql", "/db/postlikes.sql", "/db/relationships.sql"})
     public void unlikingIsPossible() throws Exception {
+        assertTrue(repository.findById(UUID.fromString("d2985a64-a139-4eb0-a5fb-f356e0fafb66")).isPresent());
         mvc
                 .perform(post("/unlikePostByUsingPOST")
                         .with(request -> {
@@ -98,7 +98,7 @@ public class PostLikeControllerTest {
                             return request;
                         })
                         .content(asJsonString(new UnlikePostRequest(
-                                UUID.fromString("d2985a64-a139-4eb0-a5fb-f356e0fafb66"))))
+                                UUID.fromString("434811ee-f31f-4929-beec-194f237cf417"))))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -118,7 +118,6 @@ public class PostLikeControllerTest {
                             return request;
                         })
                         .content(asJsonString(new LikePostRequest(
-                                UUID.fromString("a4b35fdd-441e-4691-9a03-cb0b2a4822a2"),
                                 UUID.fromString("f09823e5-6de1-4042-8ab1-9a273f283ef9"))))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

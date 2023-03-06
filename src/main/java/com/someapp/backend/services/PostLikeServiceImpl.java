@@ -1,15 +1,20 @@
 package com.someapp.backend.services;
 
 import com.someapp.backend.dto.LikePostRequest;
+import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.repositories.PostLikeRepository;
 import com.someapp.backend.mappers.PostLikeMapper;
 import com.someapp.backend.dto.UnlikePostRequest;
 import com.someapp.backend.dto.DeleteResponse;
+import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +26,12 @@ public class PostLikeServiceImpl implements PostLikeService {
     PostLikeRepository postLikeRepository;
 
     @Autowired
+    PostService postService;
+
+    @Autowired
+    JWTTokenUtil jwtTokenUtil;
+
+    @Autowired
     PostLikeMapper postLikeMapper;
 
     @Override
@@ -30,11 +41,19 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
 
     @Override
-    public DeleteResponse delete(final UnlikePostRequest unlikePostRequest) {
-        postLikeRepository.findById(unlikePostRequest.getUuid())
-                .orElseThrow(ResourceNotFoundException::new);
-        postLikeRepository.deleteById(unlikePostRequest.getUuid());
-        return new DeleteResponse(unlikePostRequest.getUuid(),
+    public DeleteResponse delete(final UnlikePostRequest unlikePostRequest) throws Exception {
+        final Post postToUnlike = postService.findPostById(unlikePostRequest.getUuid())
+                .orElseThrow(() -> new Exception("Post not found with provided id"));
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
+        PostLike postLike = postToUnlike.getPostLikes().stream()
+                .filter(like -> like.getUserId().equals(jwtTokenUtil.getIdFromToken(req)))
+                .findAny()
+                .orElseThrow(() -> new Exception("Post like not found"));
+
+        postLikeRepository.deleteById(postLike.getUUID());
+        return new DeleteResponse(unlikePostRequest.getUuid(), jwtTokenUtil.getIdFromToken(req),
                 "Successfully unliked");
     }
 

@@ -51,11 +51,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public DeleteResponse delete(final DeletePostRequest deletePostRequest) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
         final Post postToDelete =
                 postRepository.findById(deletePostRequest.getUuid())
                 .orElseThrow(ResourceNotFoundException::new);
         postRepository.delete(postToDelete);
         return new DeleteResponse(deletePostRequest.getUuid(),
+                jwtTokenUtil.getIdFromToken(req),
                 "Successfully deleted post");
     }
 

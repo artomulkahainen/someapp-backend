@@ -66,10 +66,11 @@ public class LikePostRequestValidatorTest {
         post.setUUID(UUID.fromString("d2d7ab98-ada4-4a82-87a8-f74993f95612"));
         relationship = new Relationship(user1, user2.getUUID(),
                 user1.getUUID().toString() + "," + user2.getUUID().toString(), 1);
-        likePostRequest = new LikePostRequest(user1.getUUID(), post.getUUID());
+        likePostRequest = new LikePostRequest(post.getUUID());
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         when(jwtTokenUtil.getIdFromToken(any())).thenReturn(user1.getUUID());
+        when(postRepository.findById(post.getUUID())).thenReturn(Optional.of(post));
     }
 
     @Test
@@ -84,7 +85,6 @@ public class LikePostRequestValidatorTest {
 
     @Test
     public void cannotLikePost_ifLikeIsAlreadyFound() {
-        when(relationshipService.usersHaveActiveRelationship(any())).thenReturn(true);
         when(postLikeService.likeAlreadyExists(any(), any())).thenReturn(true);
         validator.validate(likePostRequest, errors);
         assertTrue(errors.hasErrors());

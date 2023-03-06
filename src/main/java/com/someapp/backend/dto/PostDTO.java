@@ -45,4 +45,12 @@ public class PostDTO extends BaseDTO {
     public String getUsername() {
         return this.username;
     }
+
+    public List<UUID> getPostLikerIds() {
+        return this.postLikerIds;
+    }
+
+    public List<PostCommentDTO> getPostComments() {
+        return this.postComments;
+    }
 }
