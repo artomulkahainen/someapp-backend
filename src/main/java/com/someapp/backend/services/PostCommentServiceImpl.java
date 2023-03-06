@@ -41,12 +41,16 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     public DeleteResponse delete(final UUID postCommentId) {
+        final HttpServletRequest req = ((ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes()).getRequest();
+
         PostComment commentToDelete =
                 postCommentRepository.findById(postCommentId)
                 .orElseThrow(ResourceNotFoundException::new);
 
         postCommentRepository.deleteById(commentToDelete.getId());
         return new DeleteResponse(postCommentId,
+                jwtTokenUtil.getIdFromToken(req),
                 "Successfully deleted post comment");
     }
 }

@@ -1,8 +1,10 @@
 package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.UnlikePostRequest;
+import com.someapp.backend.entities.Post;
 import com.someapp.backend.entities.PostLike;
 import com.someapp.backend.services.PostLikeService;
+import com.someapp.backend.services.PostService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -18,12 +20,12 @@ import java.util.Optional;
 public class UnlikePostRequestValidator implements Validator {
 
     private final JWTTokenUtil jwtTokenUtil;
-    private final PostLikeService postLikeService;
+    private final PostService postService;
 
     public UnlikePostRequestValidator(final JWTTokenUtil jwtTokenUtil,
-                                      final PostLikeService postLikeService) {
+                                      final PostService postService) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.postLikeService = postLikeService;
+        this.postService = postService;
     }
 
     public boolean supports(final Class<?> clazz) {
@@ -35,12 +37,15 @@ public class UnlikePostRequestValidator implements Validator {
                 RequestContextHolder.getRequestAttributes()).getRequest();
 
         final UnlikePostRequest request = (UnlikePostRequest) target;
-        final Optional<PostLike> postLike =
-                postLikeService.findPostLikeById(request.getUuid());
+        final Optional<Post> postToUnlike = postService.findPostById(request.getUuid());
 
-        if (postLike.isPresent() && !Objects.equals(
-                jwtTokenUtil.getIdFromToken(req),
-                postLike.get().getUserId())) {
+        if (postToUnlike.isEmpty()) {
+            errors.reject("Unlike post failed");
+            return;
+        }
+
+        if (postToUnlike.get().getPostLikes().stream().noneMatch(
+                like -> like.getUserId().equals(jwtTokenUtil.getIdFromToken(req)))) {
             errors.reject("Only post " +
                     "like owner can unlike the post");
         }

@@ -9,7 +9,7 @@ import java.util.UUID;
 public class UnlikePostRequest extends UuidDTO {
 
     @JsonCreator
-    public UnlikePostRequest(@JsonProperty("uuid") final UUID uuid) {
-        super(uuid);
+    public UnlikePostRequest(@JsonProperty("postId") final UUID postId) {
+        super(postId);
     }
 }

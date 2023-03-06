@@ -12,7 +12,7 @@ public interface PostLikeService {
 
     PostLike save(LikePostRequest likePostRequest);
 
-    DeleteResponse delete(UnlikePostRequest unlikePostRequest);
+    DeleteResponse delete(UnlikePostRequest unlikePostRequest) throws Exception;
 
     boolean likeAlreadyExists(UUID actionUserId,
                               LikePostRequest likePostRequest);

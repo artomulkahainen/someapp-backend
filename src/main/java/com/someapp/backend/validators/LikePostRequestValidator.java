@@ -47,6 +47,12 @@ public class LikePostRequestValidator implements Validator {
                 RequestContextHolder.getRequestAttributes()).getRequest();
         final LikePostRequest likePostRequest = (LikePostRequest) target;
         final UUID actionUserId = jwtTokenUtil.getIdFromToken(req);
+        final Optional<Post> postToLike = postRepository.findById(likePostRequest.getPostId());
+
+        if (postToLike.isEmpty()) {
+            errors.reject("Post like failed");
+            return;
+        }
 
         /**
          * REJECT, IF ACTION USER AND POST CREATOR ARE NOT FRIENDS
@@ -56,7 +62,7 @@ public class LikePostRequestValidator implements Validator {
         if (!isOwnPost(likePostRequest.getPostId(), actionUserId)
                 && !relationshipService.usersHaveActiveRelationship(
                         actionUserId.toString()
-                                + "," + likePostRequest.getPostUserId())) {
+                                + "," + postToLike.get().getUserId().toString())) {
             errors.reject(
                     "Action user and post creator user doesn't " +
                             "have active relationship");

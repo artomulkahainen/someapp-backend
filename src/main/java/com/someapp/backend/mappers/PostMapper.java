@@ -33,6 +33,7 @@ public class PostMapper {
     }
 
     public PostDTO mapPostToPostDTO(final Post post) {
+        System.out.println(post.getPostLikes());
         return new PostDTO(
                 post.getUUID(),
                 post.getCreatedDate(),

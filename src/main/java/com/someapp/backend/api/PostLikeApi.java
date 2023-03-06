@@ -20,5 +20,5 @@ public interface PostLikeApi {
     @PostMapping("/unlikePostByUsingPOST")
     DeleteResponse unlikePost(
             @Valid @RequestBody UnlikePostRequest unlikePostRequest,
-            BindingResult bindingResult) throws BindException;
+            BindingResult bindingResult) throws Exception;
 }

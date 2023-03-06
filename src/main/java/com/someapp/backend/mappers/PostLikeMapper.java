@@ -43,7 +43,8 @@ public class PostLikeMapper {
         return new PostLikeDTO(
                 postLike.getUUID(),
                 postLike.getCreatedDate(),
-                postLike.getPostId());
+                postLike.getPostId(),
+                postLike.getUserId());
     }
 
     public PostLike mapLikePostRequestToPostLike(
