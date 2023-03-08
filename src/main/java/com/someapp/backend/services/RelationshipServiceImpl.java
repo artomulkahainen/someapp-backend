@@ -122,4 +122,9 @@ public class RelationshipServiceImpl implements RelationshipService {
         return matches.size() == 2 && matches.get(0).getStatus() == 1
                 && matches.get(1).getStatus() == 1;
     }
+
+    @Override
+    public List<Relationship> findUsersRelationships(UUID userId) {
+        return relationshipRepository.findRelationshipsByuser_id(userId);
+    }
 }

@@ -1,6 +1,7 @@
 package com.someapp.backend.api;
 
 import com.someapp.backend.dto.DeleteResponse;
+import com.someapp.backend.dto.PostCommentDTO;
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.PostComment;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 public interface PostCommentApi {
 
     @PostMapping("/sendPostCommentByUsingPOST")
-    PostComment sendNewPostComment(
+    PostCommentDTO sendNewPostComment(
             @Valid @RequestBody PostCommentSaveDTO postCommentSaveDTO,
             BindingResult bindingResult) throws BindException;
 

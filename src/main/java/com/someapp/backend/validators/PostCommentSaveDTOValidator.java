@@ -2,6 +2,7 @@ package com.someapp.backend.validators;
 
 import com.someapp.backend.dto.PostCommentSaveDTO;
 import com.someapp.backend.entities.Post;
+import com.someapp.backend.entities.Relationship;
 import com.someapp.backend.services.PostService;
 import com.someapp.backend.services.RelationshipService;
 import com.someapp.backend.utils.jwt.JWTTokenUtil;
@@ -12,6 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,22 +51,24 @@ public class PostCommentSaveDTOValidator implements Validator {
                 postService.findPostById(postCommentSaveDTO.getPostId());
         final UUID postUserId =
                 post.orElse(null).getUserId();
+        final Optional<Relationship> relationshipBetweenUsers = relationshipService.findUsersRelationships(actionUserId)
+                .stream().filter(relationship -> relationship.getRelationshipWith().equals(postUserId))
+                .findAny();
 
-        // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP,
-        // UNLESS COMMENTING OWN POST EXCEPTION HAVE TO BE ADDED
-        if (post.isPresent() && !actionUserId.equals(postUserId)) {
-            isActiveRelationship(actionUserId, postUserId, errors);
+        if (!actionUserId.equals(postUserId)) {
+            if (relationshipBetweenUsers.isEmpty()) {
+                errors.reject("No relationship between users");
+                return;
+            }
+
+            // POST CREATOR AND POST COMMENTER MUST HAVE ACTIVE RELATIONSHIP,
+            // UNLESS COMMENTING OWN POST EXCEPTION HAVE TO BE ADDED
+            isActiveRelationship(relationshipBetweenUsers.get().getUniqueId(), errors);
         }
     }
 
-
-
-    // NEED TO FIX
-    private void isActiveRelationship(
-            UUID actionUserId, UUID postCreatorId, Errors errors) {
-        if (/*!relationshipService.usersHaveActiveRelationship(
-        actionUserId, postCreatorId)*/
-                true) {
+    private void isActiveRelationship(String relationshipId, Errors errors) {
+        if (!relationshipService.usersHaveActiveRelationship(relationshipId)) {
             errors.reject("Active relationship " +
                     "with post creator is needed to write a comment");
         }
