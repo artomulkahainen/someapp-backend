@@ -1,9 +1,10 @@
 package com.someapp.backend.controllers;
 
+import com.someapp.backend.dto.PostCommentDTO;
 import com.someapp.backend.dto.PostCommentDeleteDTO;
 import com.someapp.backend.dto.PostCommentSaveDTO;
-import com.someapp.backend.entities.PostComment;
 import com.someapp.backend.api.PostCommentApi;
+import com.someapp.backend.mappers.PostCommentMapper;
 import com.someapp.backend.services.PostCommentService;
 import com.someapp.backend.dto.DeleteResponse;
 import com.someapp.backend.validators.PostCommentDeleteDTOValidator;
@@ -25,8 +26,11 @@ public class PostCommentController implements PostCommentApi {
     @Autowired
     private PostCommentDeleteDTOValidator deleteValidator;
 
+    @Autowired
+    private PostCommentMapper postCommentMapper;
+
     @Override
-    public PostComment sendNewPostComment(
+    public PostCommentDTO sendNewPostComment(
             final PostCommentSaveDTO postCommentSaveDTO,
             final BindingResult bindingResult) throws BindException {
         saveValidator.validate(postCommentSaveDTO, bindingResult);
@@ -35,7 +39,7 @@ public class PostCommentController implements PostCommentApi {
             throw new BindException(bindingResult);
         }
 
-        return postCommentService.save(postCommentSaveDTO);
+        return postCommentMapper.mapPostCommentToPostCommentDTO(postCommentService.save(postCommentSaveDTO));
     }
 
     @Override

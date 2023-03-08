@@ -44,7 +44,7 @@ public class PostCommentDeleteDTOValidator implements Validator {
                 postCommentRepository.findById(postCommentDeleteDTO.getUuid());
 
         if (postComment.isPresent()
-                && postComment.get().getUserId() != actionUserId) {
+                && !postComment.get().getUserId().equals(actionUserId)) {
             errors.reject(
                     "User can delete only their own post comments");
         }

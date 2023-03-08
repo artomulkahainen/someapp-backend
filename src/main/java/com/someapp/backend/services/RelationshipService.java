@@ -14,6 +14,8 @@ public interface RelationshipService {
 
     boolean usersHaveActiveRelationship(String uniqueId);
 
+    List<Relationship> findUsersRelationships(UUID userId);
+
     Optional<Relationship> findRelationshipById(UUID uuid);
 
     List<Relationship> findRelationshipsByUniqueId(String uniqueId);
